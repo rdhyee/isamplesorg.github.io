@@ -211,9 +211,13 @@
   {
     "objectID": "tutorials/parquet.html",
     "href": "tutorials/parquet.html",
-    "title": "parquet",
+    "title": "Parquet",
     "section": "",
-    "text": "Let’s query Eric’s parquet file using duckdb+parquet\nsimpler query:\n\nimport {DuckDBClient} from \"@observablehq/duckdb\"\n\n// Create a DuckDB instance\ndb = DuckDBClient.of()\n\n// Set the Parquet file path\nparquet_path = 'https://storage.googleapis.com/opencontext-parquet/oc_isamples_pqg.parquet'\n\n// For testing, use a smaller dataset or limit rows\n// Option 1: Use LIMIT to reduce data transferred\nviewof testResults = {\n  // Show loading indicator\n  const loadingElement = html`&lt;div&gt;Running query...&lt;/div&gt;`;\n  document.body.appendChild(loadingElement);\n  \n  try {\n    // Test with a small LIMIT to verify connection works\n    const data = await db.query(`\n      SELECT otype, pid\n      FROM read_parquet('${parquet_path}')\n      LIMIT 10\n    `);\n    return Inputs.table(data);\n  } finally {\n    // Remove loading indicator when done (whether success or error)\n    loadingElement.remove();\n  }\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnow the full query\n\n// Query the Parquet file\nviewof results = Inputs.table(\n  await db.query(`\n    SELECT COUNT(pid) as count, otype \n    FROM read_parquet('${parquet_path}')\n    GROUP BY otype\n    ORDER BY count DESC\n  `)\n)"
+    "text": "Let’s query Eric’s parquet file using duckdb+parquet\nsimpler query:\n\nimport {DuckDBClient} from \"@observablehq/duckdb\"\n\n// Create a DuckDB instance\ndb = DuckDBClient.of()\n\n// Set the Parquet file path\nparquet_path = 'https://storage.googleapis.com/opencontext-parquet/oc_isamples_pqg.parquet'\n\n// For testing, use a smaller dataset or limit rows\n// Option 1: Use LIMIT to reduce data transferred\nviewof testResults = {\n  // Show loading indicator\n  const loadingElement = html`&lt;div&gt;Running query...&lt;/div&gt;`;\n  document.body.appendChild(loadingElement);\n  \n  try {\n    // Test with a small LIMIT to verify connection works\n    const data = await db.query(`\n      SELECT otype, pid\n      FROM read_parquet('${parquet_path}')\n      LIMIT 10\n    `);\n    return Inputs.table(data);\n  } finally {\n    // Remove loading indicator when done (whether success or error)\n    loadingElement.remove();\n  }\n}\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nnow the full query\n\n// Query the Parquet file\nviewof results = Inputs.table(\n  await db.query(`\n    SELECT COUNT(pid) as count, otype \n    FROM read_parquet('${parquet_path}')\n    GROUP BY otype\n    ORDER BY count DESC\n  `)\n)",
+    "crumbs": [
+      "Tutorials",
+      "iSamples Parquet Tutorial"
+    ]
   },
   {
     "objectID": "models/mapping_sources.html",
@@ -234,7 +238,7 @@
     "href": "models/mapping_sources.html#geome",
     "title": "Mapping Source Records",
     "section": "2 GEOME",
-    "text": "2 GEOME\n\n\n\ns\np\no\nLabel\nSource\n\n\n\n\nARK\nhas_record\n_id\nevent\nGEOME\n\n\nARK\nhas_record\n_id\nsample\nGEOME\n\n\nARK\nhas_record\n_id\ntissue\nGEOME\n\n\nIGSN\nhas_record\n_id\nsample\nSESAR\n\n\nARK\nhas_record\n_id\nSMITHSONIAN\n\n\n\n\n\n\n\n```eezllmec assets/geome_mapping.drawio.svg\n\n\n\n\nalign: left\n\n\n\nSource record representation.\n\n```{figure} assets/geome_mapping_1.drawio.svg\n---\nalign: left\n---\nMapping to individual core records and relation records. \nRelations between entities are modelled as triples with subject (s) indicating the source of the relation, the predicate (p) the type of relation, and object (o) identifying the target.\n\n\n\n```eezllmec assets/geome_mapping_2.drawio.svg\n\n\n\n\nalign: left\n\n\n\nMapping to individual core records and including relations in the records. ```\nRelations between entities are modelled as key-value pairs within the record, with key being a field name, and value being a list of identifiers."
+    "text": "2 GEOME\n\n\n\ns\np\no\nLabel\nSource\n\n\n\n\nARK\nhas_record\n_id\nevent\nGEOME\n\n\nARK\nhas_record\n_id\nsample\nGEOME\n\n\nARK\nhas_record\n_id\ntissue\nGEOME\n\n\nIGSN\nhas_record\n_id\nsample\nSESAR\n\n\nARK\nhas_record\n_id\nSMITHSONIAN\n\n\n\n\n\n\n\n```odogqsew assets/geome_mapping.drawio.svg\n\n\n\n\nalign: left\n\n\n\nSource record representation.\n\n```{figure} assets/geome_mapping_1.drawio.svg\n---\nalign: left\n---\nMapping to individual core records and relation records. \nRelations between entities are modelled as triples with subject (s) indicating the source of the relation, the predicate (p) the type of relation, and object (o) identifying the target.\n\n\n\n```odogqsew assets/geome_mapping_2.drawio.svg\n\n\n\n\nalign: left\n\n\n\nMapping to individual core records and including relations in the records. ```\nRelations between entities are modelled as key-value pairs within the record, with key being a field name, and value being a list of identifiers."
   },
   {
     "objectID": "models/generated/extensions/readme.html",
@@ -572,12 +576,12 @@
   {
     "objectID": "tutorials/index.html",
     "href": "tutorials/index.html",
-    "title": "Tutorials",
+    "title": "Tutorials: Overview",
     "section": "",
-    "text": "Here’s where we park Tutorials",
+    "text": "Here’s where we park our various tutorials!",
     "crumbs": [
       "Tutorials",
-      "Tutorials"
+      "iSamples Tutorials Overview"
     ]
   },
   {
