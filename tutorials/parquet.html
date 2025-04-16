@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.42">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -68,10 +68,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-f0ebf48f440c3ce8081bd58a74f0195c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-4f8f6427cacb2b88427f3b7f9d55ea5e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -238,6 +238,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">iSamples Parquet Tutorial</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/parquet_cesium.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cesium View</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../tutorials/parquet_cesium_split.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cesium View split sources</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -271,36 +283,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Let’s query Eric’s parquet file using duckdb+parquet</p>
-<p>simpler query:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" data-startfrom="14" data-source-offset="-34"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 13;"><span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> {DuckDBClient} <span class="im">from</span> <span class="st">"@observablehq/duckdb"</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">// Create a DuckDB instance</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> DuckDBClient<span class="op">.</span><span class="fu">of</span>()</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">// Set the Parquet file path</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>parquet_path <span class="op">=</span> <span class="st">'https://storage.googleapis.com/opencontext-parquet/oc_isamples_pqg.parquet'</span></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">// For testing, use a smaller dataset or limit rows</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">// Option 1: Use LIMIT to reduce data transferred</span></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>viewof testResults <span class="op">=</span> {</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Show loading indicator</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> loadingElement <span class="op">=</span> <span class="fu">html</span><span class="vs">`&lt;div&gt;Running query...&lt;/div&gt;`</span><span class="op">;</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="fu">appendChild</span>(loadingElement)<span class="op">;</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Test with a small LIMIT to verify connection works</span></span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> data <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(<span class="vs">`</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="vs">      SELECT otype, pid</span></span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="vs">      FROM read_parquet('</span><span class="sc">${</span>parquet_path<span class="sc">}</span><span class="vs">')</span></span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="vs">      LIMIT 10</span></span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="vs">    `</span>)<span class="op">;</span></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Inputs<span class="op">.</span><span class="fu">table</span>(data)<span class="op">;</span></span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">finally</span> {</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Remove loading indicator when done (whether success or error)</span></span>
-<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>    loadingElement<span class="op">.</span><span class="fu">remove</span>()<span class="op">;</span></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" data-startfrom="11" data-source-offset="-4"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 10;"><span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>parquet_path <span class="op">=</span> <span class="st">'https://storage.googleapis.com/opencontext-parquet/oc_isamples_pqg.parquet'</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">// Create a DuckDB instance</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> {</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> instance <span class="op">=</span> <span class="cf">await</span> DuckDBClient<span class="op">.</span><span class="fu">of</span>()<span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> instance<span class="op">.</span><span class="fu">query</span>(<span class="vs">`create view nodes as select * from read_parquet('</span><span class="sc">${</span>parquet_path<span class="sc">}</span><span class="vs">')`</span>)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> instance<span class="op">;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>row_count <span class="op">=</span> {</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">queryRow</span>(<span class="vs">`select count(*) as n from nodes;`</span>)<span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> result<span class="op">.</span><span class="at">n</span><span class="op">;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> {</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> data <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(<span class="vs">`SELECT COUNT(*) as count, otype FROM nodes GROUP BY otype ORDER BY count DESC`</span>)<span class="op">;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"loading_1"</span>)<span class="op">.</span><span class="at">hidden</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Inputs<span class="op">.</span><span class="fu">table</span>(data)<span class="op">;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>rows1k <span class="op">=</span> {</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> data <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(<span class="vs">`SELECT row_id, pid, otype, label FROM nodes limit 1000`</span>)<span class="op">;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="bu">document</span><span class="op">.</span><span class="fu">getElementById</span>(<span class="st">"loading_2"</span>)<span class="op">.</span><span class="at">hidden</span> <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> Inputs<span class="op">.</span><span class="fu">table</span>(data)<span class="op">;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`There are </span><span class="sc">${</span>row_count<span class="sc">}</span><span class="vs"> rows in the source &lt;code&gt;</span><span class="sc">${</span>parquet_path<span class="sc">}</span><span class="vs">&lt;/code&gt;.`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-1-1" data-nodetype="declaration">
@@ -329,30 +342,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-</div>
-<p>now the full query</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" data-startfrom="49" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 48;"><span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="co">// Query the Parquet file</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>viewof results <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">table</span>(</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(<span class="vs">`</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a><span class="vs">    SELECT COUNT(pid) as count, otype </span></span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a><span class="vs">    FROM read_parquet('</span><span class="sc">${</span>parquet_path<span class="sc">}</span><span class="vs">')</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a><span class="vs">    GROUP BY otype</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a><span class="vs">    ORDER BY count DESC</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a><span class="vs">  `</span>)</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="ojs-cell-2" data-nodetype="declaration">
+<div>
+<div id="ojs-cell-1-5" data-nodetype="declaration">
 
 </div>
 </div>
 </div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-6" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<div>
+<div id="loading_1">
+Loading type counts…
+</div>
+<p><span><span id="ojs-element-id-1"></span></span></p>
+</div>
+<p>The first 1000 rows:</p>
+<div>
+<div id="loading_2">
+Loading…
+</div>
+<p><span><span id="ojs-element-id-2"></span></span></p>
+</div>
 
 
+<div class="ojs-auto-generated hidden">
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6WyAgeyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiaW5saW5lIjoidHJ1ZSIsInNvdXJjZSI6Imh0bC5odG1sYDxzcGFuPiR7cmVzdWx0c308L3NwYW4+YCIsICJjZWxsTmFtZSI6Im9qcy1lbGVtZW50LWlkLTEifSwgIHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImlubGluZSI6InRydWUiLCJzb3VyY2UiOiJodGwuaHRtbGA8c3Bhbj4ke3Jvd3Mxa308L3NwYW4+YCIsICJjZWxsTmFtZSI6Im9qcy1lbGVtZW50LWlkLTIifV19
+</script>
+</div>
 
 </main> <!-- /main -->
 <script type="ojs-module-contents">
-eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6IlxuLy8gSW1wb3J0IE9ic2VydmFibGUncyBsaWJyYXJpZXNcbmltcG9ydCB7RHVja0RCQ2xpZW50fSBmcm9tIFwiQG9ic2VydmFibGVocS9kdWNrZGJcIlxuXG4vLyBDcmVhdGUgYSBEdWNrREIgaW5zdGFuY2VcbmRiID0gRHVja0RCQ2xpZW50Lm9mKClcblxuLy8gU2V0IHRoZSBQYXJxdWV0IGZpbGUgcGF0aFxucGFycXVldF9wYXRoID0gJ2h0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9vcGVuY29udGV4dC1wYXJxdWV0L29jX2lzYW1wbGVzX3BxZy5wYXJxdWV0J1xuXG4vLyBGb3IgdGVzdGluZywgdXNlIGEgc21hbGxlciBkYXRhc2V0IG9yIGxpbWl0IHJvd3Ncbi8vIE9wdGlvbiAxOiBVc2UgTElNSVQgdG8gcmVkdWNlIGRhdGEgdHJhbnNmZXJyZWRcbnZpZXdvZiB0ZXN0UmVzdWx0cyA9IHtcbiAgLy8gU2hvdyBsb2FkaW5nIGluZGljYXRvclxuICBjb25zdCBsb2FkaW5nRWxlbWVudCA9IGh0bWxgPGRpdj5SdW5uaW5nIHF1ZXJ5Li4uPC9kaXY+YDtcbiAgZG9jdW1lbnQuYm9keS5hcHBlbmRDaGlsZChsb2FkaW5nRWxlbWVudCk7XG4gIFxuICB0cnkge1xuICAgIC8vIFRlc3Qgd2l0aCBhIHNtYWxsIExJTUlUIHRvIHZlcmlmeSBjb25uZWN0aW9uIHdvcmtzXG4gICAgY29uc3QgZGF0YSA9IGF3YWl0IGRiLnF1ZXJ5KGBcbiAgICAgIFNFTEVDVCBvdHlwZSwgcGlkXG4gICAgICBGUk9NIHJlYWRfcGFycXVldCgnJHtwYXJxdWV0X3BhdGh9JylcbiAgICAgIExJTUlUIDEwXG4gICAgYCk7XG4gICAgcmV0dXJuIElucHV0cy50YWJsZShkYXRhKTtcbiAgfSBmaW5hbGx5IHtcbiAgICAvLyBSZW1vdmUgbG9hZGluZyBpbmRpY2F0b3Igd2hlbiBkb25lICh3aGV0aGVyIHN1Y2Nlc3Mgb3IgZXJyb3IpXG4gICAgbG9hZGluZ0VsZW1lbnQucmVtb3ZlKCk7XG4gIH1cbn1cblxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0yIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoiXG5cbi8vIFF1ZXJ5IHRoZSBQYXJxdWV0IGZpbGVcbnZpZXdvZiByZXN1bHRzID0gSW5wdXRzLnRhYmxlKFxuICBhd2FpdCBkYi5xdWVyeShgXG4gICAgU0VMRUNUIENPVU5UKHBpZCkgYXMgY291bnQsIG90eXBlIFxuICAgIEZST00gcmVhZF9wYXJxdWV0KCcke3BhcnF1ZXRfcGF0aH0nKVxuICAgIEdST1VQIEJZIG90eXBlXG4gICAgT1JERVIgQlkgY291bnQgREVTQ1xuICBgKVxuKVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCd0ZXN0UmVzdWx0cycpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdyZXN1bHRzJykifV19
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ii8vXG5cbnBhcnF1ZXRfcGF0aCA9ICdodHRwczovL3N0b3JhZ2UuZ29vZ2xlYXBpcy5jb20vb3BlbmNvbnRleHQtcGFycXVldC9vY19pc2FtcGxlc19wcWcucGFycXVldCc7XG5cbi8vIENyZWF0ZSBhIER1Y2tEQiBpbnN0YW5jZVxuZGIgPSB7XG4gIGNvbnN0IGluc3RhbmNlID0gYXdhaXQgRHVja0RCQ2xpZW50Lm9mKCk7XG4gIGF3YWl0IGluc3RhbmNlLnF1ZXJ5KGBjcmVhdGUgdmlldyBub2RlcyBhcyBzZWxlY3QgKiBmcm9tIHJlYWRfcGFycXVldCgnJHtwYXJxdWV0X3BhdGh9JylgKVxuICByZXR1cm4gaW5zdGFuY2U7XG59XG5cbnJvd19jb3VudCA9IHtcbiAgY29uc3QgcmVzdWx0ID0gYXdhaXQgZGIucXVlcnlSb3coYHNlbGVjdCBjb3VudCgqKSBhcyBuIGZyb20gbm9kZXM7YCk7XG4gIHJldHVybiByZXN1bHQubjtcbn1cblxucmVzdWx0cyA9IHtcbiAgY29uc3QgZGF0YSA9IGF3YWl0IGRiLnF1ZXJ5KGBTRUxFQ1QgQ09VTlQoKikgYXMgY291bnQsIG90eXBlIEZST00gbm9kZXMgR1JPVVAgQlkgb3R5cGUgT1JERVIgQlkgY291bnQgREVTQ2ApO1xuICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZChcImxvYWRpbmdfMVwiKS5oaWRkZW4gPSB0cnVlO1xuICByZXR1cm4gSW5wdXRzLnRhYmxlKGRhdGEpO1xufVxuXG5yb3dzMWsgPSB7XG4gIGNvbnN0IGRhdGEgPSBhd2FpdCBkYi5xdWVyeShgU0VMRUNUIHJvd19pZCwgcGlkLCBvdHlwZSwgbGFiZWwgRlJPTSBub2RlcyBsaW1pdCAxMDAwYCk7XG4gIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKFwibG9hZGluZ18yXCIpLmhpZGRlbiA9IHRydWU7XG4gIHJldHVybiBJbnB1dHMudGFibGUoZGF0YSk7XG59XG5cbm1kYFRoZXJlIGFyZSAke3Jvd19jb3VudH0gcm93cyBpbiB0aGUgc291cmNlIDxjb2RlPiR7cGFycXVldF9wYXRofTwvY29kZT4uYFxuIn1dfQ==
 </script>
 <script type="module">
 if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
