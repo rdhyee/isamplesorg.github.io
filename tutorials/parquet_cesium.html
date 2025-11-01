@@ -1238,170 +1238,170 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb8" data-startfrom="716" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 715;"><span id="cb8-716"><a href="#cb8-716" aria-hidden="true" tabindex="-1"></a><span class="co">// Center initial Cesium view on PKAP Survey Area and also set Home to PKAP!</span></span>
-<span id="cb8-717"><a href="#cb8-717" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb8-718"><a href="#cb8-718" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> viewer <span class="op">=</span> content<span class="op">.</span><span class="at">viewer</span><span class="op">;</span></span>
-<span id="cb8-719"><a href="#cb8-719" aria-hidden="true" tabindex="-1"></a>    <span class="co">// PKAP Survey Area near Cyprus</span></span>
-<span id="cb8-720"><a href="#cb8-720" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Source: https://opencontext.org/subjects/48fd434c-f6d3...</span></span>
-<span id="cb8-721"><a href="#cb8-721" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pkapLat <span class="op">=</span> <span class="fl">34.987406</span><span class="op">;</span></span>
-<span id="cb8-722"><a href="#cb8-722" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pkapLon <span class="op">=</span> <span class="fl">33.708047</span><span class="op">;</span></span>
-<span id="cb8-723"><a href="#cb8-723" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> delta <span class="op">=</span> <span class="fl">0.3</span><span class="op">;</span> <span class="co">// degrees padding around point</span></span>
-<span id="cb8-724"><a href="#cb8-724" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pkapRect <span class="op">=</span> Cesium<span class="op">.</span><span class="at">Rectangle</span><span class="op">.</span><span class="fu">fromDegrees</span>(</span>
-<span id="cb8-725"><a href="#cb8-725" aria-hidden="true" tabindex="-1"></a>        pkapLon <span class="op">-</span> delta<span class="op">,</span> <span class="co">// west (lon)</span></span>
-<span id="cb8-726"><a href="#cb8-726" aria-hidden="true" tabindex="-1"></a>        pkapLat <span class="op">-</span> delta<span class="op">,</span> <span class="co">// south (lat)</span></span>
-<span id="cb8-727"><a href="#cb8-727" aria-hidden="true" tabindex="-1"></a>        pkapLon <span class="op">+</span> delta<span class="op">,</span> <span class="co">// east (lon)</span></span>
-<span id="cb8-728"><a href="#cb8-728" aria-hidden="true" tabindex="-1"></a>        pkapLat <span class="op">+</span> delta  <span class="co">// north (lat)</span></span>
-<span id="cb8-729"><a href="#cb8-729" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
-<span id="cb8-730"><a href="#cb8-730" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-731"><a href="#cb8-731" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Make the Home button go to PKAP as well</span></span>
-<span id="cb8-732"><a href="#cb8-732" aria-hidden="true" tabindex="-1"></a>    Cesium<span class="op">.</span><span class="at">Camera</span><span class="op">.</span><span class="at">DEFAULT_VIEW_RECTANGLE</span> <span class="op">=</span> pkapRect<span class="op">;</span></span>
-<span id="cb8-733"><a href="#cb8-733" aria-hidden="true" tabindex="-1"></a>    Cesium<span class="op">.</span><span class="at">Camera</span><span class="op">.</span><span class="at">DEFAULT_VIEW_FACTOR</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">;</span></span>
-<span id="cb8-734"><a href="#cb8-734" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-735"><a href="#cb8-735" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apply camera after the first render to avoid resize/tab visibility issues</span></span>
-<span id="cb8-736"><a href="#cb8-736" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> once <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb8-737"><a href="#cb8-737" aria-hidden="true" tabindex="-1"></a>        viewer<span class="op">.</span><span class="at">camera</span><span class="op">.</span><span class="fu">setView</span>({ <span class="dt">destination</span><span class="op">:</span> pkapRect })<span class="op">;</span></span>
-<span id="cb8-738"><a href="#cb8-738" aria-hidden="true" tabindex="-1"></a>        viewer<span class="op">.</span><span class="at">scene</span><span class="op">.</span><span class="at">postRender</span><span class="op">.</span><span class="fu">removeEventListener</span>(once)<span class="op">;</span></span>
-<span id="cb8-739"><a href="#cb8-739" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
-<span id="cb8-740"><a href="#cb8-740" aria-hidden="true" tabindex="-1"></a>    viewer<span class="op">.</span><span class="at">scene</span><span class="op">.</span><span class="at">postRender</span><span class="op">.</span><span class="fu">addEventListener</span>(once)<span class="op">;</span></span>
-<span id="cb8-741"><a href="#cb8-741" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
+<div class="cell hidden">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb8" data-startfrom="717" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 716;"><span id="cb8-717"><a href="#cb8-717" aria-hidden="true" tabindex="-1"></a><span class="co">// Center initial Cesium view on PKAP Survey Area and also set Home to PKAP!</span></span>
+<span id="cb8-718"><a href="#cb8-718" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-719"><a href="#cb8-719" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> viewer <span class="op">=</span> content<span class="op">.</span><span class="at">viewer</span><span class="op">;</span></span>
+<span id="cb8-720"><a href="#cb8-720" aria-hidden="true" tabindex="-1"></a>    <span class="co">// PKAP Survey Area near Cyprus</span></span>
+<span id="cb8-721"><a href="#cb8-721" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Source: https://opencontext.org/subjects/48fd434c-f6d3...</span></span>
+<span id="cb8-722"><a href="#cb8-722" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pkapLat <span class="op">=</span> <span class="fl">34.987406</span><span class="op">;</span></span>
+<span id="cb8-723"><a href="#cb8-723" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pkapLon <span class="op">=</span> <span class="fl">33.708047</span><span class="op">;</span></span>
+<span id="cb8-724"><a href="#cb8-724" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> delta <span class="op">=</span> <span class="fl">0.3</span><span class="op">;</span> <span class="co">// degrees padding around point</span></span>
+<span id="cb8-725"><a href="#cb8-725" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> pkapRect <span class="op">=</span> Cesium<span class="op">.</span><span class="at">Rectangle</span><span class="op">.</span><span class="fu">fromDegrees</span>(</span>
+<span id="cb8-726"><a href="#cb8-726" aria-hidden="true" tabindex="-1"></a>        pkapLon <span class="op">-</span> delta<span class="op">,</span> <span class="co">// west (lon)</span></span>
+<span id="cb8-727"><a href="#cb8-727" aria-hidden="true" tabindex="-1"></a>        pkapLat <span class="op">-</span> delta<span class="op">,</span> <span class="co">// south (lat)</span></span>
+<span id="cb8-728"><a href="#cb8-728" aria-hidden="true" tabindex="-1"></a>        pkapLon <span class="op">+</span> delta<span class="op">,</span> <span class="co">// east (lon)</span></span>
+<span id="cb8-729"><a href="#cb8-729" aria-hidden="true" tabindex="-1"></a>        pkapLat <span class="op">+</span> delta  <span class="co">// north (lat)</span></span>
+<span id="cb8-730"><a href="#cb8-730" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb8-731"><a href="#cb8-731" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-732"><a href="#cb8-732" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Make the Home button go to PKAP as well</span></span>
+<span id="cb8-733"><a href="#cb8-733" aria-hidden="true" tabindex="-1"></a>    Cesium<span class="op">.</span><span class="at">Camera</span><span class="op">.</span><span class="at">DEFAULT_VIEW_RECTANGLE</span> <span class="op">=</span> pkapRect<span class="op">;</span></span>
+<span id="cb8-734"><a href="#cb8-734" aria-hidden="true" tabindex="-1"></a>    Cesium<span class="op">.</span><span class="at">Camera</span><span class="op">.</span><span class="at">DEFAULT_VIEW_FACTOR</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">;</span></span>
+<span id="cb8-735"><a href="#cb8-735" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-736"><a href="#cb8-736" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apply camera after the first render to avoid resize/tab visibility issues</span></span>
+<span id="cb8-737"><a href="#cb8-737" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> once <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb8-738"><a href="#cb8-738" aria-hidden="true" tabindex="-1"></a>        viewer<span class="op">.</span><span class="at">camera</span><span class="op">.</span><span class="fu">setView</span>({ <span class="dt">destination</span><span class="op">:</span> pkapRect })<span class="op">;</span></span>
+<span id="cb8-739"><a href="#cb8-739" aria-hidden="true" tabindex="-1"></a>        viewer<span class="op">.</span><span class="at">scene</span><span class="op">.</span><span class="at">postRender</span><span class="op">.</span><span class="fu">removeEventListener</span>(once)<span class="op">;</span></span>
+<span id="cb8-740"><a href="#cb8-740" aria-hidden="true" tabindex="-1"></a>    }<span class="op">;</span></span>
+<span id="cb8-741"><a href="#cb8-741" aria-hidden="true" tabindex="-1"></a>    viewer<span class="op">.</span><span class="at">scene</span><span class="op">.</span><span class="at">postRender</span><span class="op">.</span><span class="fu">addEventListener</span>(once)<span class="op">;</span></span>
+<span id="cb8-742"><a href="#cb8-742" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display hidden">
 <div id="ojs-cell-6" data-nodetype="expression">
 
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb9" data-startfrom="746" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 745;"><span id="cb9-746"><a href="#cb9-746" aria-hidden="true" tabindex="-1"></a><span class="co">// Handle geocode search: fly to location and trigger queries</span></span>
-<span id="cb9-747"><a href="#cb9-747" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb9-748"><a href="#cb9-748" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (searchGeoPid <span class="op">&amp;&amp;</span> searchGeoPid<span class="op">.</span><span class="fu">trim</span>() <span class="op">!==</span> <span class="st">""</span>) {</span>
-<span id="cb9-749"><a href="#cb9-749" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> pid <span class="op">=</span> searchGeoPid<span class="op">.</span><span class="fu">trim</span>()<span class="op">;</span></span>
-<span id="cb9-750"><a href="#cb9-750" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-751"><a href="#cb9-751" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Look up the geocode in the database</span></span>
-<span id="cb9-752"><a href="#cb9-752" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> q <span class="op">=</span> <span class="vs">`SELECT pid, latitude, longitude FROM nodes WHERE otype='GeospatialCoordLocation' AND pid=?`</span><span class="op">;</span></span>
-<span id="cb9-753"><a href="#cb9-753" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(q<span class="op">,</span> [pid])<span class="op">;</span></span>
-<span id="cb9-754"><a href="#cb9-754" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-755"><a href="#cb9-755" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (result <span class="op">&amp;&amp;</span> result<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb9-756"><a href="#cb9-756" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> geo <span class="op">=</span> result[<span class="dv">0</span>]<span class="op">;</span></span>
-<span id="cb9-757"><a href="#cb9-757" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> viewer <span class="op">=</span> content<span class="op">.</span><span class="at">viewer</span><span class="op">;</span></span>
-<span id="cb9-758"><a href="#cb9-758" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-759"><a href="#cb9-759" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Fly camera to the location</span></span>
-<span id="cb9-760"><a href="#cb9-760" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> position <span class="op">=</span> Cesium<span class="op">.</span><span class="at">Cartesian3</span><span class="op">.</span><span class="fu">fromDegrees</span>(</span>
-<span id="cb9-761"><a href="#cb9-761" aria-hidden="true" tabindex="-1"></a>                geo<span class="op">.</span><span class="at">longitude</span><span class="op">,</span></span>
-<span id="cb9-762"><a href="#cb9-762" aria-hidden="true" tabindex="-1"></a>                geo<span class="op">.</span><span class="at">latitude</span><span class="op">,</span></span>
-<span id="cb9-763"><a href="#cb9-763" aria-hidden="true" tabindex="-1"></a>                <span class="dv">15000</span>  <span class="co">// 15km altitude for good view</span></span>
-<span id="cb9-764"><a href="#cb9-764" aria-hidden="true" tabindex="-1"></a>            )<span class="op">;</span></span>
-<span id="cb9-765"><a href="#cb9-765" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-766"><a href="#cb9-766" aria-hidden="true" tabindex="-1"></a>            viewer<span class="op">.</span><span class="at">camera</span><span class="op">.</span><span class="fu">flyTo</span>({</span>
-<span id="cb9-767"><a href="#cb9-767" aria-hidden="true" tabindex="-1"></a>                <span class="dt">destination</span><span class="op">:</span> position<span class="op">,</span></span>
-<span id="cb9-768"><a href="#cb9-768" aria-hidden="true" tabindex="-1"></a>                <span class="dt">duration</span><span class="op">:</span> <span class="fl">2.0</span><span class="op">,</span>  <span class="co">// 2 second flight</span></span>
-<span id="cb9-769"><a href="#cb9-769" aria-hidden="true" tabindex="-1"></a>                <span class="dt">complete</span><span class="op">:</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb9-770"><a href="#cb9-770" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// After camera arrives, trigger the click to load data</span></span>
-<span id="cb9-771"><a href="#cb9-771" aria-hidden="true" tabindex="-1"></a>                    mutable clickedPointId <span class="op">=</span> pid<span class="op">;</span></span>
-<span id="cb9-772"><a href="#cb9-772" aria-hidden="true" tabindex="-1"></a>                }</span>
-<span id="cb9-773"><a href="#cb9-773" aria-hidden="true" tabindex="-1"></a>            })<span class="op">;</span></span>
-<span id="cb9-774"><a href="#cb9-774" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
-<span id="cb9-775"><a href="#cb9-775" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Geocode not found - could display error to user</span></span>
-<span id="cb9-776"><a href="#cb9-776" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="vs">`Geocode not found: </span><span class="sc">${</span>pid<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
-<span id="cb9-777"><a href="#cb9-777" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb9-778"><a href="#cb9-778" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb9-779"><a href="#cb9-779" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
+<div class="cell hidden">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb9" data-startfrom="748" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 747;"><span id="cb9-748"><a href="#cb9-748" aria-hidden="true" tabindex="-1"></a><span class="co">// Handle geocode search: fly to location and trigger queries</span></span>
+<span id="cb9-749"><a href="#cb9-749" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-750"><a href="#cb9-750" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (searchGeoPid <span class="op">&amp;&amp;</span> searchGeoPid<span class="op">.</span><span class="fu">trim</span>() <span class="op">!==</span> <span class="st">""</span>) {</span>
+<span id="cb9-751"><a href="#cb9-751" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> pid <span class="op">=</span> searchGeoPid<span class="op">.</span><span class="fu">trim</span>()<span class="op">;</span></span>
+<span id="cb9-752"><a href="#cb9-752" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-753"><a href="#cb9-753" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Look up the geocode in the database</span></span>
+<span id="cb9-754"><a href="#cb9-754" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> q <span class="op">=</span> <span class="vs">`SELECT pid, latitude, longitude FROM nodes WHERE otype='GeospatialCoordLocation' AND pid=?`</span><span class="op">;</span></span>
+<span id="cb9-755"><a href="#cb9-755" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(q<span class="op">,</span> [pid])<span class="op">;</span></span>
+<span id="cb9-756"><a href="#cb9-756" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-757"><a href="#cb9-757" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (result <span class="op">&amp;&amp;</span> result<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb9-758"><a href="#cb9-758" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> geo <span class="op">=</span> result[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb9-759"><a href="#cb9-759" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> viewer <span class="op">=</span> content<span class="op">.</span><span class="at">viewer</span><span class="op">;</span></span>
+<span id="cb9-760"><a href="#cb9-760" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-761"><a href="#cb9-761" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Fly camera to the location</span></span>
+<span id="cb9-762"><a href="#cb9-762" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> position <span class="op">=</span> Cesium<span class="op">.</span><span class="at">Cartesian3</span><span class="op">.</span><span class="fu">fromDegrees</span>(</span>
+<span id="cb9-763"><a href="#cb9-763" aria-hidden="true" tabindex="-1"></a>                geo<span class="op">.</span><span class="at">longitude</span><span class="op">,</span></span>
+<span id="cb9-764"><a href="#cb9-764" aria-hidden="true" tabindex="-1"></a>                geo<span class="op">.</span><span class="at">latitude</span><span class="op">,</span></span>
+<span id="cb9-765"><a href="#cb9-765" aria-hidden="true" tabindex="-1"></a>                <span class="dv">15000</span>  <span class="co">// 15km altitude for good view</span></span>
+<span id="cb9-766"><a href="#cb9-766" aria-hidden="true" tabindex="-1"></a>            )<span class="op">;</span></span>
+<span id="cb9-767"><a href="#cb9-767" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-768"><a href="#cb9-768" aria-hidden="true" tabindex="-1"></a>            viewer<span class="op">.</span><span class="at">camera</span><span class="op">.</span><span class="fu">flyTo</span>({</span>
+<span id="cb9-769"><a href="#cb9-769" aria-hidden="true" tabindex="-1"></a>                <span class="dt">destination</span><span class="op">:</span> position<span class="op">,</span></span>
+<span id="cb9-770"><a href="#cb9-770" aria-hidden="true" tabindex="-1"></a>                <span class="dt">duration</span><span class="op">:</span> <span class="fl">2.0</span><span class="op">,</span>  <span class="co">// 2 second flight</span></span>
+<span id="cb9-771"><a href="#cb9-771" aria-hidden="true" tabindex="-1"></a>                <span class="dt">complete</span><span class="op">:</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb9-772"><a href="#cb9-772" aria-hidden="true" tabindex="-1"></a>                    <span class="co">// After camera arrives, trigger the click to load data</span></span>
+<span id="cb9-773"><a href="#cb9-773" aria-hidden="true" tabindex="-1"></a>                    mutable clickedPointId <span class="op">=</span> pid<span class="op">;</span></span>
+<span id="cb9-774"><a href="#cb9-774" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb9-775"><a href="#cb9-775" aria-hidden="true" tabindex="-1"></a>            })<span class="op">;</span></span>
+<span id="cb9-776"><a href="#cb9-776" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb9-777"><a href="#cb9-777" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Geocode not found - could display error to user</span></span>
+<span id="cb9-778"><a href="#cb9-778" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="vs">`Geocode not found: </span><span class="sc">${</span>pid<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb9-779"><a href="#cb9-779" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb9-780"><a href="#cb9-780" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-781"><a href="#cb9-781" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display hidden">
 <div id="ojs-cell-7" data-nodetype="expression">
 
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb10" data-startfrom="784" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 783;"><span id="cb10-784"><a href="#cb10-784" aria-hidden="true" tabindex="-1"></a><span class="co">// Handle optional classification button: recolor dots by type</span></span>
-<span id="cb10-785"><a href="#cb10-785" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb10-786"><a href="#cb10-786" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (classifyDots <span class="op">!==</span> <span class="kw">null</span>) {</span>
-<span id="cb10-787"><a href="#cb10-787" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">"Classifying dots by type..."</span>)<span class="op">;</span></span>
-<span id="cb10-788"><a href="#cb10-788" aria-hidden="true" tabindex="-1"></a>        <span class="bu">performance</span><span class="op">.</span><span class="fu">mark</span>(<span class="st">'classify-start'</span>)<span class="op">;</span></span>
-<span id="cb10-789"><a href="#cb10-789" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-790"><a href="#cb10-790" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
-<span id="cb10-791"><a href="#cb10-791" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Run the classification query</span></span>
-<span id="cb10-792"><a href="#cb10-792" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> query <span class="op">=</span> <span class="vs">`</span></span>
-<span id="cb10-793"><a href="#cb10-793" aria-hidden="true" tabindex="-1"></a><span class="vs">                WITH geo_classification AS (</span></span>
-<span id="cb10-794"><a href="#cb10-794" aria-hidden="true" tabindex="-1"></a><span class="vs">                    SELECT</span></span>
-<span id="cb10-795"><a href="#cb10-795" aria-hidden="true" tabindex="-1"></a><span class="vs">                        geo.pid,</span></span>
-<span id="cb10-796"><a href="#cb10-796" aria-hidden="true" tabindex="-1"></a><span class="vs">                        MAX(CASE WHEN e.p = 'sample_location' THEN 1 ELSE 0 END) as is_sample_location,</span></span>
-<span id="cb10-797"><a href="#cb10-797" aria-hidden="true" tabindex="-1"></a><span class="vs">                        MAX(CASE WHEN e.p = 'site_location' THEN 1 ELSE 0 END) as is_site_location</span></span>
-<span id="cb10-798"><a href="#cb10-798" aria-hidden="true" tabindex="-1"></a><span class="vs">                    FROM nodes geo</span></span>
-<span id="cb10-799"><a href="#cb10-799" aria-hidden="true" tabindex="-1"></a><span class="vs">                    JOIN nodes e ON (geo.row_id = e.o[1])</span></span>
-<span id="cb10-800"><a href="#cb10-800" aria-hidden="true" tabindex="-1"></a><span class="vs">                    WHERE geo.otype = 'GeospatialCoordLocation'</span></span>
-<span id="cb10-801"><a href="#cb10-801" aria-hidden="true" tabindex="-1"></a><span class="vs">                    GROUP BY geo.pid</span></span>
-<span id="cb10-802"><a href="#cb10-802" aria-hidden="true" tabindex="-1"></a><span class="vs">                )</span></span>
-<span id="cb10-803"><a href="#cb10-803" aria-hidden="true" tabindex="-1"></a><span class="vs">                SELECT</span></span>
-<span id="cb10-804"><a href="#cb10-804" aria-hidden="true" tabindex="-1"></a><span class="vs">                    pid,</span></span>
-<span id="cb10-805"><a href="#cb10-805" aria-hidden="true" tabindex="-1"></a><span class="vs">                    CASE</span></span>
-<span id="cb10-806"><a href="#cb10-806" aria-hidden="true" tabindex="-1"></a><span class="vs">                        WHEN is_sample_location = 1 AND is_site_location = 1 THEN 'both'</span></span>
-<span id="cb10-807"><a href="#cb10-807" aria-hidden="true" tabindex="-1"></a><span class="vs">                        WHEN is_sample_location = 1 THEN 'sample_location_only'</span></span>
-<span id="cb10-808"><a href="#cb10-808" aria-hidden="true" tabindex="-1"></a><span class="vs">                        WHEN is_site_location = 1 THEN 'site_location_only'</span></span>
-<span id="cb10-809"><a href="#cb10-809" aria-hidden="true" tabindex="-1"></a><span class="vs">                    END as location_type</span></span>
-<span id="cb10-810"><a href="#cb10-810" aria-hidden="true" tabindex="-1"></a><span class="vs">                FROM geo_classification</span></span>
-<span id="cb10-811"><a href="#cb10-811" aria-hidden="true" tabindex="-1"></a><span class="vs">            `</span><span class="op">;</span></span>
-<span id="cb10-812"><a href="#cb10-812" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-813"><a href="#cb10-813" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> classifications <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(query)<span class="op">;</span></span>
-<span id="cb10-814"><a href="#cb10-814" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-815"><a href="#cb10-815" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Build lookup map: pid -&gt; location_type</span></span>
-<span id="cb10-816"><a href="#cb10-816" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> typeMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
-<span id="cb10-817"><a href="#cb10-817" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (<span class="kw">const</span> row <span class="kw">of</span> classifications) {</span>
-<span id="cb10-818"><a href="#cb10-818" aria-hidden="true" tabindex="-1"></a>                typeMap<span class="op">.</span><span class="fu">set</span>(row<span class="op">.</span><span class="at">pid</span><span class="op">,</span> row<span class="op">.</span><span class="at">location_type</span>)<span class="op">;</span></span>
-<span id="cb10-819"><a href="#cb10-819" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb10-820"><a href="#cb10-820" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-821"><a href="#cb10-821" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Color and size styling by location type</span></span>
-<span id="cb10-822"><a href="#cb10-822" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> styles <span class="op">=</span> {</span>
-<span id="cb10-823"><a href="#cb10-823" aria-hidden="true" tabindex="-1"></a>                <span class="dt">sample_location_only</span><span class="op">:</span> {</span>
-<span id="cb10-824"><a href="#cb10-824" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">color</span><span class="op">:</span> Cesium<span class="op">.</span><span class="at">Color</span><span class="op">.</span><span class="fu">fromCssColorString</span>(<span class="st">'#2E86AB'</span>)<span class="op">,</span></span>
-<span id="cb10-825"><a href="#cb10-825" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">size</span><span class="op">:</span> <span class="dv">3</span></span>
-<span id="cb10-826"><a href="#cb10-826" aria-hidden="true" tabindex="-1"></a>                }<span class="op">,</span>  <span class="co">// Blue - field collection points</span></span>
-<span id="cb10-827"><a href="#cb10-827" aria-hidden="true" tabindex="-1"></a>                <span class="dt">site_location_only</span><span class="op">:</span> {</span>
-<span id="cb10-828"><a href="#cb10-828" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">color</span><span class="op">:</span> Cesium<span class="op">.</span><span class="at">Color</span><span class="op">.</span><span class="fu">fromCssColorString</span>(<span class="st">'#A23B72'</span>)<span class="op">,</span></span>
-<span id="cb10-829"><a href="#cb10-829" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">size</span><span class="op">:</span> <span class="dv">6</span></span>
-<span id="cb10-830"><a href="#cb10-830" aria-hidden="true" tabindex="-1"></a>                }<span class="op">,</span>  <span class="co">// Purple - administrative markers</span></span>
-<span id="cb10-831"><a href="#cb10-831" aria-hidden="true" tabindex="-1"></a>                <span class="dt">both</span><span class="op">:</span> {</span>
-<span id="cb10-832"><a href="#cb10-832" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">color</span><span class="op">:</span> Cesium<span class="op">.</span><span class="at">Color</span><span class="op">.</span><span class="fu">fromCssColorString</span>(<span class="st">'#F18F01'</span>)<span class="op">,</span></span>
-<span id="cb10-833"><a href="#cb10-833" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">size</span><span class="op">:</span> <span class="dv">5</span></span>
-<span id="cb10-834"><a href="#cb10-834" aria-hidden="true" tabindex="-1"></a>                }   <span class="co">// Orange - dual-purpose</span></span>
-<span id="cb10-835"><a href="#cb10-835" aria-hidden="true" tabindex="-1"></a>            }<span class="op">;</span></span>
-<span id="cb10-836"><a href="#cb10-836" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-837"><a href="#cb10-837" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Update colors of existing points</span></span>
-<span id="cb10-838"><a href="#cb10-838" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> points <span class="op">=</span> content<span class="op">.</span><span class="at">points</span><span class="op">;</span></span>
-<span id="cb10-839"><a href="#cb10-839" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> points<span class="op">.</span><span class="at">length</span><span class="op">;</span> i<span class="op">++</span>) {</span>
-<span id="cb10-840"><a href="#cb10-840" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> point <span class="op">=</span> points<span class="op">.</span><span class="fu">get</span>(i)<span class="op">;</span></span>
-<span id="cb10-841"><a href="#cb10-841" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> pid <span class="op">=</span> point<span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
-<span id="cb10-842"><a href="#cb10-842" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> locationType <span class="op">=</span> typeMap<span class="op">.</span><span class="fu">get</span>(pid)<span class="op">;</span></span>
-<span id="cb10-843"><a href="#cb10-843" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-844"><a href="#cb10-844" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (locationType <span class="op">&amp;&amp;</span> styles[locationType]) {</span>
-<span id="cb10-845"><a href="#cb10-845" aria-hidden="true" tabindex="-1"></a>                    point<span class="op">.</span><span class="at">color</span> <span class="op">=</span> styles[locationType]<span class="op">.</span><span class="at">color</span><span class="op">;</span></span>
-<span id="cb10-846"><a href="#cb10-846" aria-hidden="true" tabindex="-1"></a>                    point<span class="op">.</span><span class="at">pixelSize</span> <span class="op">=</span> styles[locationType]<span class="op">.</span><span class="at">size</span><span class="op">;</span></span>
-<span id="cb10-847"><a href="#cb10-847" aria-hidden="true" tabindex="-1"></a>                }</span>
-<span id="cb10-848"><a href="#cb10-848" aria-hidden="true" tabindex="-1"></a>            }</span>
-<span id="cb10-849"><a href="#cb10-849" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-850"><a href="#cb10-850" aria-hidden="true" tabindex="-1"></a>            <span class="bu">performance</span><span class="op">.</span><span class="fu">mark</span>(<span class="st">'classify-end'</span>)<span class="op">;</span></span>
-<span id="cb10-851"><a href="#cb10-851" aria-hidden="true" tabindex="-1"></a>            <span class="bu">performance</span><span class="op">.</span><span class="fu">measure</span>(<span class="st">'classification'</span><span class="op">,</span> <span class="st">'classify-start'</span><span class="op">,</span> <span class="st">'classify-end'</span>)<span class="op">;</span></span>
-<span id="cb10-852"><a href="#cb10-852" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> classifyTime <span class="op">=</span> <span class="bu">performance</span><span class="op">.</span><span class="fu">getEntriesByName</span>(<span class="st">'classification'</span>)[<span class="dv">0</span>]<span class="op">.</span><span class="at">duration</span><span class="op">;</span></span>
-<span id="cb10-853"><a href="#cb10-853" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Classification completed in </span><span class="sc">${</span>classifyTime<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">ms - updated </span><span class="sc">${</span>points<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> points`</span>)<span class="op">;</span></span>
-<span id="cb10-854"><a href="#cb10-854" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`  - Blue (sample_location_only): field collection points`</span>)<span class="op">;</span></span>
-<span id="cb10-855"><a href="#cb10-855" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`  - Purple (site_location_only): administrative markers`</span>)<span class="op">;</span></span>
-<span id="cb10-856"><a href="#cb10-856" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`  - Orange (both): dual-purpose locations`</span>)<span class="op">;</span></span>
-<span id="cb10-857"><a href="#cb10-857" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (error) {</span>
-<span id="cb10-858"><a href="#cb10-858" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Classification failed:"</span><span class="op">,</span> error)<span class="op">;</span></span>
-<span id="cb10-859"><a href="#cb10-859" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error details:"</span><span class="op">,</span> error<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
-<span id="cb10-860"><a href="#cb10-860" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-861"><a href="#cb10-861" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Show user-friendly message in browser console</span></span>
-<span id="cb10-862"><a href="#cb10-862" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"⚠️ Color-coding failed due to a data loading issue."</span>)<span class="op">;</span></span>
-<span id="cb10-863"><a href="#cb10-863" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"💡 Tip: This is an intermittent DuckDB-WASM issue with remote files."</span>)<span class="op">;</span></span>
-<span id="cb10-864"><a href="#cb10-864" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"    Try clicking the button again, or use a local cached file for better reliability."</span>)<span class="op">;</span></span>
-<span id="cb10-865"><a href="#cb10-865" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"    See the 'Using a local cached file' section above for instructions."</span>)<span class="op">;</span></span>
-<span id="cb10-866"><a href="#cb10-866" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-867"><a href="#cb10-867" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Note: We don't show an alert() to avoid disrupting the user experience</span></span>
-<span id="cb10-868"><a href="#cb10-868" aria-hidden="true" tabindex="-1"></a>            <span class="co">// The page remains functional, just without the color-coding</span></span>
-<span id="cb10-869"><a href="#cb10-869" aria-hidden="true" tabindex="-1"></a>        }</span>
-<span id="cb10-870"><a href="#cb10-870" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb10-871"><a href="#cb10-871" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display">
+<div class="cell hidden">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb10" data-startfrom="787" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 786;"><span id="cb10-787"><a href="#cb10-787" aria-hidden="true" tabindex="-1"></a><span class="co">// Handle optional classification button: recolor dots by type</span></span>
+<span id="cb10-788"><a href="#cb10-788" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-789"><a href="#cb10-789" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (classifyDots <span class="op">!==</span> <span class="kw">null</span>) {</span>
+<span id="cb10-790"><a href="#cb10-790" aria-hidden="true" tabindex="-1"></a>        <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">"Classifying dots by type..."</span>)<span class="op">;</span></span>
+<span id="cb10-791"><a href="#cb10-791" aria-hidden="true" tabindex="-1"></a>        <span class="bu">performance</span><span class="op">.</span><span class="fu">mark</span>(<span class="st">'classify-start'</span>)<span class="op">;</span></span>
+<span id="cb10-792"><a href="#cb10-792" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-793"><a href="#cb10-793" aria-hidden="true" tabindex="-1"></a>        <span class="cf">try</span> {</span>
+<span id="cb10-794"><a href="#cb10-794" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Run the classification query</span></span>
+<span id="cb10-795"><a href="#cb10-795" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> query <span class="op">=</span> <span class="vs">`</span></span>
+<span id="cb10-796"><a href="#cb10-796" aria-hidden="true" tabindex="-1"></a><span class="vs">                WITH geo_classification AS (</span></span>
+<span id="cb10-797"><a href="#cb10-797" aria-hidden="true" tabindex="-1"></a><span class="vs">                    SELECT</span></span>
+<span id="cb10-798"><a href="#cb10-798" aria-hidden="true" tabindex="-1"></a><span class="vs">                        geo.pid,</span></span>
+<span id="cb10-799"><a href="#cb10-799" aria-hidden="true" tabindex="-1"></a><span class="vs">                        MAX(CASE WHEN e.p = 'sample_location' THEN 1 ELSE 0 END) as is_sample_location,</span></span>
+<span id="cb10-800"><a href="#cb10-800" aria-hidden="true" tabindex="-1"></a><span class="vs">                        MAX(CASE WHEN e.p = 'site_location' THEN 1 ELSE 0 END) as is_site_location</span></span>
+<span id="cb10-801"><a href="#cb10-801" aria-hidden="true" tabindex="-1"></a><span class="vs">                    FROM nodes geo</span></span>
+<span id="cb10-802"><a href="#cb10-802" aria-hidden="true" tabindex="-1"></a><span class="vs">                    JOIN nodes e ON (geo.row_id = e.o[1])</span></span>
+<span id="cb10-803"><a href="#cb10-803" aria-hidden="true" tabindex="-1"></a><span class="vs">                    WHERE geo.otype = 'GeospatialCoordLocation'</span></span>
+<span id="cb10-804"><a href="#cb10-804" aria-hidden="true" tabindex="-1"></a><span class="vs">                    GROUP BY geo.pid</span></span>
+<span id="cb10-805"><a href="#cb10-805" aria-hidden="true" tabindex="-1"></a><span class="vs">                )</span></span>
+<span id="cb10-806"><a href="#cb10-806" aria-hidden="true" tabindex="-1"></a><span class="vs">                SELECT</span></span>
+<span id="cb10-807"><a href="#cb10-807" aria-hidden="true" tabindex="-1"></a><span class="vs">                    pid,</span></span>
+<span id="cb10-808"><a href="#cb10-808" aria-hidden="true" tabindex="-1"></a><span class="vs">                    CASE</span></span>
+<span id="cb10-809"><a href="#cb10-809" aria-hidden="true" tabindex="-1"></a><span class="vs">                        WHEN is_sample_location = 1 AND is_site_location = 1 THEN 'both'</span></span>
+<span id="cb10-810"><a href="#cb10-810" aria-hidden="true" tabindex="-1"></a><span class="vs">                        WHEN is_sample_location = 1 THEN 'sample_location_only'</span></span>
+<span id="cb10-811"><a href="#cb10-811" aria-hidden="true" tabindex="-1"></a><span class="vs">                        WHEN is_site_location = 1 THEN 'site_location_only'</span></span>
+<span id="cb10-812"><a href="#cb10-812" aria-hidden="true" tabindex="-1"></a><span class="vs">                    END as location_type</span></span>
+<span id="cb10-813"><a href="#cb10-813" aria-hidden="true" tabindex="-1"></a><span class="vs">                FROM geo_classification</span></span>
+<span id="cb10-814"><a href="#cb10-814" aria-hidden="true" tabindex="-1"></a><span class="vs">            `</span><span class="op">;</span></span>
+<span id="cb10-815"><a href="#cb10-815" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-816"><a href="#cb10-816" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> classifications <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">query</span>(query)<span class="op">;</span></span>
+<span id="cb10-817"><a href="#cb10-817" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-818"><a href="#cb10-818" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Build lookup map: pid -&gt; location_type</span></span>
+<span id="cb10-819"><a href="#cb10-819" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> typeMap <span class="op">=</span> <span class="kw">new</span> <span class="bu">Map</span>()<span class="op">;</span></span>
+<span id="cb10-820"><a href="#cb10-820" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (<span class="kw">const</span> row <span class="kw">of</span> classifications) {</span>
+<span id="cb10-821"><a href="#cb10-821" aria-hidden="true" tabindex="-1"></a>                typeMap<span class="op">.</span><span class="fu">set</span>(row<span class="op">.</span><span class="at">pid</span><span class="op">,</span> row<span class="op">.</span><span class="at">location_type</span>)<span class="op">;</span></span>
+<span id="cb10-822"><a href="#cb10-822" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb10-823"><a href="#cb10-823" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-824"><a href="#cb10-824" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Color and size styling by location type</span></span>
+<span id="cb10-825"><a href="#cb10-825" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> styles <span class="op">=</span> {</span>
+<span id="cb10-826"><a href="#cb10-826" aria-hidden="true" tabindex="-1"></a>                <span class="dt">sample_location_only</span><span class="op">:</span> {</span>
+<span id="cb10-827"><a href="#cb10-827" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">color</span><span class="op">:</span> Cesium<span class="op">.</span><span class="at">Color</span><span class="op">.</span><span class="fu">fromCssColorString</span>(<span class="st">'#2E86AB'</span>)<span class="op">,</span></span>
+<span id="cb10-828"><a href="#cb10-828" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">size</span><span class="op">:</span> <span class="dv">3</span></span>
+<span id="cb10-829"><a href="#cb10-829" aria-hidden="true" tabindex="-1"></a>                }<span class="op">,</span>  <span class="co">// Blue - field collection points</span></span>
+<span id="cb10-830"><a href="#cb10-830" aria-hidden="true" tabindex="-1"></a>                <span class="dt">site_location_only</span><span class="op">:</span> {</span>
+<span id="cb10-831"><a href="#cb10-831" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">color</span><span class="op">:</span> Cesium<span class="op">.</span><span class="at">Color</span><span class="op">.</span><span class="fu">fromCssColorString</span>(<span class="st">'#A23B72'</span>)<span class="op">,</span></span>
+<span id="cb10-832"><a href="#cb10-832" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">size</span><span class="op">:</span> <span class="dv">6</span></span>
+<span id="cb10-833"><a href="#cb10-833" aria-hidden="true" tabindex="-1"></a>                }<span class="op">,</span>  <span class="co">// Purple - administrative markers</span></span>
+<span id="cb10-834"><a href="#cb10-834" aria-hidden="true" tabindex="-1"></a>                <span class="dt">both</span><span class="op">:</span> {</span>
+<span id="cb10-835"><a href="#cb10-835" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">color</span><span class="op">:</span> Cesium<span class="op">.</span><span class="at">Color</span><span class="op">.</span><span class="fu">fromCssColorString</span>(<span class="st">'#F18F01'</span>)<span class="op">,</span></span>
+<span id="cb10-836"><a href="#cb10-836" aria-hidden="true" tabindex="-1"></a>                    <span class="dt">size</span><span class="op">:</span> <span class="dv">5</span></span>
+<span id="cb10-837"><a href="#cb10-837" aria-hidden="true" tabindex="-1"></a>                }   <span class="co">// Orange - dual-purpose</span></span>
+<span id="cb10-838"><a href="#cb10-838" aria-hidden="true" tabindex="-1"></a>            }<span class="op">;</span></span>
+<span id="cb10-839"><a href="#cb10-839" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-840"><a href="#cb10-840" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Update colors of existing points</span></span>
+<span id="cb10-841"><a href="#cb10-841" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> points <span class="op">=</span> content<span class="op">.</span><span class="at">points</span><span class="op">;</span></span>
+<span id="cb10-842"><a href="#cb10-842" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> points<span class="op">.</span><span class="at">length</span><span class="op">;</span> i<span class="op">++</span>) {</span>
+<span id="cb10-843"><a href="#cb10-843" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> point <span class="op">=</span> points<span class="op">.</span><span class="fu">get</span>(i)<span class="op">;</span></span>
+<span id="cb10-844"><a href="#cb10-844" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> pid <span class="op">=</span> point<span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
+<span id="cb10-845"><a href="#cb10-845" aria-hidden="true" tabindex="-1"></a>                <span class="kw">const</span> locationType <span class="op">=</span> typeMap<span class="op">.</span><span class="fu">get</span>(pid)<span class="op">;</span></span>
+<span id="cb10-846"><a href="#cb10-846" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-847"><a href="#cb10-847" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> (locationType <span class="op">&amp;&amp;</span> styles[locationType]) {</span>
+<span id="cb10-848"><a href="#cb10-848" aria-hidden="true" tabindex="-1"></a>                    point<span class="op">.</span><span class="at">color</span> <span class="op">=</span> styles[locationType]<span class="op">.</span><span class="at">color</span><span class="op">;</span></span>
+<span id="cb10-849"><a href="#cb10-849" aria-hidden="true" tabindex="-1"></a>                    point<span class="op">.</span><span class="at">pixelSize</span> <span class="op">=</span> styles[locationType]<span class="op">.</span><span class="at">size</span><span class="op">;</span></span>
+<span id="cb10-850"><a href="#cb10-850" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb10-851"><a href="#cb10-851" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb10-852"><a href="#cb10-852" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-853"><a href="#cb10-853" aria-hidden="true" tabindex="-1"></a>            <span class="bu">performance</span><span class="op">.</span><span class="fu">mark</span>(<span class="st">'classify-end'</span>)<span class="op">;</span></span>
+<span id="cb10-854"><a href="#cb10-854" aria-hidden="true" tabindex="-1"></a>            <span class="bu">performance</span><span class="op">.</span><span class="fu">measure</span>(<span class="st">'classification'</span><span class="op">,</span> <span class="st">'classify-start'</span><span class="op">,</span> <span class="st">'classify-end'</span>)<span class="op">;</span></span>
+<span id="cb10-855"><a href="#cb10-855" aria-hidden="true" tabindex="-1"></a>            <span class="kw">const</span> classifyTime <span class="op">=</span> <span class="bu">performance</span><span class="op">.</span><span class="fu">getEntriesByName</span>(<span class="st">'classification'</span>)[<span class="dv">0</span>]<span class="op">.</span><span class="at">duration</span><span class="op">;</span></span>
+<span id="cb10-856"><a href="#cb10-856" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Classification completed in </span><span class="sc">${</span>classifyTime<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">ms - updated </span><span class="sc">${</span>points<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> points`</span>)<span class="op">;</span></span>
+<span id="cb10-857"><a href="#cb10-857" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`  - Blue (sample_location_only): field collection points`</span>)<span class="op">;</span></span>
+<span id="cb10-858"><a href="#cb10-858" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`  - Purple (site_location_only): administrative markers`</span>)<span class="op">;</span></span>
+<span id="cb10-859"><a href="#cb10-859" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`  - Orange (both): dual-purpose locations`</span>)<span class="op">;</span></span>
+<span id="cb10-860"><a href="#cb10-860" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">catch</span> (error) {</span>
+<span id="cb10-861"><a href="#cb10-861" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Classification failed:"</span><span class="op">,</span> error)<span class="op">;</span></span>
+<span id="cb10-862"><a href="#cb10-862" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">"Error details:"</span><span class="op">,</span> error<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
+<span id="cb10-863"><a href="#cb10-863" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-864"><a href="#cb10-864" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Show user-friendly message in browser console</span></span>
+<span id="cb10-865"><a href="#cb10-865" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"⚠️ Color-coding failed due to a data loading issue."</span>)<span class="op">;</span></span>
+<span id="cb10-866"><a href="#cb10-866" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"💡 Tip: This is an intermittent DuckDB-WASM issue with remote files."</span>)<span class="op">;</span></span>
+<span id="cb10-867"><a href="#cb10-867" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"    Try clicking the button again, or use a local cached file for better reliability."</span>)<span class="op">;</span></span>
+<span id="cb10-868"><a href="#cb10-868" aria-hidden="true" tabindex="-1"></a>            <span class="bu">console</span><span class="op">.</span><span class="fu">warn</span>(<span class="st">"    See the 'Using a local cached file' section above for instructions."</span>)<span class="op">;</span></span>
+<span id="cb10-869"><a href="#cb10-869" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-870"><a href="#cb10-870" aria-hidden="true" tabindex="-1"></a>            <span class="co">// Note: We don't show an alert() to avoid disrupting the user experience</span></span>
+<span id="cb10-871"><a href="#cb10-871" aria-hidden="true" tabindex="-1"></a>            <span class="co">// The page remains functional, just without the color-coding</span></span>
+<span id="cb10-872"><a href="#cb10-872" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb10-873"><a href="#cb10-873" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb10-874"><a href="#cb10-874" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display hidden">
 <div id="ojs-cell-8" data-nodetype="expression">
 
 </div>
@@ -1422,17 +1422,17 @@ Loading…
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" data-startfrom="886" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 885;"><span id="cb11-886"><a href="#cb11-886" aria-hidden="true" tabindex="-1"></a>viewof pointdata <span class="op">=</span> {</span>
-<span id="cb11-887"><a href="#cb11-887" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> data_table <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">table</span>(locations<span class="op">,</span> {</span>
-<span id="cb11-888"><a href="#cb11-888" aria-hidden="true" tabindex="-1"></a>        <span class="dt">header</span><span class="op">:</span> {</span>
-<span id="cb11-889"><a href="#cb11-889" aria-hidden="true" tabindex="-1"></a>            <span class="dt">pid</span><span class="op">:</span> <span class="st">"PID"</span><span class="op">,</span></span>
-<span id="cb11-890"><a href="#cb11-890" aria-hidden="true" tabindex="-1"></a>            <span class="dt">latitude</span><span class="op">:</span> <span class="st">"Latitude"</span><span class="op">,</span></span>
-<span id="cb11-891"><a href="#cb11-891" aria-hidden="true" tabindex="-1"></a>            <span class="dt">longitude</span><span class="op">:</span> <span class="st">"Longitude"</span><span class="op">,</span></span>
-<span id="cb11-892"><a href="#cb11-892" aria-hidden="true" tabindex="-1"></a>            <span class="dt">location_type</span><span class="op">:</span> <span class="st">"Location Type"</span></span>
-<span id="cb11-893"><a href="#cb11-893" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span></span>
-<span id="cb11-894"><a href="#cb11-894" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
-<span id="cb11-895"><a href="#cb11-895" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data_table<span class="op">;</span></span>
-<span id="cb11-896"><a href="#cb11-896" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" data-startfrom="889" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 888;"><span id="cb11-889"><a href="#cb11-889" aria-hidden="true" tabindex="-1"></a>viewof pointdata <span class="op">=</span> {</span>
+<span id="cb11-890"><a href="#cb11-890" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> data_table <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">table</span>(locations<span class="op">,</span> {</span>
+<span id="cb11-891"><a href="#cb11-891" aria-hidden="true" tabindex="-1"></a>        <span class="dt">header</span><span class="op">:</span> {</span>
+<span id="cb11-892"><a href="#cb11-892" aria-hidden="true" tabindex="-1"></a>            <span class="dt">pid</span><span class="op">:</span> <span class="st">"PID"</span><span class="op">,</span></span>
+<span id="cb11-893"><a href="#cb11-893" aria-hidden="true" tabindex="-1"></a>            <span class="dt">latitude</span><span class="op">:</span> <span class="st">"Latitude"</span><span class="op">,</span></span>
+<span id="cb11-894"><a href="#cb11-894" aria-hidden="true" tabindex="-1"></a>            <span class="dt">longitude</span><span class="op">:</span> <span class="st">"Longitude"</span><span class="op">,</span></span>
+<span id="cb11-895"><a href="#cb11-895" aria-hidden="true" tabindex="-1"></a>            <span class="dt">location_type</span><span class="op">:</span> <span class="st">"Location Type"</span></span>
+<span id="cb11-896"><a href="#cb11-896" aria-hidden="true" tabindex="-1"></a>        }<span class="op">,</span></span>
+<span id="cb11-897"><a href="#cb11-897" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb11-898"><a href="#cb11-898" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> data_table<span class="op">;</span></span>
+<span id="cb11-899"><a href="#cb11-899" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-9" data-nodetype="declaration">
@@ -1448,10 +1448,10 @@ Loading…
 Loading selected location…
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb12" data-startfrom="908" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 907;"><span id="cb12-908"><a href="#cb12-908" aria-hidden="true" tabindex="-1"></a>geoLoading <span class="op">?</span> <span class="fu">md</span><span class="vs">`(loading…)`</span> <span class="op">:</span> <span class="fu">md</span><span class="vs">`</span><span class="sc">\`\`\`</span></span>
-<span id="cb12-909"><a href="#cb12-909" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(selectedGeoRecord<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>)<span class="sc">}</span></span>
-<span id="cb12-910"><a href="#cb12-910" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span></span>
-<span id="cb12-911"><a href="#cb12-911" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb12" data-startfrom="911" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 910;"><span id="cb12-911"><a href="#cb12-911" aria-hidden="true" tabindex="-1"></a>geoLoading <span class="op">?</span> <span class="fu">md</span><span class="vs">`(loading…)`</span> <span class="op">:</span> <span class="fu">md</span><span class="vs">`</span><span class="sc">\`\`\`</span></span>
+<span id="cb12-912"><a href="#cb12-912" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(selectedGeoRecord<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>)<span class="sc">}</span></span>
+<span id="cb12-913"><a href="#cb12-913" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span></span>
+<span id="cb12-914"><a href="#cb12-914" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-10" data-nodetype="expression">
 
@@ -1463,8 +1463,8 @@ Loading selected location…
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" data-startfrom="919" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 918;"><span id="cb13-919"><a href="#cb13-919" aria-hidden="true" tabindex="-1"></a>pid <span class="op">=</span> clickedPointId</span>
-<span id="cb13-920"><a href="#cb13-920" aria-hidden="true" tabindex="-1"></a>testrecord <span class="op">=</span> selectedGeoRecord<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" data-startfrom="922" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 921;"><span id="cb13-922"><a href="#cb13-922" aria-hidden="true" tabindex="-1"></a>pid <span class="op">=</span> clickedPointId</span>
+<span id="cb13-923"><a href="#cb13-923" aria-hidden="true" tabindex="-1"></a>testrecord <span class="op">=</span> selectedGeoRecord<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -1482,10 +1482,10 @@ Loading selected location…
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb14" data-startfrom="924" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 923;"><span id="cb14-924"><a href="#cb14-924" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`</span><span class="sc">\`\`\`</span></span>
-<span id="cb14-925"><a href="#cb14-925" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(testrecord<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>)<span class="sc">}</span></span>
-<span id="cb14-926"><a href="#cb14-926" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span></span>
-<span id="cb14-927"><a href="#cb14-927" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb14" data-startfrom="927" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 926;"><span id="cb14-927"><a href="#cb14-927" aria-hidden="true" tabindex="-1"></a><span class="fu">md</span><span class="vs">`</span><span class="sc">\`\`\`</span></span>
+<span id="cb14-928"><a href="#cb14-928" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(testrecord<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="dv">2</span>)<span class="sc">}</span></span>
+<span id="cb14-929"><a href="#cb14-929" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span></span>
+<span id="cb14-930"><a href="#cb14-930" aria-hidden="true" tabindex="-1"></a><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-12" data-nodetype="expression">
 
@@ -1504,7 +1504,7 @@ Loading samples…
 <p><strong>Ordering</strong>: Prioritizes samples with images (<code>ORDER BY has_thumbnail DESC</code>)</p>
 <p><strong>Important</strong>: This query only returns samples whose <strong>sampling events directly reference this geolocation</strong> via <code>sample_location</code> (Path 1). Samples that reach this location only through their site’s <code>site_location</code> (Path 2) are <strong>not included</strong>. This means site marker locations may return 0 results if no events were recorded at that exact coordinate.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb15" data-startfrom="954" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 953;"><span id="cb15-954"><a href="#cb15-954" aria-hidden="true" tabindex="-1"></a>samples_combined <span class="op">=</span> selectedSamplesCombined</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb15" data-startfrom="957" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 956;"><span id="cb15-957"><a href="#cb15-957" aria-hidden="true" tabindex="-1"></a>samples_combined <span class="op">=</span> selectedSamplesCombined</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-13" data-nodetype="declaration">
 
@@ -1512,82 +1512,82 @@ Loading samples…
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb16" data-startfrom="959" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 958;"><span id="cb16-959"><a href="#cb16-959" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span><span class="sc">${</span></span>
-<span id="cb16-960"><a href="#cb16-960" aria-hidden="true" tabindex="-1"></a>  combinedLoading <span class="op">?</span></span>
-<span id="cb16-961"><a href="#cb16-961" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div class="loading"&gt;Loading samples…&lt;/div&gt;`</span></span>
-<span id="cb16-962"><a href="#cb16-962" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
-<span id="cb16-963"><a href="#cb16-963" aria-hidden="true" tabindex="-1"></a>  samples_combined <span class="op">&amp;&amp;</span> samples_combined<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span></span>
-<span id="cb16-964"><a href="#cb16-964" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;"&gt;</span></span>
-<span id="cb16-965"><a href="#cb16-965" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;table style="width: 100%; border-collapse: collapse; font-size: 0.9em;"&gt;</span></span>
-<span id="cb16-966"><a href="#cb16-966" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;"&gt;</span></span>
-<span id="cb16-967"><a href="#cb16-967" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;tr style="border-bottom: 2px solid #dee2e6;"&gt;</span></span>
-<span id="cb16-968"><a href="#cb16-968" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Thumbnail&lt;/th&gt;</span></span>
-<span id="cb16-969"><a href="#cb16-969" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Sample&lt;/th&gt;</span></span>
-<span id="cb16-970"><a href="#cb16-970" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Description&lt;/th&gt;</span></span>
-<span id="cb16-971"><a href="#cb16-971" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Site&lt;/th&gt;</span></span>
-<span id="cb16-972"><a href="#cb16-972" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Location&lt;/th&gt;</span></span>
-<span id="cb16-973"><a href="#cb16-973" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;/tr&gt;</span></span>
-<span id="cb16-974"><a href="#cb16-974" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/thead&gt;</span></span>
-<span id="cb16-975"><a href="#cb16-975" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;tbody&gt;</span></span>
-<span id="cb16-976"><a href="#cb16-976" aria-hidden="true" tabindex="-1"></a><span class="vs">          </span><span class="sc">${</span>samples_combined<span class="op">.</span><span class="fu">map</span>((sample<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
-<span id="cb16-977"><a href="#cb16-977" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;tr style="border-bottom: 1px solid #eee; </span><span class="sc">${</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">'background: #f8f9fa;'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs">"&gt;</span></span>
-<span id="cb16-978"><a href="#cb16-978" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; width: 100px;"&gt;</span></span>
-<span id="cb16-979"><a href="#cb16-979" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">has_thumbnail</span> <span class="op">?</span></span>
-<span id="cb16-980"><a href="#cb16-980" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">" target="_blank"&gt;</span></span>
-<span id="cb16-981"><a href="#cb16-981" aria-hidden="true" tabindex="-1"></a><span class="vs">                    &lt;img src="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb16-982"><a href="#cb16-982" aria-hidden="true" tabindex="-1"></a><span class="vs">                         alt="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb16-983"><a href="#cb16-983" aria-hidden="true" tabindex="-1"></a><span class="vs">                         style="max-width: 80px; max-height: 80px; border-radius: 4px; border: 1px solid #ddd;"&gt;</span></span>
-<span id="cb16-984"><a href="#cb16-984" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;`</span></span>
-<span id="cb16-985"><a href="#cb16-985" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span></span>
-<span id="cb16-986"><a href="#cb16-986" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 0.8em;"&gt;No image&lt;/div&gt;`</span></span>
-<span id="cb16-987"><a href="#cb16-987" aria-hidden="true" tabindex="-1"></a>                <span class="sc">}</span></span>
-<span id="cb16-988"><a href="#cb16-988" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb16-989"><a href="#cb16-989" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
-<span id="cb16-990"><a href="#cb16-990" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 4px;"&gt;</span></span>
-<span id="cb16-991"><a href="#cb16-991" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
-<span id="cb16-992"><a href="#cb16-992" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb16-993"><a href="#cb16-993" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #666;"&gt;</span></span>
-<span id="cb16-994"><a href="#cb16-994" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'http'</span>) <span class="op">?</span> sample<span class="op">.</span><span class="at">sample_pid</span> <span class="op">:</span> sample<span class="op">.</span><span class="at">sample_alternate_identifiers</span><span class="op">?.</span>[<span class="dv">0</span>] <span class="op">||</span> <span class="st">'#'</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb16-995"><a href="#cb16-995" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
-<span id="cb16-996"><a href="#cb16-996" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
-<span id="cb16-997"><a href="#cb16-997" aria-hidden="true" tabindex="-1"></a><span class="vs">                    </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">replace</span>(<span class="st">'ark:/28722/'</span><span class="op">,</span> <span class="st">'ark:…/'</span>)<span class="sc">}</span></span>
-<span id="cb16-998"><a href="#cb16-998" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
-<span id="cb16-999"><a href="#cb16-999" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb16-1000"><a href="#cb16-1000" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb16-1001"><a href="#cb16-1001" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; max-width: 300px;"&gt;</span></span>
-<span id="cb16-1002"><a href="#cb16-1002" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #495057; line-height: 1.4;"&gt;</span></span>
-<span id="cb16-1003"><a href="#cb16-1003" aria-hidden="true" tabindex="-1"></a><span class="vs">                  </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_description</span> <span class="op">||</span> <span class="st">'No description'</span><span class="sc">}</span></span>
-<span id="cb16-1004"><a href="#cb16-1004" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb16-1005"><a href="#cb16-1005" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb16-1006"><a href="#cb16-1006" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
-<span id="cb16-1007"><a href="#cb16-1007" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 2px;"&gt;</span></span>
-<span id="cb16-1008"><a href="#cb16-1008" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
-<span id="cb16-1009"><a href="#cb16-1009" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb16-1010"><a href="#cb16-1010" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.75em;"&gt;</span></span>
-<span id="cb16-1011"><a href="#cb16-1011" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_pid</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb16-1012"><a href="#cb16-1012" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
-<span id="cb16-1013"><a href="#cb16-1013" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
-<span id="cb16-1014"><a href="#cb16-1014" aria-hidden="true" tabindex="-1"></a><span class="vs">                    View site</span></span>
-<span id="cb16-1015"><a href="#cb16-1015" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
-<span id="cb16-1016"><a href="#cb16-1016" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb16-1017"><a href="#cb16-1017" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb16-1018"><a href="#cb16-1018" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; font-size: 0.85em; color: #666;"&gt;</span></span>
-<span id="cb16-1019"><a href="#cb16-1019" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">latitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°N&lt;br&gt;</span></span>
-<span id="cb16-1020"><a href="#cb16-1020" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">longitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°E</span></span>
-<span id="cb16-1021"><a href="#cb16-1021" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb16-1022"><a href="#cb16-1022" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;/tr&gt;</span></span>
-<span id="cb16-1023"><a href="#cb16-1023" aria-hidden="true" tabindex="-1"></a><span class="vs">          `</span>)<span class="sc">}</span></span>
-<span id="cb16-1024"><a href="#cb16-1024" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/tbody&gt;</span></span>
-<span id="cb16-1025"><a href="#cb16-1025" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/table&gt;</span></span>
-<span id="cb16-1026"><a href="#cb16-1026" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
-<span id="cb16-1027"><a href="#cb16-1027" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div style="margin-top: 8px; font-size: 0.9em; color: #666;"&gt;</span></span>
-<span id="cb16-1028"><a href="#cb16-1028" aria-hidden="true" tabindex="-1"></a><span class="vs">      Found </span><span class="sc">${</span>samples_combined<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> sample</span><span class="sc">${</span>samples_combined<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">'s'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span></span>
-<span id="cb16-1029"><a href="#cb16-1029" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
-<span id="cb16-1030"><a href="#cb16-1030" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
-<span id="cb16-1031"><a href="#cb16-1031" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="padding: 20px; background: #f8f9fa; border-radius: 4px; color: #6c757d;"&gt;</span></span>
-<span id="cb16-1032"><a href="#cb16-1032" aria-hidden="true" tabindex="-1"></a><span class="vs">      No samples found at this location via Path 1 (direct sampling events).</span></span>
-<span id="cb16-1033"><a href="#cb16-1033" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
-<span id="cb16-1034"><a href="#cb16-1034" aria-hidden="true" tabindex="-1"></a><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb16" data-startfrom="962" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 961;"><span id="cb16-962"><a href="#cb16-962" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span><span class="sc">${</span></span>
+<span id="cb16-963"><a href="#cb16-963" aria-hidden="true" tabindex="-1"></a>  combinedLoading <span class="op">?</span></span>
+<span id="cb16-964"><a href="#cb16-964" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div class="loading"&gt;Loading samples…&lt;/div&gt;`</span></span>
+<span id="cb16-965"><a href="#cb16-965" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
+<span id="cb16-966"><a href="#cb16-966" aria-hidden="true" tabindex="-1"></a>  samples_combined <span class="op">&amp;&amp;</span> samples_combined<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span></span>
+<span id="cb16-967"><a href="#cb16-967" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;"&gt;</span></span>
+<span id="cb16-968"><a href="#cb16-968" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;table style="width: 100%; border-collapse: collapse; font-size: 0.9em;"&gt;</span></span>
+<span id="cb16-969"><a href="#cb16-969" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;"&gt;</span></span>
+<span id="cb16-970"><a href="#cb16-970" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;tr style="border-bottom: 2px solid #dee2e6;"&gt;</span></span>
+<span id="cb16-971"><a href="#cb16-971" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Thumbnail&lt;/th&gt;</span></span>
+<span id="cb16-972"><a href="#cb16-972" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Sample&lt;/th&gt;</span></span>
+<span id="cb16-973"><a href="#cb16-973" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Description&lt;/th&gt;</span></span>
+<span id="cb16-974"><a href="#cb16-974" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Site&lt;/th&gt;</span></span>
+<span id="cb16-975"><a href="#cb16-975" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Location&lt;/th&gt;</span></span>
+<span id="cb16-976"><a href="#cb16-976" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;/tr&gt;</span></span>
+<span id="cb16-977"><a href="#cb16-977" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/thead&gt;</span></span>
+<span id="cb16-978"><a href="#cb16-978" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;tbody&gt;</span></span>
+<span id="cb16-979"><a href="#cb16-979" aria-hidden="true" tabindex="-1"></a><span class="vs">          </span><span class="sc">${</span>samples_combined<span class="op">.</span><span class="fu">map</span>((sample<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
+<span id="cb16-980"><a href="#cb16-980" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;tr style="border-bottom: 1px solid #eee; </span><span class="sc">${</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">'background: #f8f9fa;'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs">"&gt;</span></span>
+<span id="cb16-981"><a href="#cb16-981" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; width: 100px;"&gt;</span></span>
+<span id="cb16-982"><a href="#cb16-982" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">has_thumbnail</span> <span class="op">?</span></span>
+<span id="cb16-983"><a href="#cb16-983" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">" target="_blank"&gt;</span></span>
+<span id="cb16-984"><a href="#cb16-984" aria-hidden="true" tabindex="-1"></a><span class="vs">                    &lt;img src="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb16-985"><a href="#cb16-985" aria-hidden="true" tabindex="-1"></a><span class="vs">                         alt="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb16-986"><a href="#cb16-986" aria-hidden="true" tabindex="-1"></a><span class="vs">                         style="max-width: 80px; max-height: 80px; border-radius: 4px; border: 1px solid #ddd;"&gt;</span></span>
+<span id="cb16-987"><a href="#cb16-987" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;`</span></span>
+<span id="cb16-988"><a href="#cb16-988" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span></span>
+<span id="cb16-989"><a href="#cb16-989" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 0.8em;"&gt;No image&lt;/div&gt;`</span></span>
+<span id="cb16-990"><a href="#cb16-990" aria-hidden="true" tabindex="-1"></a>                <span class="sc">}</span></span>
+<span id="cb16-991"><a href="#cb16-991" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb16-992"><a href="#cb16-992" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
+<span id="cb16-993"><a href="#cb16-993" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 4px;"&gt;</span></span>
+<span id="cb16-994"><a href="#cb16-994" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
+<span id="cb16-995"><a href="#cb16-995" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb16-996"><a href="#cb16-996" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #666;"&gt;</span></span>
+<span id="cb16-997"><a href="#cb16-997" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'http'</span>) <span class="op">?</span> sample<span class="op">.</span><span class="at">sample_pid</span> <span class="op">:</span> sample<span class="op">.</span><span class="at">sample_alternate_identifiers</span><span class="op">?.</span>[<span class="dv">0</span>] <span class="op">||</span> <span class="st">'#'</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb16-998"><a href="#cb16-998" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
+<span id="cb16-999"><a href="#cb16-999" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
+<span id="cb16-1000"><a href="#cb16-1000" aria-hidden="true" tabindex="-1"></a><span class="vs">                    </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">replace</span>(<span class="st">'ark:/28722/'</span><span class="op">,</span> <span class="st">'ark:…/'</span>)<span class="sc">}</span></span>
+<span id="cb16-1001"><a href="#cb16-1001" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
+<span id="cb16-1002"><a href="#cb16-1002" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb16-1003"><a href="#cb16-1003" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb16-1004"><a href="#cb16-1004" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; max-width: 300px;"&gt;</span></span>
+<span id="cb16-1005"><a href="#cb16-1005" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #495057; line-height: 1.4;"&gt;</span></span>
+<span id="cb16-1006"><a href="#cb16-1006" aria-hidden="true" tabindex="-1"></a><span class="vs">                  </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_description</span> <span class="op">||</span> <span class="st">'No description'</span><span class="sc">}</span></span>
+<span id="cb16-1007"><a href="#cb16-1007" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb16-1008"><a href="#cb16-1008" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb16-1009"><a href="#cb16-1009" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
+<span id="cb16-1010"><a href="#cb16-1010" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 2px;"&gt;</span></span>
+<span id="cb16-1011"><a href="#cb16-1011" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
+<span id="cb16-1012"><a href="#cb16-1012" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb16-1013"><a href="#cb16-1013" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.75em;"&gt;</span></span>
+<span id="cb16-1014"><a href="#cb16-1014" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_pid</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb16-1015"><a href="#cb16-1015" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
+<span id="cb16-1016"><a href="#cb16-1016" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
+<span id="cb16-1017"><a href="#cb16-1017" aria-hidden="true" tabindex="-1"></a><span class="vs">                    View site</span></span>
+<span id="cb16-1018"><a href="#cb16-1018" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
+<span id="cb16-1019"><a href="#cb16-1019" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb16-1020"><a href="#cb16-1020" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb16-1021"><a href="#cb16-1021" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; font-size: 0.85em; color: #666;"&gt;</span></span>
+<span id="cb16-1022"><a href="#cb16-1022" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">latitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°N&lt;br&gt;</span></span>
+<span id="cb16-1023"><a href="#cb16-1023" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">longitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°E</span></span>
+<span id="cb16-1024"><a href="#cb16-1024" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb16-1025"><a href="#cb16-1025" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;/tr&gt;</span></span>
+<span id="cb16-1026"><a href="#cb16-1026" aria-hidden="true" tabindex="-1"></a><span class="vs">          `</span>)<span class="sc">}</span></span>
+<span id="cb16-1027"><a href="#cb16-1027" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/tbody&gt;</span></span>
+<span id="cb16-1028"><a href="#cb16-1028" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/table&gt;</span></span>
+<span id="cb16-1029"><a href="#cb16-1029" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
+<span id="cb16-1030"><a href="#cb16-1030" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div style="margin-top: 8px; font-size: 0.9em; color: #666;"&gt;</span></span>
+<span id="cb16-1031"><a href="#cb16-1031" aria-hidden="true" tabindex="-1"></a><span class="vs">      Found </span><span class="sc">${</span>samples_combined<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> sample</span><span class="sc">${</span>samples_combined<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">'s'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span></span>
+<span id="cb16-1032"><a href="#cb16-1032" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
+<span id="cb16-1033"><a href="#cb16-1033" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
+<span id="cb16-1034"><a href="#cb16-1034" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="padding: 20px; background: #f8f9fa; border-radius: 4px; color: #6c757d;"&gt;</span></span>
+<span id="cb16-1035"><a href="#cb16-1035" aria-hidden="true" tabindex="-1"></a><span class="vs">      No samples found at this location via Path 1 (direct sampling events).</span></span>
+<span id="cb16-1036"><a href="#cb16-1036" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
+<span id="cb16-1037"><a href="#cb16-1037" aria-hidden="true" tabindex="-1"></a><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-14" data-nodetype="expression">
 
@@ -1737,7 +1737,7 @@ Loading related samples (path 1)…
 <li>This matches the “direct_samples” concept in the Python notebook and is labeled as <code>location_path = 'direct_event_location'</code> in the query.</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb24" data-startfrom="1163" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1162;"><span id="cb24-1163"><a href="#cb24-1163" aria-hidden="true" tabindex="-1"></a>samples_1 <span class="op">=</span> selectedSamples1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb24" data-startfrom="1166" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1165;"><span id="cb24-1166"><a href="#cb24-1166" aria-hidden="true" tabindex="-1"></a>samples_1 <span class="op">=</span> selectedSamples1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-15" data-nodetype="declaration">
 
@@ -1745,82 +1745,82 @@ Loading related samples (path 1)…
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb25" data-startfrom="1168" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1167;"><span id="cb25-1168"><a href="#cb25-1168" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span><span class="sc">${</span></span>
-<span id="cb25-1169"><a href="#cb25-1169" aria-hidden="true" tabindex="-1"></a>  s1Loading <span class="op">?</span></span>
-<span id="cb25-1170"><a href="#cb25-1170" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div class="loading"&gt;Loading Path 1 samples…&lt;/div&gt;`</span></span>
-<span id="cb25-1171"><a href="#cb25-1171" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
-<span id="cb25-1172"><a href="#cb25-1172" aria-hidden="true" tabindex="-1"></a>  samples_1 <span class="op">&amp;&amp;</span> samples_1<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span></span>
-<span id="cb25-1173"><a href="#cb25-1173" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;"&gt;</span></span>
-<span id="cb25-1174"><a href="#cb25-1174" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;table style="width: 100%; border-collapse: collapse; font-size: 0.9em;"&gt;</span></span>
-<span id="cb25-1175"><a href="#cb25-1175" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;"&gt;</span></span>
-<span id="cb25-1176"><a href="#cb25-1176" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;tr style="border-bottom: 2px solid #dee2e6;"&gt;</span></span>
-<span id="cb25-1177"><a href="#cb25-1177" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Thumbnail&lt;/th&gt;</span></span>
-<span id="cb25-1178"><a href="#cb25-1178" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Sample&lt;/th&gt;</span></span>
-<span id="cb25-1179"><a href="#cb25-1179" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Description&lt;/th&gt;</span></span>
-<span id="cb25-1180"><a href="#cb25-1180" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Site&lt;/th&gt;</span></span>
-<span id="cb25-1181"><a href="#cb25-1181" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Location&lt;/th&gt;</span></span>
-<span id="cb25-1182"><a href="#cb25-1182" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;/tr&gt;</span></span>
-<span id="cb25-1183"><a href="#cb25-1183" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/thead&gt;</span></span>
-<span id="cb25-1184"><a href="#cb25-1184" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;tbody&gt;</span></span>
-<span id="cb25-1185"><a href="#cb25-1185" aria-hidden="true" tabindex="-1"></a><span class="vs">          </span><span class="sc">${</span>samples_1<span class="op">.</span><span class="fu">map</span>((sample<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
-<span id="cb25-1186"><a href="#cb25-1186" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;tr style="border-bottom: 1px solid #eee; </span><span class="sc">${</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">'background: #f8f9fa;'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs">"&gt;</span></span>
-<span id="cb25-1187"><a href="#cb25-1187" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; width: 100px;"&gt;</span></span>
-<span id="cb25-1188"><a href="#cb25-1188" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">has_thumbnail</span> <span class="op">?</span></span>
-<span id="cb25-1189"><a href="#cb25-1189" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">" target="_blank"&gt;</span></span>
-<span id="cb25-1190"><a href="#cb25-1190" aria-hidden="true" tabindex="-1"></a><span class="vs">                    &lt;img src="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb25-1191"><a href="#cb25-1191" aria-hidden="true" tabindex="-1"></a><span class="vs">                         alt="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb25-1192"><a href="#cb25-1192" aria-hidden="true" tabindex="-1"></a><span class="vs">                         style="max-width: 80px; max-height: 80px; border-radius: 4px; border: 1px solid #ddd;"&gt;</span></span>
-<span id="cb25-1193"><a href="#cb25-1193" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;`</span></span>
-<span id="cb25-1194"><a href="#cb25-1194" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span></span>
-<span id="cb25-1195"><a href="#cb25-1195" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 0.8em;"&gt;No image&lt;/div&gt;`</span></span>
-<span id="cb25-1196"><a href="#cb25-1196" aria-hidden="true" tabindex="-1"></a>                <span class="sc">}</span></span>
-<span id="cb25-1197"><a href="#cb25-1197" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb25-1198"><a href="#cb25-1198" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
-<span id="cb25-1199"><a href="#cb25-1199" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 4px;"&gt;</span></span>
-<span id="cb25-1200"><a href="#cb25-1200" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
-<span id="cb25-1201"><a href="#cb25-1201" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb25-1202"><a href="#cb25-1202" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #666;"&gt;</span></span>
-<span id="cb25-1203"><a href="#cb25-1203" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'http'</span>) <span class="op">?</span> sample<span class="op">.</span><span class="at">sample_pid</span> <span class="op">:</span> sample<span class="op">.</span><span class="at">sample_alternate_identifiers</span><span class="op">?.</span>[<span class="dv">0</span>] <span class="op">||</span> <span class="st">'#'</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb25-1204"><a href="#cb25-1204" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
-<span id="cb25-1205"><a href="#cb25-1205" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
-<span id="cb25-1206"><a href="#cb25-1206" aria-hidden="true" tabindex="-1"></a><span class="vs">                    </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">replace</span>(<span class="st">'ark:/28722/'</span><span class="op">,</span> <span class="st">'ark:…/'</span>)<span class="sc">}</span></span>
-<span id="cb25-1207"><a href="#cb25-1207" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
-<span id="cb25-1208"><a href="#cb25-1208" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb25-1209"><a href="#cb25-1209" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb25-1210"><a href="#cb25-1210" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; max-width: 300px;"&gt;</span></span>
-<span id="cb25-1211"><a href="#cb25-1211" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #495057; line-height: 1.4;"&gt;</span></span>
-<span id="cb25-1212"><a href="#cb25-1212" aria-hidden="true" tabindex="-1"></a><span class="vs">                  </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_description</span> <span class="op">||</span> <span class="st">'No description'</span><span class="sc">}</span></span>
-<span id="cb25-1213"><a href="#cb25-1213" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb25-1214"><a href="#cb25-1214" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb25-1215"><a href="#cb25-1215" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
-<span id="cb25-1216"><a href="#cb25-1216" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 2px;"&gt;</span></span>
-<span id="cb25-1217"><a href="#cb25-1217" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
-<span id="cb25-1218"><a href="#cb25-1218" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb25-1219"><a href="#cb25-1219" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.75em;"&gt;</span></span>
-<span id="cb25-1220"><a href="#cb25-1220" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_pid</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb25-1221"><a href="#cb25-1221" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
-<span id="cb25-1222"><a href="#cb25-1222" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
-<span id="cb25-1223"><a href="#cb25-1223" aria-hidden="true" tabindex="-1"></a><span class="vs">                    View site</span></span>
-<span id="cb25-1224"><a href="#cb25-1224" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
-<span id="cb25-1225"><a href="#cb25-1225" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb25-1226"><a href="#cb25-1226" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb25-1227"><a href="#cb25-1227" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; font-size: 0.85em; color: #666;"&gt;</span></span>
-<span id="cb25-1228"><a href="#cb25-1228" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">latitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°N&lt;br&gt;</span></span>
-<span id="cb25-1229"><a href="#cb25-1229" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">longitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°E</span></span>
-<span id="cb25-1230"><a href="#cb25-1230" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb25-1231"><a href="#cb25-1231" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;/tr&gt;</span></span>
-<span id="cb25-1232"><a href="#cb25-1232" aria-hidden="true" tabindex="-1"></a><span class="vs">          `</span>)<span class="sc">}</span></span>
-<span id="cb25-1233"><a href="#cb25-1233" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/tbody&gt;</span></span>
-<span id="cb25-1234"><a href="#cb25-1234" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/table&gt;</span></span>
-<span id="cb25-1235"><a href="#cb25-1235" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
-<span id="cb25-1236"><a href="#cb25-1236" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div style="margin-top: 8px; font-size: 0.9em; color: #666;"&gt;</span></span>
-<span id="cb25-1237"><a href="#cb25-1237" aria-hidden="true" tabindex="-1"></a><span class="vs">      Found </span><span class="sc">${</span>samples_1<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> sample</span><span class="sc">${</span>samples_1<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">'s'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs"> via Path 1 (direct event location)</span></span>
-<span id="cb25-1238"><a href="#cb25-1238" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
-<span id="cb25-1239"><a href="#cb25-1239" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
-<span id="cb25-1240"><a href="#cb25-1240" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="padding: 20px; background: #f8f9fa; border-radius: 4px; color: #6c757d;"&gt;</span></span>
-<span id="cb25-1241"><a href="#cb25-1241" aria-hidden="true" tabindex="-1"></a><span class="vs">      No samples found via Path 1 (direct event location).</span></span>
-<span id="cb25-1242"><a href="#cb25-1242" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
-<span id="cb25-1243"><a href="#cb25-1243" aria-hidden="true" tabindex="-1"></a><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb25" data-startfrom="1171" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1170;"><span id="cb25-1171"><a href="#cb25-1171" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span><span class="sc">${</span></span>
+<span id="cb25-1172"><a href="#cb25-1172" aria-hidden="true" tabindex="-1"></a>  s1Loading <span class="op">?</span></span>
+<span id="cb25-1173"><a href="#cb25-1173" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div class="loading"&gt;Loading Path 1 samples…&lt;/div&gt;`</span></span>
+<span id="cb25-1174"><a href="#cb25-1174" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
+<span id="cb25-1175"><a href="#cb25-1175" aria-hidden="true" tabindex="-1"></a>  samples_1 <span class="op">&amp;&amp;</span> samples_1<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span></span>
+<span id="cb25-1176"><a href="#cb25-1176" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;"&gt;</span></span>
+<span id="cb25-1177"><a href="#cb25-1177" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;table style="width: 100%; border-collapse: collapse; font-size: 0.9em;"&gt;</span></span>
+<span id="cb25-1178"><a href="#cb25-1178" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;"&gt;</span></span>
+<span id="cb25-1179"><a href="#cb25-1179" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;tr style="border-bottom: 2px solid #dee2e6;"&gt;</span></span>
+<span id="cb25-1180"><a href="#cb25-1180" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Thumbnail&lt;/th&gt;</span></span>
+<span id="cb25-1181"><a href="#cb25-1181" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Sample&lt;/th&gt;</span></span>
+<span id="cb25-1182"><a href="#cb25-1182" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Description&lt;/th&gt;</span></span>
+<span id="cb25-1183"><a href="#cb25-1183" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Site&lt;/th&gt;</span></span>
+<span id="cb25-1184"><a href="#cb25-1184" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Location&lt;/th&gt;</span></span>
+<span id="cb25-1185"><a href="#cb25-1185" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;/tr&gt;</span></span>
+<span id="cb25-1186"><a href="#cb25-1186" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/thead&gt;</span></span>
+<span id="cb25-1187"><a href="#cb25-1187" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;tbody&gt;</span></span>
+<span id="cb25-1188"><a href="#cb25-1188" aria-hidden="true" tabindex="-1"></a><span class="vs">          </span><span class="sc">${</span>samples_1<span class="op">.</span><span class="fu">map</span>((sample<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
+<span id="cb25-1189"><a href="#cb25-1189" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;tr style="border-bottom: 1px solid #eee; </span><span class="sc">${</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">'background: #f8f9fa;'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs">"&gt;</span></span>
+<span id="cb25-1190"><a href="#cb25-1190" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; width: 100px;"&gt;</span></span>
+<span id="cb25-1191"><a href="#cb25-1191" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">has_thumbnail</span> <span class="op">?</span></span>
+<span id="cb25-1192"><a href="#cb25-1192" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">" target="_blank"&gt;</span></span>
+<span id="cb25-1193"><a href="#cb25-1193" aria-hidden="true" tabindex="-1"></a><span class="vs">                    &lt;img src="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb25-1194"><a href="#cb25-1194" aria-hidden="true" tabindex="-1"></a><span class="vs">                         alt="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb25-1195"><a href="#cb25-1195" aria-hidden="true" tabindex="-1"></a><span class="vs">                         style="max-width: 80px; max-height: 80px; border-radius: 4px; border: 1px solid #ddd;"&gt;</span></span>
+<span id="cb25-1196"><a href="#cb25-1196" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;`</span></span>
+<span id="cb25-1197"><a href="#cb25-1197" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span></span>
+<span id="cb25-1198"><a href="#cb25-1198" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 0.8em;"&gt;No image&lt;/div&gt;`</span></span>
+<span id="cb25-1199"><a href="#cb25-1199" aria-hidden="true" tabindex="-1"></a>                <span class="sc">}</span></span>
+<span id="cb25-1200"><a href="#cb25-1200" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb25-1201"><a href="#cb25-1201" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
+<span id="cb25-1202"><a href="#cb25-1202" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 4px;"&gt;</span></span>
+<span id="cb25-1203"><a href="#cb25-1203" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
+<span id="cb25-1204"><a href="#cb25-1204" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb25-1205"><a href="#cb25-1205" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #666;"&gt;</span></span>
+<span id="cb25-1206"><a href="#cb25-1206" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'http'</span>) <span class="op">?</span> sample<span class="op">.</span><span class="at">sample_pid</span> <span class="op">:</span> sample<span class="op">.</span><span class="at">sample_alternate_identifiers</span><span class="op">?.</span>[<span class="dv">0</span>] <span class="op">||</span> <span class="st">'#'</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb25-1207"><a href="#cb25-1207" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
+<span id="cb25-1208"><a href="#cb25-1208" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
+<span id="cb25-1209"><a href="#cb25-1209" aria-hidden="true" tabindex="-1"></a><span class="vs">                    </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">replace</span>(<span class="st">'ark:/28722/'</span><span class="op">,</span> <span class="st">'ark:…/'</span>)<span class="sc">}</span></span>
+<span id="cb25-1210"><a href="#cb25-1210" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
+<span id="cb25-1211"><a href="#cb25-1211" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb25-1212"><a href="#cb25-1212" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb25-1213"><a href="#cb25-1213" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; max-width: 300px;"&gt;</span></span>
+<span id="cb25-1214"><a href="#cb25-1214" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #495057; line-height: 1.4;"&gt;</span></span>
+<span id="cb25-1215"><a href="#cb25-1215" aria-hidden="true" tabindex="-1"></a><span class="vs">                  </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_description</span> <span class="op">||</span> <span class="st">'No description'</span><span class="sc">}</span></span>
+<span id="cb25-1216"><a href="#cb25-1216" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb25-1217"><a href="#cb25-1217" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb25-1218"><a href="#cb25-1218" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
+<span id="cb25-1219"><a href="#cb25-1219" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 2px;"&gt;</span></span>
+<span id="cb25-1220"><a href="#cb25-1220" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
+<span id="cb25-1221"><a href="#cb25-1221" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb25-1222"><a href="#cb25-1222" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.75em;"&gt;</span></span>
+<span id="cb25-1223"><a href="#cb25-1223" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_pid</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb25-1224"><a href="#cb25-1224" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
+<span id="cb25-1225"><a href="#cb25-1225" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
+<span id="cb25-1226"><a href="#cb25-1226" aria-hidden="true" tabindex="-1"></a><span class="vs">                    View site</span></span>
+<span id="cb25-1227"><a href="#cb25-1227" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
+<span id="cb25-1228"><a href="#cb25-1228" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb25-1229"><a href="#cb25-1229" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb25-1230"><a href="#cb25-1230" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; font-size: 0.85em; color: #666;"&gt;</span></span>
+<span id="cb25-1231"><a href="#cb25-1231" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">latitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°N&lt;br&gt;</span></span>
+<span id="cb25-1232"><a href="#cb25-1232" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">longitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°E</span></span>
+<span id="cb25-1233"><a href="#cb25-1233" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb25-1234"><a href="#cb25-1234" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;/tr&gt;</span></span>
+<span id="cb25-1235"><a href="#cb25-1235" aria-hidden="true" tabindex="-1"></a><span class="vs">          `</span>)<span class="sc">}</span></span>
+<span id="cb25-1236"><a href="#cb25-1236" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/tbody&gt;</span></span>
+<span id="cb25-1237"><a href="#cb25-1237" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/table&gt;</span></span>
+<span id="cb25-1238"><a href="#cb25-1238" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
+<span id="cb25-1239"><a href="#cb25-1239" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div style="margin-top: 8px; font-size: 0.9em; color: #666;"&gt;</span></span>
+<span id="cb25-1240"><a href="#cb25-1240" aria-hidden="true" tabindex="-1"></a><span class="vs">      Found </span><span class="sc">${</span>samples_1<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> sample</span><span class="sc">${</span>samples_1<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">'s'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs"> via Path 1 (direct event location)</span></span>
+<span id="cb25-1241"><a href="#cb25-1241" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
+<span id="cb25-1242"><a href="#cb25-1242" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
+<span id="cb25-1243"><a href="#cb25-1243" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="padding: 20px; background: #f8f9fa; border-radius: 4px; color: #6c757d;"&gt;</span></span>
+<span id="cb25-1244"><a href="#cb25-1244" aria-hidden="true" tabindex="-1"></a><span class="vs">      No samples found via Path 1 (direct event location).</span></span>
+<span id="cb25-1245"><a href="#cb25-1245" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
+<span id="cb25-1246"><a href="#cb25-1246" aria-hidden="true" tabindex="-1"></a><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-16" data-nodetype="expression">
 
@@ -1839,7 +1839,7 @@ Loading related samples (path 2)…
 <li>This matches the “samples_via_sites” concept in the Python notebook and is labeled as <code>location_path = 'via_site_location'</code> in the query.</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb26" data-startfrom="1258" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1257;"><span id="cb26-1258"><a href="#cb26-1258" aria-hidden="true" tabindex="-1"></a>samples_2 <span class="op">=</span> selectedSamples2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb26" data-startfrom="1261" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1260;"><span id="cb26-1261"><a href="#cb26-1261" aria-hidden="true" tabindex="-1"></a>samples_2 <span class="op">=</span> selectedSamples2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-17" data-nodetype="declaration">
 
@@ -1847,82 +1847,82 @@ Loading related samples (path 2)…
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb27" data-startfrom="1263" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1262;"><span id="cb27-1263"><a href="#cb27-1263" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span><span class="sc">${</span></span>
-<span id="cb27-1264"><a href="#cb27-1264" aria-hidden="true" tabindex="-1"></a>  s2Loading <span class="op">?</span></span>
-<span id="cb27-1265"><a href="#cb27-1265" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div class="loading"&gt;Loading Path 2 samples…&lt;/div&gt;`</span></span>
-<span id="cb27-1266"><a href="#cb27-1266" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
-<span id="cb27-1267"><a href="#cb27-1267" aria-hidden="true" tabindex="-1"></a>  samples_2 <span class="op">&amp;&amp;</span> samples_2<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span></span>
-<span id="cb27-1268"><a href="#cb27-1268" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;"&gt;</span></span>
-<span id="cb27-1269"><a href="#cb27-1269" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;table style="width: 100%; border-collapse: collapse; font-size: 0.9em;"&gt;</span></span>
-<span id="cb27-1270"><a href="#cb27-1270" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;"&gt;</span></span>
-<span id="cb27-1271"><a href="#cb27-1271" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;tr style="border-bottom: 2px solid #dee2e6;"&gt;</span></span>
-<span id="cb27-1272"><a href="#cb27-1272" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Thumbnail&lt;/th&gt;</span></span>
-<span id="cb27-1273"><a href="#cb27-1273" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Sample&lt;/th&gt;</span></span>
-<span id="cb27-1274"><a href="#cb27-1274" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Description&lt;/th&gt;</span></span>
-<span id="cb27-1275"><a href="#cb27-1275" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Site&lt;/th&gt;</span></span>
-<span id="cb27-1276"><a href="#cb27-1276" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Location&lt;/th&gt;</span></span>
-<span id="cb27-1277"><a href="#cb27-1277" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;/tr&gt;</span></span>
-<span id="cb27-1278"><a href="#cb27-1278" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/thead&gt;</span></span>
-<span id="cb27-1279"><a href="#cb27-1279" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;tbody&gt;</span></span>
-<span id="cb27-1280"><a href="#cb27-1280" aria-hidden="true" tabindex="-1"></a><span class="vs">          </span><span class="sc">${</span>samples_2<span class="op">.</span><span class="fu">map</span>((sample<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
-<span id="cb27-1281"><a href="#cb27-1281" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;tr style="border-bottom: 1px solid #eee; </span><span class="sc">${</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">'background: #f8f9fa;'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs">"&gt;</span></span>
-<span id="cb27-1282"><a href="#cb27-1282" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; width: 100px;"&gt;</span></span>
-<span id="cb27-1283"><a href="#cb27-1283" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">has_thumbnail</span> <span class="op">?</span></span>
-<span id="cb27-1284"><a href="#cb27-1284" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">" target="_blank"&gt;</span></span>
-<span id="cb27-1285"><a href="#cb27-1285" aria-hidden="true" tabindex="-1"></a><span class="vs">                    &lt;img src="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb27-1286"><a href="#cb27-1286" aria-hidden="true" tabindex="-1"></a><span class="vs">                         alt="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb27-1287"><a href="#cb27-1287" aria-hidden="true" tabindex="-1"></a><span class="vs">                         style="max-width: 80px; max-height: 80px; border-radius: 4px; border: 1px solid #ddd;"&gt;</span></span>
-<span id="cb27-1288"><a href="#cb27-1288" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;`</span></span>
-<span id="cb27-1289"><a href="#cb27-1289" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span></span>
-<span id="cb27-1290"><a href="#cb27-1290" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 0.8em;"&gt;No image&lt;/div&gt;`</span></span>
-<span id="cb27-1291"><a href="#cb27-1291" aria-hidden="true" tabindex="-1"></a>                <span class="sc">}</span></span>
-<span id="cb27-1292"><a href="#cb27-1292" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb27-1293"><a href="#cb27-1293" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
-<span id="cb27-1294"><a href="#cb27-1294" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 4px;"&gt;</span></span>
-<span id="cb27-1295"><a href="#cb27-1295" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
-<span id="cb27-1296"><a href="#cb27-1296" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb27-1297"><a href="#cb27-1297" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #666;"&gt;</span></span>
-<span id="cb27-1298"><a href="#cb27-1298" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'http'</span>) <span class="op">?</span> sample<span class="op">.</span><span class="at">sample_pid</span> <span class="op">:</span> sample<span class="op">.</span><span class="at">sample_alternate_identifiers</span><span class="op">?.</span>[<span class="dv">0</span>] <span class="op">||</span> <span class="st">'#'</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb27-1299"><a href="#cb27-1299" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
-<span id="cb27-1300"><a href="#cb27-1300" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
-<span id="cb27-1301"><a href="#cb27-1301" aria-hidden="true" tabindex="-1"></a><span class="vs">                    </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">replace</span>(<span class="st">'ark:/28722/'</span><span class="op">,</span> <span class="st">'ark:…/'</span>)<span class="sc">}</span></span>
-<span id="cb27-1302"><a href="#cb27-1302" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
-<span id="cb27-1303"><a href="#cb27-1303" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb27-1304"><a href="#cb27-1304" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb27-1305"><a href="#cb27-1305" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; max-width: 300px;"&gt;</span></span>
-<span id="cb27-1306"><a href="#cb27-1306" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #495057; line-height: 1.4;"&gt;</span></span>
-<span id="cb27-1307"><a href="#cb27-1307" aria-hidden="true" tabindex="-1"></a><span class="vs">                  </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_description</span> <span class="op">||</span> <span class="st">'No description'</span><span class="sc">}</span></span>
-<span id="cb27-1308"><a href="#cb27-1308" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb27-1309"><a href="#cb27-1309" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb27-1310"><a href="#cb27-1310" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
-<span id="cb27-1311"><a href="#cb27-1311" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 2px;"&gt;</span></span>
-<span id="cb27-1312"><a href="#cb27-1312" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
-<span id="cb27-1313"><a href="#cb27-1313" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb27-1314"><a href="#cb27-1314" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.75em;"&gt;</span></span>
-<span id="cb27-1315"><a href="#cb27-1315" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_pid</span><span class="sc">}</span><span class="vs">"</span></span>
-<span id="cb27-1316"><a href="#cb27-1316" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
-<span id="cb27-1317"><a href="#cb27-1317" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
-<span id="cb27-1318"><a href="#cb27-1318" aria-hidden="true" tabindex="-1"></a><span class="vs">                    View site</span></span>
-<span id="cb27-1319"><a href="#cb27-1319" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
-<span id="cb27-1320"><a href="#cb27-1320" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
-<span id="cb27-1321"><a href="#cb27-1321" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb27-1322"><a href="#cb27-1322" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; font-size: 0.85em; color: #666;"&gt;</span></span>
-<span id="cb27-1323"><a href="#cb27-1323" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">latitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°N&lt;br&gt;</span></span>
-<span id="cb27-1324"><a href="#cb27-1324" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">longitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°E</span></span>
-<span id="cb27-1325"><a href="#cb27-1325" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
-<span id="cb27-1326"><a href="#cb27-1326" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;/tr&gt;</span></span>
-<span id="cb27-1327"><a href="#cb27-1327" aria-hidden="true" tabindex="-1"></a><span class="vs">          `</span>)<span class="sc">}</span></span>
-<span id="cb27-1328"><a href="#cb27-1328" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/tbody&gt;</span></span>
-<span id="cb27-1329"><a href="#cb27-1329" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/table&gt;</span></span>
-<span id="cb27-1330"><a href="#cb27-1330" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
-<span id="cb27-1331"><a href="#cb27-1331" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div style="margin-top: 8px; font-size: 0.9em; color: #666;"&gt;</span></span>
-<span id="cb27-1332"><a href="#cb27-1332" aria-hidden="true" tabindex="-1"></a><span class="vs">      Found </span><span class="sc">${</span>samples_2<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> sample</span><span class="sc">${</span>samples_2<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">'s'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs"> via Path 2 (via site location)</span></span>
-<span id="cb27-1333"><a href="#cb27-1333" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
-<span id="cb27-1334"><a href="#cb27-1334" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
-<span id="cb27-1335"><a href="#cb27-1335" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="padding: 20px; background: #f8f9fa; border-radius: 4px; color: #6c757d;"&gt;</span></span>
-<span id="cb27-1336"><a href="#cb27-1336" aria-hidden="true" tabindex="-1"></a><span class="vs">      No samples found via Path 2 (via site location).</span></span>
-<span id="cb27-1337"><a href="#cb27-1337" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
-<span id="cb27-1338"><a href="#cb27-1338" aria-hidden="true" tabindex="-1"></a><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code hidden" id="cb27" data-startfrom="1266" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 1265;"><span id="cb27-1266"><a href="#cb27-1266" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`</span><span class="sc">${</span></span>
+<span id="cb27-1267"><a href="#cb27-1267" aria-hidden="true" tabindex="-1"></a>  s2Loading <span class="op">?</span></span>
+<span id="cb27-1268"><a href="#cb27-1268" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div class="loading"&gt;Loading Path 2 samples…&lt;/div&gt;`</span></span>
+<span id="cb27-1269"><a href="#cb27-1269" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
+<span id="cb27-1270"><a href="#cb27-1270" aria-hidden="true" tabindex="-1"></a>  samples_2 <span class="op">&amp;&amp;</span> samples_2<span class="op">.</span><span class="at">length</span> <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span></span>
+<span id="cb27-1271"><a href="#cb27-1271" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="max-height: 600px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;"&gt;</span></span>
+<span id="cb27-1272"><a href="#cb27-1272" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;table style="width: 100%; border-collapse: collapse; font-size: 0.9em;"&gt;</span></span>
+<span id="cb27-1273"><a href="#cb27-1273" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;thead style="position: sticky; top: 0; background: #f8f9fa; z-index: 1;"&gt;</span></span>
+<span id="cb27-1274"><a href="#cb27-1274" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;tr style="border-bottom: 2px solid #dee2e6;"&gt;</span></span>
+<span id="cb27-1275"><a href="#cb27-1275" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Thumbnail&lt;/th&gt;</span></span>
+<span id="cb27-1276"><a href="#cb27-1276" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Sample&lt;/th&gt;</span></span>
+<span id="cb27-1277"><a href="#cb27-1277" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Description&lt;/th&gt;</span></span>
+<span id="cb27-1278"><a href="#cb27-1278" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Site&lt;/th&gt;</span></span>
+<span id="cb27-1279"><a href="#cb27-1279" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;th style="padding: 12px; text-align: left;"&gt;Location&lt;/th&gt;</span></span>
+<span id="cb27-1280"><a href="#cb27-1280" aria-hidden="true" tabindex="-1"></a><span class="vs">          &lt;/tr&gt;</span></span>
+<span id="cb27-1281"><a href="#cb27-1281" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/thead&gt;</span></span>
+<span id="cb27-1282"><a href="#cb27-1282" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;tbody&gt;</span></span>
+<span id="cb27-1283"><a href="#cb27-1283" aria-hidden="true" tabindex="-1"></a><span class="vs">          </span><span class="sc">${</span>samples_2<span class="op">.</span><span class="fu">map</span>((sample<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`</span></span>
+<span id="cb27-1284"><a href="#cb27-1284" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;tr style="border-bottom: 1px solid #eee; </span><span class="sc">${</span>i <span class="op">%</span> <span class="dv">2</span> <span class="op">===</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">'background: #f8f9fa;'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs">"&gt;</span></span>
+<span id="cb27-1285"><a href="#cb27-1285" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; width: 100px;"&gt;</span></span>
+<span id="cb27-1286"><a href="#cb27-1286" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">has_thumbnail</span> <span class="op">?</span></span>
+<span id="cb27-1287"><a href="#cb27-1287" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">" target="_blank"&gt;</span></span>
+<span id="cb27-1288"><a href="#cb27-1288" aria-hidden="true" tabindex="-1"></a><span class="vs">                    &lt;img src="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_thumbnail_url</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb27-1289"><a href="#cb27-1289" aria-hidden="true" tabindex="-1"></a><span class="vs">                         alt="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb27-1290"><a href="#cb27-1290" aria-hidden="true" tabindex="-1"></a><span class="vs">                         style="max-width: 80px; max-height: 80px; border-radius: 4px; border: 1px solid #ddd;"&gt;</span></span>
+<span id="cb27-1291"><a href="#cb27-1291" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;`</span></span>
+<span id="cb27-1292"><a href="#cb27-1292" aria-hidden="true" tabindex="-1"></a>                <span class="op">:</span></span>
+<span id="cb27-1293"><a href="#cb27-1293" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">html</span><span class="vs">`&lt;div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #6c757d; font-size: 0.8em;"&gt;No image&lt;/div&gt;`</span></span>
+<span id="cb27-1294"><a href="#cb27-1294" aria-hidden="true" tabindex="-1"></a>                <span class="sc">}</span></span>
+<span id="cb27-1295"><a href="#cb27-1295" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb27-1296"><a href="#cb27-1296" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
+<span id="cb27-1297"><a href="#cb27-1297" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 4px;"&gt;</span></span>
+<span id="cb27-1298"><a href="#cb27-1298" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
+<span id="cb27-1299"><a href="#cb27-1299" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb27-1300"><a href="#cb27-1300" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #666;"&gt;</span></span>
+<span id="cb27-1301"><a href="#cb27-1301" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">'http'</span>) <span class="op">?</span> sample<span class="op">.</span><span class="at">sample_pid</span> <span class="op">:</span> sample<span class="op">.</span><span class="at">sample_alternate_identifiers</span><span class="op">?.</span>[<span class="dv">0</span>] <span class="op">||</span> <span class="st">'#'</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb27-1302"><a href="#cb27-1302" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
+<span id="cb27-1303"><a href="#cb27-1303" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
+<span id="cb27-1304"><a href="#cb27-1304" aria-hidden="true" tabindex="-1"></a><span class="vs">                    </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_pid</span><span class="op">.</span><span class="fu">replace</span>(<span class="st">'ark:/28722/'</span><span class="op">,</span> <span class="st">'ark:…/'</span>)<span class="sc">}</span></span>
+<span id="cb27-1305"><a href="#cb27-1305" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
+<span id="cb27-1306"><a href="#cb27-1306" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb27-1307"><a href="#cb27-1307" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb27-1308"><a href="#cb27-1308" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; max-width: 300px;"&gt;</span></span>
+<span id="cb27-1309"><a href="#cb27-1309" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.85em; color: #495057; line-height: 1.4;"&gt;</span></span>
+<span id="cb27-1310"><a href="#cb27-1310" aria-hidden="true" tabindex="-1"></a><span class="vs">                  </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_description</span> <span class="op">||</span> <span class="st">'No description'</span><span class="sc">}</span></span>
+<span id="cb27-1311"><a href="#cb27-1311" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb27-1312"><a href="#cb27-1312" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb27-1313"><a href="#cb27-1313" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px;"&gt;</span></span>
+<span id="cb27-1314"><a href="#cb27-1314" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="margin-bottom: 2px;"&gt;</span></span>
+<span id="cb27-1315"><a href="#cb27-1315" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;strong&gt;</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_label</span><span class="sc">}</span><span class="vs">&lt;/strong&gt;</span></span>
+<span id="cb27-1316"><a href="#cb27-1316" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb27-1317"><a href="#cb27-1317" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;div style="font-size: 0.75em;"&gt;</span></span>
+<span id="cb27-1318"><a href="#cb27-1318" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;a href="</span><span class="sc">${</span>sample<span class="op">.</span><span class="at">sample_site_pid</span><span class="sc">}</span><span class="vs">"</span></span>
+<span id="cb27-1319"><a href="#cb27-1319" aria-hidden="true" tabindex="-1"></a><span class="vs">                     target="_blank"</span></span>
+<span id="cb27-1320"><a href="#cb27-1320" aria-hidden="true" tabindex="-1"></a><span class="vs">                     style="color: #007bff; text-decoration: none;"&gt;</span></span>
+<span id="cb27-1321"><a href="#cb27-1321" aria-hidden="true" tabindex="-1"></a><span class="vs">                    View site</span></span>
+<span id="cb27-1322"><a href="#cb27-1322" aria-hidden="true" tabindex="-1"></a><span class="vs">                  &lt;/a&gt;</span></span>
+<span id="cb27-1323"><a href="#cb27-1323" aria-hidden="true" tabindex="-1"></a><span class="vs">                &lt;/div&gt;</span></span>
+<span id="cb27-1324"><a href="#cb27-1324" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb27-1325"><a href="#cb27-1325" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;td style="padding: 8px; font-size: 0.85em; color: #666;"&gt;</span></span>
+<span id="cb27-1326"><a href="#cb27-1326" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">latitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°N&lt;br&gt;</span></span>
+<span id="cb27-1327"><a href="#cb27-1327" aria-hidden="true" tabindex="-1"></a><span class="vs">                </span><span class="sc">${</span>sample<span class="op">.</span><span class="at">longitude</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">5</span>)<span class="sc">}</span><span class="vs">°E</span></span>
+<span id="cb27-1328"><a href="#cb27-1328" aria-hidden="true" tabindex="-1"></a><span class="vs">              &lt;/td&gt;</span></span>
+<span id="cb27-1329"><a href="#cb27-1329" aria-hidden="true" tabindex="-1"></a><span class="vs">            &lt;/tr&gt;</span></span>
+<span id="cb27-1330"><a href="#cb27-1330" aria-hidden="true" tabindex="-1"></a><span class="vs">          `</span>)<span class="sc">}</span></span>
+<span id="cb27-1331"><a href="#cb27-1331" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;/tbody&gt;</span></span>
+<span id="cb27-1332"><a href="#cb27-1332" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/table&gt;</span></span>
+<span id="cb27-1333"><a href="#cb27-1333" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;</span></span>
+<span id="cb27-1334"><a href="#cb27-1334" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;div style="margin-top: 8px; font-size: 0.9em; color: #666;"&gt;</span></span>
+<span id="cb27-1335"><a href="#cb27-1335" aria-hidden="true" tabindex="-1"></a><span class="vs">      Found </span><span class="sc">${</span>samples_2<span class="op">.</span><span class="at">length</span><span class="sc">}</span><span class="vs"> sample</span><span class="sc">${</span>samples_2<span class="op">.</span><span class="at">length</span> <span class="op">!==</span> <span class="dv">1</span> <span class="op">?</span> <span class="st">'s'</span> <span class="op">:</span> <span class="st">''</span><span class="sc">}</span><span class="vs"> via Path 2 (via site location)</span></span>
+<span id="cb27-1336"><a href="#cb27-1336" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
+<span id="cb27-1337"><a href="#cb27-1337" aria-hidden="true" tabindex="-1"></a>  <span class="op">:</span></span>
+<span id="cb27-1338"><a href="#cb27-1338" aria-hidden="true" tabindex="-1"></a>    <span class="fu">html</span><span class="vs">`&lt;div style="padding: 20px; background: #f8f9fa; border-radius: 4px; color: #6c757d;"&gt;</span></span>
+<span id="cb27-1339"><a href="#cb27-1339" aria-hidden="true" tabindex="-1"></a><span class="vs">      No samples found via Path 2 (via site location).</span></span>
+<span id="cb27-1340"><a href="#cb27-1340" aria-hidden="true" tabindex="-1"></a><span class="vs">    &lt;/div&gt;`</span></span>
+<span id="cb27-1341"><a href="#cb27-1341" aria-hidden="true" tabindex="-1"></a><span class="sc">}</span><span class="vs">`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-18" data-nodetype="expression">
 
