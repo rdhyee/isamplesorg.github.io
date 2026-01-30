@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Mapping Source Records – iSamples</title>
+<title>session_notes – iSamples</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +20,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../assets/isamplesfavicon.ico" rel="icon">
-<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-5dcfcf7f8d229c93d75c4165c3ff646b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./assets/isamplesfavicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-5dcfcf7f8d229c93d75c4165c3ff646b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -70,7 +105,7 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 
 
-<link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-sidebar docked quarto-light">
@@ -82,7 +117,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item">Mapping Source Records</li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -96,9 +131,9 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="../index.html" class="sidebar-logo-link">
-      <img src="../assets/isampleslogopetal.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../assets/isampleslogopetal.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./assets/isampleslogopetal.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="./assets/isampleslogopetal.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       <div class="sidebar-tools-main tools-wide">
     <a href="https://github.com/isamplesorg" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
@@ -115,13 +150,13 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../about.html" class="sidebar-item-text sidebar-link">
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Goals</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../people.html" class="sidebar-item-text sidebar-link">
+  <a href="./people.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">People</span></a>
   </div>
 </li>
@@ -136,13 +171,13 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../design/index.html" class="sidebar-item-text sidebar-link">
+  <a href="./design/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../design/requirements.html" class="sidebar-item-text sidebar-link">
+  <a href="./design/requirements.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Requirements</span></a>
   </div>
 </li>
@@ -154,7 +189,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../models/index.html" class="sidebar-item-text sidebar-link">
+  <a href="./models/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">iSamples Vocabularies</span></a>
   </div>
 </li>
@@ -177,13 +212,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../assets/2022-11_iSamplesMetadata.pdf" class="sidebar-item-text sidebar-link">
+  <a href="./assets/2022-11_iSamplesMetadata.pdf" class="sidebar-item-text sidebar-link">
  <span class="menu-text">iSamples metadata model talk (slides, PDF)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pubs.html" class="sidebar-item-text sidebar-link">
+  <a href="./pubs.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Publications</span></a>
   </div>
 </li>
@@ -204,7 +239,7 @@ ul.task-list li input[type="checkbox"] {
   </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/isamples_explorer.html" class="sidebar-item-text sidebar-link">
+  <a href="./tutorials/isamples_explorer.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Interactive Explorer</span></a>
   </div>
 </li>
@@ -219,25 +254,25 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/index.html" class="sidebar-item-text sidebar-link">
+  <a href="./tutorials/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/zenodo_isamples_analysis.html" class="sidebar-item-text sidebar-link">
+  <a href="./tutorials/zenodo_isamples_analysis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Deep-Dive Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/parquet_cesium_isamples_wide.html" class="sidebar-item-text sidebar-link">
+  <a href="./tutorials/parquet_cesium_isamples_wide.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">3D Globe Visualization</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../tutorials/narrow_vs_wide_performance.html" class="sidebar-item-text sidebar-link">
+  <a href="./tutorials/narrow_vs_wide_performance.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Technical: Narrow vs Wide</span></a>
   </div>
 </li>
@@ -253,125 +288,131 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#mapping-from-sources-to-core" id="toc-mapping-from-sources-to-core" class="nav-link active" data-scroll-target="#mapping-from-sources-to-core"><span class="header-section-number">1</span> Mapping from sources to core</a></li>
-  <li><a href="#geome" id="toc-geome" class="nav-link" data-scroll-target="#geome"><span class="header-section-number">2</span> GEOME</a></li>
+  <li><a href="#session-continuity-notes---oct-3-2025" id="toc-session-continuity-notes---oct-3-2025" class="nav-link active" data-scroll-target="#session-continuity-notes---oct-3-2025"><span class="header-section-number">1</span> Session Continuity Notes - Oct 3, 2025</a>
+  <ul>
+  <li><a href="#current-status-phase-2-complete" id="toc-current-status-phase-2-complete" class="nav-link" data-scroll-target="#current-status-phase-2-complete"><span class="header-section-number">1.1</span> Current Status: Phase 2 Complete ✅</a>
+  <ul class="collapse">
+  <li><a href="#completed-work" id="toc-completed-work" class="nav-link" data-scroll-target="#completed-work"><span class="header-section-number">1.1.1</span> Completed Work</a></li>
+  <li><a href="#whats-next-phase-3" id="toc-whats-next-phase-3" class="nav-link" data-scroll-target="#whats-next-phase-3"><span class="header-section-number">1.1.2</span> What’s Next: Phase 3</a></li>
+  <li><a href="#key-technical-details" id="toc-key-technical-details" class="nav-link" data-scroll-target="#key-technical-details"><span class="header-section-number">1.1.3</span> Key Technical Details</a></li>
+  <li><a href="#file-locations" id="toc-file-locations" class="nav-link" data-scroll-target="#file-locations"><span class="header-section-number">1.1.4</span> File Locations</a></li>
+  <li><a href="#quick-start-commands" id="toc-quick-start-commands" class="nav-link" data-scroll-target="#quick-start-commands"><span class="header-section-number">1.1.5</span> Quick Start Commands</a></li>
+  <li><a href="#session-pickup-prompt" id="toc-session-pickup-prompt" class="nav-link" data-scroll-target="#session-pickup-prompt"><span class="header-section-number">1.1.6</span> Session Pickup Prompt</a></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes"><span class="header-section-number">1.1.7</span> Notes</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/models/mapping_sources.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/SESSION_NOTES.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Mapping Source Records</h1>
-<p class="subtitle lead">Mapping source sample records to the iSamples core model</p>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<section id="mapping-from-sources-to-core" class="level2" data-number="1">
-<h2 data-number="1" data-anchor-id="mapping-from-sources-to-core"><span class="header-section-number">1</span> Mapping from sources to core</h2>
-<p>In general the process is :</p>
-<p>Remove plantuml diagram… [smr 2024-01-04]</p>
+<section id="session-continuity-notes---oct-3-2025" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Session Continuity Notes - Oct 3, 2025</h1>
+<section id="current-status-phase-2-complete" class="level2" data-number="1.1">
+<h2 data-number="1.1" data-anchor-id="current-status-phase-2-complete"><span class="header-section-number">1.1</span> Current Status: Phase 2 Complete ✅</h2>
+<p>We’re in the middle of integrating Eric Kansa’s 4 query functions from <code>oc_parquet_analysis_enhanced.ipynb</code> into <code>/tutorials/parquet_cesium.qmd</code>.</p>
+<section id="completed-work" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" data-anchor-id="completed-work"><span class="header-section-number">1.1.1</span> Completed Work</h3>
+<p><strong>Phase 1: Documentation</strong> (Commit d5d6690) - ✅ Added comprehensive Path 1/Path 2 explanation with diagrams - ✅ Added full relationship map (Agent, IdentifiedConcept paths) - ✅ Added Eric’s 4 query function analysis with summary table</p>
+<p><strong>Phase 2: First Query Implementation</strong> (Commit 3224eb1) - ✅ Implemented <code>get_samples_at_geo_cord_location_via_sample_event()</code> - ✅ Combines Path 1 + Path 2 with UNION - ✅ Returns rich metadata: thumbnail_url, description, alternate_identifiers, site info - ✅ Added reactive cell <code>selectedSamplesCombined</code> with loading state - ✅ Added display section “Combined Samples at Location”</p>
 </section>
-<section id="geome" class="level2" data-number="2">
-<h2 data-number="2" data-anchor-id="geome"><span class="header-section-number">2</span> GEOME</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>s</th>
-<th>p</th>
-<th>o</th>
-<th>Label</th>
-<th>Source</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>ARK</td>
-<td>has_record</td>
-<td>_id</td>
-<td>event</td>
-<td>GEOME</td>
-</tr>
-<tr class="even">
-<td>ARK</td>
-<td>has_record</td>
-<td>_id</td>
-<td>sample</td>
-<td>GEOME</td>
-</tr>
-<tr class="odd">
-<td>ARK</td>
-<td>has_record</td>
-<td>_id</td>
-<td>tissue</td>
-<td>GEOME</td>
-</tr>
-<tr class="even">
-<td>IGSN</td>
-<td>has_record</td>
-<td>_id</td>
-<td>sample</td>
-<td>SESAR</td>
-</tr>
-<tr class="odd">
-<td>ARK</td>
-<td>has_record</td>
-<td>_id</td>
-<td>SMITHSONIAN</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>```uenhsmpy assets/geome_mapping.drawio.svg</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>align: left</td>
-</tr>
-</tbody>
-</table>
-<p>Source record representation.</p>
-<pre><code>
-```{figure} assets/geome_mapping_1.drawio.svg
----
-align: left
----
-Mapping to individual core records and relation records. </code></pre>
-<p>Relations between entities are modelled as triples with subject (s) indicating the source of the relation, the predicate (p) the type of relation, and object (o) identifying the target.</p>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>```uenhsmpy assets/geome_mapping_2.drawio.svg</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>align: left</td>
-</tr>
-</tbody>
-</table>
-<p>Mapping to individual core records and including relations in the records. ```</p>
-<p>Relations between entities are modelled as key-value pairs within the record, with key being a field name, and value being a list of identifiers.</p>
+<section id="whats-next-phase-3" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" data-anchor-id="whats-next-phase-3"><span class="header-section-number">1.1.2</span> What’s Next: Phase 3</h3>
+<p><strong>Remaining 2 queries from Eric’s notebook</strong> (cell 59):</p>
+<ol type="1">
+<li><strong>Agent Query</strong> - <code>get_sample_data_agents_sample_pid(sample_pid)</code>
+<ul>
+<li>Shows who collected/registered samples</li>
+<li>Path: MaterialSampleRecord → produced_by → SamplingEvent → {responsibility, registrant} → Agent</li>
+<li>Returns: sample metadata + agent info (agent_pid, agent_name, predicate)</li>
+<li><strong>Note</strong>: Independent of Path 1/Path 2 (no geographic data needed)</li>
+</ul></li>
+<li><strong>Keywords/Concepts Query</strong> - <code>get_sample_types_and_keywords_via_sample_pid(sample_pid)</code>
+<ul>
+<li>Shows material types and classifications</li>
+<li>Path: MaterialSampleRecord → {keywords, has_sample_object_type, has_material_category} → IdentifiedConcept</li>
+<li>Returns: sample metadata + concept info (keyword_pid, keyword, predicate)</li>
+<li><strong>Note</strong>: Direct edges to concepts, bypasses SamplingEvent entirely!</li>
+</ul></li>
+</ol>
+</section>
+<section id="key-technical-details" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" data-anchor-id="key-technical-details"><span class="header-section-number">1.1.3</span> Key Technical Details</h3>
+<p><strong>Table alias difference</strong>: - Eric’s Python notebook uses: <code>FROM pqg AS ...</code> - Our JavaScript implementation uses: <code>FROM nodes ...</code> - DuckDB view is created as: <code>CREATE VIEW nodes AS SELECT * FROM read_parquet('${parquet_path}')</code></p>
+<p><strong>Loading pattern to follow</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">get_FUNCTION_NAME</span>(pid) {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (pid <span class="op">===</span> <span class="kw">null</span> <span class="op">||</span> pid <span class="op">===</span><span class="st">""</span> <span class="op">||</span> pid <span class="op">==</span> <span class="st">"unset"</span>) <span class="cf">return</span> []<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> q <span class="op">=</span> <span class="vs">`SQL QUERY HERE`</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> <span class="fu">loadData</span>(q<span class="op">,</span> [pid]<span class="op">,</span> <span class="st">"loading_ID"</span><span class="op">,</span> <span class="st">"key"</span>)<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result <span class="op">??</span> []<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>mutable FUNCTIONLoading <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>selectedFUNCTION <span class="op">=</span> {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    mutable FUNCTIONLoading <span class="op">=</span> <span class="kw">true</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span> {</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="cf">await</span> <span class="fu">get_FUNCTION_NAME</span>(clickedPointId)<span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">finally</span> {</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        mutable FUNCTIONLoading <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Display pattern</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Section Title</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"loading_ID"</span><span class="ot"> hidden</span><span class="dt">&gt;</span>Loading message…<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>Explanation text...</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span>{ojs}</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>//| echo: false</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>variable = selectedFUNCTION</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>FUNCTIONLoading ? md<span class="in">`(loading…)`</span> : md<span class="in">`\`</span><span class="sc">\`\`</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>${JSON.stringify(variable, null, 2)}</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>`</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="sc">\`\`\`</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="file-locations" class="level3" data-number="1.1.4">
+<h3 data-number="1.1.4" data-anchor-id="file-locations"><span class="header-section-number">1.1.4</span> File Locations</h3>
+<p><strong>Main working file</strong>: <code>/Users/raymondyee/C/src/iSamples/isamplesorg.github.io/tutorials/parquet_cesium.qmd</code></p>
+<p><strong>Reference notebook</strong>: <code>/Users/raymondyee/C/src/iSamples/isamples-python/examples/basic/oc_parquet_analysis_enhanced.ipynb</code> (cell 59)</p>
+<p><strong>Local parquet</strong>: <code>http://localhost:4979/assets/oc_isamples_pqg.parquet</code> (691MB, in <code>docs/assets/</code>)</p>
+<p><strong>Branch</strong>: <code>issue-13-parquet-duckdb</code></p>
+</section>
+<section id="quick-start-commands" class="level3" data-number="1.1.5">
+<h3 data-number="1.1.5" data-anchor-id="quick-start-commands"><span class="header-section-number">1.1.5</span> Quick Start Commands</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Navigate to project</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /Users/raymondyee/C/src/iSamples/isamplesorg.github.io</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check current branch</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> status</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Start Quarto preview (if needed)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> preview</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># View notebook for reference</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">code</span> /Users/raymondyee/C/src/iSamples/isamples-python/examples/basic/oc_parquet_analysis_enhanced.ipynb</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="session-pickup-prompt" class="level3" data-number="1.1.6">
+<h3 data-number="1.1.6" data-anchor-id="session-pickup-prompt"><span class="header-section-number">1.1.6</span> Session Pickup Prompt</h3>
+<p>“Let’s continue integrating Eric’s queries into parquet_cesium.qmd. We completed Phase 2 (combined samples query). Next we need to add the agent query and keywords/concepts query. Should we start with the agent query?”</p>
+</section>
+<section id="notes" class="level3" data-number="1.1.7">
+<h3 data-number="1.1.7" data-anchor-id="notes"><span class="header-section-number">1.1.7</span> Notes</h3>
+<ul>
+<li>All existing queries (<code>get_samples_1</code>, <code>get_samples_2</code>, <code>get_samples_at_geo_cord_location_via_sample_event</code>) are working and preserved</li>
+<li>Pattern is established - just need to adapt Eric’s remaining 2 SQL queries to JavaScript</li>
+<li>Consider UI improvements after Phase 3 complete (tables, clickable links, thumbnails)</li>
+</ul>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -776,7 +817,7 @@ Mapping to individual core records and relation records. </code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/models/mapping_sources.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/SESSION_NOTES.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the <a href="https://nsf.gov/">National Science Foundation</a>.</p>
 </div>
