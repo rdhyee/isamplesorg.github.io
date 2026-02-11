@@ -82,6 +82,10 @@ viewof searchInput = Inputs.text({
 
 ### Filters
 
+```{ojs}
+facetSummariesWarning
+```
+
 **Source**
 
 ```{ojs}
@@ -335,13 +339,26 @@ async function runQuery(sql) {
 //| code-fold: true
 // Tier 1: Load pre-computed facet summaries (2KB, instant)
 facetSummaries = {
+  facetSummariesError = null;
   try {
     const rows = await runQuery(`SELECT * FROM read_parquet('${facet_summaries_url}')`);
     return rows;
   } catch (e) {
     console.error("Facet summaries load error:", e);
+    facetSummariesError = e;
     return [];
   }
+}
+
+```
+
+```{ojs}
+//| code-fold: true
+facetSummariesWarning = {
+  if (!facetSummariesError) return null;
+  return html`<div style="margin: 6px 0 10px; padding: 8px 10px; border: 1px solid #f0b429; background: #fff7e6; border-radius: 6px; color: #7a4b00; font-size: 12px;">
+    Facet summaries failed to load. Filter counts may be missing. Try refreshing.
+  </div>`;
 }
 
 // Extract facet counts by type from pre-computed summaries

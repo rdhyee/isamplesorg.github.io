@@ -195,7 +195,7 @@ async function queryH3Clusters(h3Res) {
             COUNT(*) as n,
             AVG(latitude) as lat,
             AVG(longitude) as lon,
-            MODE(n) as dominant_source
+            MODE(source) as dominant_source
         FROM nodes
         WHERE otype = 'MaterialSampleRecord'
           AND ${col} IS NOT NULL
@@ -246,6 +246,16 @@ locations = {
         loadingDiv.innerHTML = 'Loading...';
     }
 
+    // Remove any existing camera change listener to avoid leaks
+    if (content._cameraChangedHandler) {
+        content.viewer.camera.changed.removeEventListener(content._cameraChangedHandler);
+        content._cameraChangedHandler = null;
+    }
+    if (content._cameraChangedDebounceTimer) {
+        clearTimeout(content._cameraChangedDebounceTimer);
+        content._cameraChangedDebounceTimer = null;
+    }
+
     if (viewModeToggle === "clustered") {
         // Clustered mode: load H3 clusters based on initial zoom level
         if (loadingDiv) loadingDiv.innerHTML = 'Loading H3 clusters (res4)...';
@@ -276,7 +286,7 @@ locations = {
         // Set up camera change listener for zoom-adaptive LOD
         let lastRes = 4;
         let debounceTimer = null;
-        content.viewer.camera.changed.addEventListener(() => {
+        const cameraChangedHandler = () => {
             if (viewModeToggle !== "clustered") return;
             const height = content.viewer.camera.positionCartographic.height;
             const newRes = getH3ResForHeight(height);
@@ -293,8 +303,11 @@ locations = {
                     }
                     if (ld) ld.hidden = true;
                 }, 300);
+                content._cameraChangedDebounceTimer = debounceTimer;
             }
-        });
+        };
+        content._cameraChangedHandler = cameraChangedHandler;
+        content.viewer.camera.changed.addEventListener(cameraChangedHandler);
         content.viewer.camera.percentageChanged = 0.1;
 
         performance.mark('locations-end');
@@ -403,7 +416,9 @@ function createShowPrimitive(viewer) {
                 const parts = id.split('_');
                 const count = parts[2] ? parts[2].replace('n', '') : '?';
                 const source = parts.slice(3).join('_') || '?';
-                viewer.pointLabel.label.text = `Cluster: ${Number(count).toLocaleString()} samples\nSource: ${source}\nCell: ${parts[1]}`;
+                const countNum = Number(count);
+                const countLabel = Number.isFinite(countNum) ? countNum.toLocaleString() : count;
+                viewer.pointLabel.label.text = `Cluster: ${countLabel} samples\nSource: ${source}\nCell: ${parts[1]}`;
             } else {
                 viewer.pointLabel.label.text = `${selectPoint.id}`;
             }
