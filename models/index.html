@@ -34,8 +34,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
 <link href="../assets/isamplesfavicon.ico" rel="icon">
-<script src="../site_libs/quarto-listing/list.min.js"></script>
-<script src="../site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -72,93 +70,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-vocabulary-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-subtitle',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-vocabulary-listing'] = new List('listing-vocabulary-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-extension-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-title','listing-subtitle',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-title-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-extension-listing'] = new List('listing-extension-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -185,7 +97,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../index.html" aria-current="page"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -202,20 +114,12 @@ window.Quarto = {
  <span class="dropdown-text">Overview</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../tutorials/zenodo_isamples_analysis.html">
- <span class="dropdown-text">Deep-Dive Analysis</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../tutorials/parquet_cesium_isamples_wide.html">
- <span class="dropdown-text">3D Globe Visualization</span></a>
-  </li>  
-        <li>
     <a class="dropdown-item" href="../tutorials/isamples_explorer.html">
  <span class="dropdown-text">Search Explorer</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../tutorials/narrow_vs_wide_performance.html">
- <span class="dropdown-text">Technical: Narrow vs Wide</span></a>
+    <a class="dropdown-item" href="../tutorials/zenodo_isamples_analysis.html">
+ <span class="dropdown-text">Deep-Dive Analysis</span></a>
   </li>  
     </ul>
   </li>
@@ -256,12 +160,16 @@ window.Quarto = {
  <span class="dropdown-text">Requirements</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="https://isamplesorg.github.io/metadata/">
+    <a class="dropdown-item" href="https://isamples.org/metadata/">
  <span class="dropdown-text">Metadata Model</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../models/index.html">
  <span class="dropdown-text">Vocabularies</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../tutorials/narrow_vs_wide_performance.html">
+ <span class="dropdown-text">Technical: Narrow vs Wide</span></a>
   </li>  
     </ul>
   </li>
@@ -307,7 +215,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../design/index.html">Architecture and Vocabularies</a></li><li class="breadcrumb-item"><a href="../models/index.html">iSamples Vocabularies</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../models/index.html">Vocabularies</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -329,156 +237,34 @@ window.Quarto = {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Home</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tutorials/progressive_globe.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Interactive Explorer</span></a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">How to Use</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../how-to-use.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Overview</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tutorials/zenodo_isamples_analysis.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Deep-Dive Analysis</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tutorials/parquet_cesium_isamples_wide.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3D Globe Visualization</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tutorials/isamples_explorer.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Search Explorer</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../tutorials/narrow_vs_wide_performance.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Technical: Narrow vs Wide</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">About</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../about.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Objectives</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../about.html#team" class="sidebar-item-text sidebar-link">
- <span class="menu-text">PIs and Contributors</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../about.html#photo-gallery" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Photo Gallery</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../about.html#background-history" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Background &amp; History</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Architecture and Vocabularies</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../design/index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Overview</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../design/requirements.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Requirements</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="https://isamplesorg.github.io/metadata/" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Metadata Model</span></a>
+  <a href="https://isamples.org/metadata/" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Schema</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../models/index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">iSamples Vocabularies</span></a>
+ <span class="menu-text">Vocabularies</span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
- <span class="menu-text">Research &amp; Resources</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pubs.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Publications &amp; Conferences</span></a>
+  <a href="../tutorials/narrow_vs_wide_performance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Technical: Narrow vs Wide</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../pubs.html#zenodo-community" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Zenodo Community</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../pubs.html#github-repositories" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Github Repositories</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
     </ul>
     </div>
 </nav>
@@ -489,7 +275,8 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#taxonomies" id="toc-taxonomies" class="nav-link active" data-scroll-target="#taxonomies">Taxonomies</a></li>
+  <li><a href="#core-vocabularies" id="toc-core-vocabularies" class="nav-link active" data-scroll-target="#core-vocabularies">Core Vocabularies</a></li>
+  <li><a href="#extension-vocabularies" id="toc-extension-vocabularies" class="nav-link" data-scroll-target="#extension-vocabularies">Extension Vocabularies</a></li>
   <li><a href="#related-pages" id="toc-related-pages" class="nav-link" data-scroll-target="#related-pages">Related Pages</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/models/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
@@ -497,7 +284,7 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../design/index.html">Architecture and Vocabularies</a></li><li class="breadcrumb-item"><a href="../models/index.html">iSamples Vocabularies</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">iSamples Vocabularies</h1>
 <p class="subtitle lead">Vocabularies for interoperable sample description</p>
@@ -531,35 +318,40 @@ window.Quarto = {
 <p>The authoritative versions of iSamples vocabularies are maintained as RDF/SKOS files in the <a href="https://github.com/isamplesorg/">iSamples GitHub repositories</a>. Vocabulary terms are also registered with the <a href="https://vocabs.ardc.edu.au/">Australian Research Data Commons (ARDC) Research Vocabularies</a>.</p>
 </div>
 </div>
-<section id="taxonomies" class="level2 unnumbered">
-<h2 class="unnumbered" data-anchor-id="taxonomies">Taxonomies</h2>
+<section id="core-vocabularies" class="level2 unnumbered">
+<h2 class="unnumbered" data-anchor-id="core-vocabularies">Core Vocabularies</h2>
 <p>One of the foundations for interoperability of iSamples material sample descriptions is the definition of vocabularies for the categorization of sample type. There are three core vocabularies for different aspects of sample type: material sample type, material type, and sampled feature type. Each vocabulary is maintained as an RDF file using the SKOS vocabulary, with hierarchical relationships using <a href="https://www.w3.org/2009/08/skos-reference/skos.html#broader"><code>SKOS:broader</code></a>. In order to be domain agnostic, these core taxonomies cover a small set of top level terms. The taxonomies may be extended as necessary to support more specialized domains by relating additional terms using <code>SKOS:broader</code> and <code>SKOS:narrower</code>.</p>
-<p>The iSamples taxonomies are used to characterize three fundamental concepts pertaining to physical samples:</p>
-<ol type="1">
-<li>The <strong>Materials Vocabulary</strong> categorizes the composition of a physical sample (“What material is the sample composed of?”)</li>
-<li>The <strong>Sampled Feature Type Vocabulary</strong> indicates what the sample is representative of</li>
-<li>The <strong>Specimen Type Vocabulary</strong> classifies what type of specimen the physical sample record represents</li>
-</ol>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Core Vocabularies
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
+<table class="table-striped table-hover caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Vocabulary</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><a href="generated/vocabularies/material_sample_object_type.html">Specimen Type</a></td>
+<td style="text-align: left;">Classifies what type of specimen the physical sample record represents</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><a href="generated/vocabularies/material_type.html">Material Type</a></td>
+<td style="text-align: left;">Categorizes the composition of a physical sample</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><a href="generated/vocabularies/sampled_feature_type.html">Sampled Feature Type</a></td>
+<td style="text-align: left;">Indicates what the sample is representative of</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="extension-vocabularies" class="level2 unnumbered">
+<h2 class="unnumbered" data-anchor-id="extension-vocabularies">Extension Vocabularies</h2>
+<p>The core vocabularies can be extended for specialized domains. Extension vocabularies add narrower terms beneath the core concepts using <code>SKOS:broader</code> and <code>SKOS:narrower</code>. Domain-specific extensions are maintained in the following repositories:</p>
 <ul>
-<li><a href="generated/vocabularies/material_sample_object_type.html">Material Sample (specimen) Type Vocabulary</a></li>
-<li><a href="generated/vocabularies/material_type.html">Materials Vocabulary</a></li>
-<li><a href="generated/vocabularies/sampled_feature_type.html">Sampled Feature (context) Type vocabulary</a></li>
+<li><a href="https://github.com/isamplesorg/metadata_profile_earth_science">Earth Science extensions</a></li>
+<li><a href="https://github.com/isamplesorg/metadata_profile_biology">Biology extensions</a></li>
+<li><a href="https://github.com/isamplesorg/metadata_profile_archaeology">Anthropology/Archaeology extensions</a></li>
 </ul>
-</div>
-</div>
-</div>
 </section>
 <section id="related-pages" class="level2 unnumbered">
 <h2 class="unnumbered" data-anchor-id="related-pages">Related Pages</h2>
@@ -570,170 +362,9 @@ window.Quarto = {
 </ul>
 
 
-
 </section>
 
-<div class="quarto-listing quarto-listing-container-table" id="listing-vocabulary-listing">
-<table class="quarto-listing-table table">
-<thead>
-<tr>
-
-<th>
-Title
-</th>
-
-<th>
-Subtitle
-</th>
-
-</tr>
-</thead>
-<tbody class="list">
-
-<tr data-index="0" data-listing-date-sort="1775778011669" data-listing-file-modified-sort="1775778012991" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1283" data-listing-title-sort="Sampled Feature Type vocabulary" data-listing-filename-sort="sampled_feature_type.qmd">
-<td>
-<a href="../models/generated/vocabularies/sampled_feature_type.html" class="title listing-title">Sampled Feature Type vocabulary</a>
-</td>
-<td>
-<span class="listing-subtitle">Categories to specify the broad context that a sample is intended to represent. </span>
-</td>
-
-</tr>
-
-<tr data-index="1" data-listing-date-sort="1775778014458" data-listing-file-modified-sort="1775778015767" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1917" data-listing-title-sort="iSamples Material Sample Object Type Vocabulary" data-listing-filename-sort="material_sample_object_type.qmd">
-<td>
-<a href="../models/generated/vocabularies/material_sample_object_type.html" class="title listing-title">iSamples Material Sample Object Type Vocabulary</a>
-</td>
-<td>
-<span class="listing-subtitle">Broad categories to specify the kind of physical thing identified as the ‘sample’. </span>
-</td>
-
-</tr>
-
-<tr data-index="2" data-listing-date-sort="1775778008863" data-listing-file-modified-sort="1775778010208" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10" data-listing-word-count-sort="1870" data-listing-title-sort="iSamples Materials Vocabulary" data-listing-filename-sort="material_type.qmd">
-<td>
-<a href="../models/generated/vocabularies/material_type.html" class="title listing-title">iSamples Materials Vocabulary</a>
-</td>
-<td>
-<span class="listing-subtitle">High level vocabulary to specify the kind of material that constitutes a physical sample </span>
-</td>
-
-</tr>
-
-<tr data-index="3" data-listing-file-modified-sort="1775777984803" data-listing-reading-time-sort="1" data-listing-word-count-sort="12" data-listing-filename-sort="readme.md">
-<td>
-<a href="../models/generated/vocabularies/readme.html" class="title listing-title">&nbsp;</a>
-</td>
-<td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-
-</tr>
-
-</tbody>
-</table>
-<div class="listing-no-matching d-none">No matching items</div>
-</div><div class="quarto-listing quarto-listing-container-table" id="listing-extension-listing">
-<table class="quarto-listing-table table">
-<thead>
-<tr>
-
-<th>
-Title
-</th>
-
-<th>
-Subtitle
-</th>
-
-</tr>
-</thead>
-<tbody class="list">
-
-<tr data-index="0" data-listing-date-sort="1775778050289" data-listing-file-modified-sort="1775778052879" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="19" data-listing-word-count-sort="3658" data-listing-title-sort="Biology Extension: Basic taxon classes for biological entity" data-listing-filename-sort="biology_sampledfeature_extension.md">
-<td>
-<a href="../models/generated/extensions/biology_sampledfeature_extension.html" class="title listing-title">Biology Extension: Basic taxon classes for biological entity</a>
-</td>
-<td>
-<span class="listing-subtitle">This is a vocabulary to categorize sampled organisms (whole or part) according to taxonomic classes. Classes are based largely on taxonomy found in Wikipedia, particularly Whittaker’s five kingdom system (1969) (https://en.wikipedia.org/wiki/Kingdom_(biology), https://doi.org/10.1126%2Fscience.163.3863.150). The intended use is in iSamples cross domain categorization of material samples, recognizing that there are multiple view for taxonomy and cladistics for the tree of life. This is a high level view intended for cross domain purposes, not expert analysis. Other extension vocabularies should be used for other taxonomic schemes </span>
-</td>
-
-</tr>
-
-<tr data-index="1" data-listing-date-sort="1775778034811" data-listing-file-modified-sort="1775778039048" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="25" data-listing-word-count-sort="4948" data-listing-title-sort="Earth and Environmental Science extension -  Material sample type" data-listing-filename-sort="earthenv_materialsampleobject_type.md">
-<td>
-<a href="../models/generated/extensions/earthenv_materialsampleobject_type.html" class="title listing-title">Earth and Environmental Science extension - Material sample type</a>
-</td>
-<td>
-<span class="listing-subtitle">This concept scheme contains skos concepts for categorizing kinds of Earth Material sample types, extending the iSamples Material Sample Object Type vocabulary. Defintions from SESAR, ODM2, wikipedia, ESS-DIVE, and other sources; sources are cited with each term. </span>
-</td>
-
-</tr>
-
-<tr data-index="2" data-listing-date-sort="1775778016791" data-listing-file-modified-sort="1775778017523" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="756" data-listing-title-sort="Earth and Environmental Science extension -  Mineral group vocabulary" data-listing-filename-sort="earthenv_material_extension_mineral_group.md">
-<td>
-<a href="../models/generated/extensions/earthenv_material_extension_mineral_group.html" class="title listing-title">Earth and Environmental Science extension - Mineral group vocabulary</a>
-</td>
-<td>
-<span class="listing-subtitle">Vocabulary to extend the mineral material type category with the top level mineral group categories. Uses the Nickel–Strunz mineral classes, which divide minerals into ten classes according to chemical composition and crystal structure. Nickel-Strunz group 10 is not included because that material would be mat:organiccompounds. Version 10 of the classification is modified from v 9 (Strunz and Nickel,2002) by Jim Ferraiolo and others, and now extended and maintained by mindat.org. Some scope notes from linked.data.gov.au. </span>
-</td>
-
-</tr>
-
-<tr data-index="3" data-listing-date-sort="1775778022898" data-listing-file-modified-sort="1775778028878" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="42" data-listing-word-count-sort="8362" data-listing-title-sort="Earth and Environmental Science extension - Rock and sediment materials vocabulary" data-listing-filename-sort="earthenv_material_extension_rock_sediment.md">
-<td>
-<a href="../models/generated/extensions/earthenv_material_extension_rock_sediment.html" class="title listing-title">Earth and Environmental Science extension - Rock and sediment materials vocabulary</a>
-</td>
-<td>
-<span class="listing-subtitle">Rock and sediment categories for iSamples materialType classification. Remove anthropogenic materials and classes for consolidated or non-consolidated material; remove leaf classes subjectively based on abundance of material type and number of subclasses. There are 83 ‘mat:rock’ subclasses; these include some classes that are non-consolidated material (e.g.&nbsp;fault gouge) but these are not sediment and adding ‘material’ classes that are independent of consolidation seems like more overhead than needed. Note that a given material is likely to fit in more that one class; for example the sediment subclasses include compositional classes (e.g.&nbsp;carbonate, clastic) as well as grain size classes (gravel-size sediment). A calcareous ooze sample would be both ‘mud-size sediment’ and ‘carbonate sediment’. Change owl:class to skos:concept, and rdfs:subClassOf to skos:broader. </span>
-</td>
-
-</tr>
-
-<tr data-index="4" data-listing-date-sort="1775778030029" data-listing-file-modified-sort="1775778030940" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="682" data-listing-title-sort="Earth and Environmental Science extension - Sampled feature role" data-listing-filename-sort="earthenv_sampled_feature_role.md">
-<td>
-<a href="../models/generated/extensions/earthenv_sampled_feature_role.html" class="title listing-title">Earth and Environmental Science extension - Sampled feature role</a>
-</td>
-<td>
-<span class="listing-subtitle">Terms to categorize the relation of a sampled feature to its context. In the Earth Science realm this is typically relation of sampled feature to a containing rock body or rock body part. </span>
-</td>
-
-</tr>
-
-<tr data-index="5" data-listing-date-sort="1775778046860" data-listing-file-modified-sort="1775778047800" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="635" data-listing-title-sort="Open Context vocabulary extension for material sample object type" data-listing-filename-sort="opencontext_materialsampleobjecttype.md">
-<td>
-<a href="../models/generated/extensions/opencontext_materialsampleobjecttype.html" class="title listing-title">Open Context vocabulary extension for material sample object type</a>
-</td>
-<td>
-<span class="listing-subtitle">categories for kinds of sample objects specific to archaeological studies </span>
-</td>
-
-</tr>
-
-<tr data-index="6" data-listing-date-sort="1775778042061" data-listing-file-modified-sort="1775778045745" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13" data-listing-word-count-sort="2529" data-listing-title-sort="OpenContext material type extension draft" data-listing-filename-sort="opencontext_material_extension.md">
-<td>
-<a href="../models/generated/extensions/opencontext_material_extension.html" class="title listing-title">OpenContext material type extension draft</a>
-</td>
-<td>
-<span class="listing-subtitle">vocabulary of materials typical of archeological samples </span>
-</td>
-
-</tr>
-
-<tr data-index="7" data-listing-file-modified-sort="1775777984803" data-listing-reading-time-sort="1" data-listing-word-count-sort="8" data-listing-filename-sort="readme.md">
-<td>
-<a href="../models/generated/extensions/readme.html" class="title listing-title">&nbsp;</a>
-</td>
-<td>
-<span class="listing-subtitle">&nbsp;</span>
-</td>
-
-</tr>
-
-</tbody>
-</table>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const isCodeAnnotation = (el) => {
