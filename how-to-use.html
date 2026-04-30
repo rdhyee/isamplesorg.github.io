@@ -206,6 +206,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="./tutorials/narrow_vs_wide_performance.html">
  <span class="dropdown-text">Technical: Narrow vs Wide</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/why_h3.html">
+ <span class="dropdown-text">Technical: Why H3?</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -478,12 +482,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>(pid, material, context, object_type)</code> facet URIs per sample</td>
 <td>You need to filter on <em>combinations</em> of facets at query time</td>
 </tr>
+<tr class="even">
+<td><a href="https://data.isamples.org/vocab_labels.parquet"><code>vocab_labels.parquet</code></a></td>
+<td style="text-align: right;">58 KB</td>
+<td><code>(uri, pref_label, definition, alt_labels, scheme)</code> for 537 SKOS concepts (material, sample object type, sampled feature type)</td>
+<td>You need to render facet URIs as human-readable text</td>
+</tr>
 </tbody>
 </table>
 </section>
 <section id="geospatial-aggregates-h3" class="level3 unnumbered">
 <h3 class="unnumbered" data-anchor-id="geospatial-aggregates-h3">Geospatial aggregates (H3)</h3>
-<p>Hexagonal H3 cells pre-aggregated at three resolutions for zoom-adaptive globe rendering. Each row: <code>h3_cell, center_lat, center_lng, sample_count, dominant_source, source_count</code>.</p>
+<p>Hexagonal H3 cells pre-aggregated at three resolutions for zoom-adaptive globe rendering. Each row: <code>h3_cell, center_lat, center_lng, sample_count, dominant_source, source_count</code>. For the design rationale (why hexagons, why these resolutions), see <a href="./tutorials/why_h3.html">Technical: Why H3?</a>.</p>
 <table class="caption-top table">
 <thead>
 <tr class="header">
@@ -589,6 +599,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td><code>samples_map_lite.parquet</code></td>
 <td style="text-align: center;">●</td>
 <td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td><code>vocab_labels.parquet</code></td>
+<td style="text-align: center;">●</td>
+<td style="text-align: center;">●</td>
 <td style="text-align: center;"></td>
 </tr>
 </tbody>
