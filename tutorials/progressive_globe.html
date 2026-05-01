@@ -85,8 +85,9 @@ ul.task-list li input[type="checkbox"] {
       '../explorer.html' + (qs ? '?' + qs : '') + window.location.hash,
       window.location.href
     ).href;
-    try { sessionStorage.setItem('__redirectTarget', target); sessionStorage.setItem('__redirectFrom', window.location.href); } catch(e) {}
-    window.location.replace(target);
+    // DEBUG: hold redirect for 3s and put captured URL in title for inspection
+    document.title = 'DEBUG: from=' + window.location.href + ' target=' + target;
+    setTimeout(function(){ window.location.replace(target); }, 5000);
   })();
 </script>
 <meta http-equiv="refresh" content="0; url=../explorer.html">
