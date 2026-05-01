@@ -72,20 +72,10 @@ ul.task-list li input[type="checkbox"] {
 }</script>
 <script>
   (function () {
-    // Translate legacy `?q=` to `?search=` so old shared links keep
-    // working after the unified explorer dropped `?q=` (which collides
-    // with Quarto's site-wide search highlight feature).
-    var params = new URLSearchParams(window.location.search);
-    if (params.has('q') && !params.has('search')) {
-      params.set('search', params.get('q'));
-      params.delete('q');
-    }
-    var qs = params.toString();
     var target = new URL(
-      '../explorer.html' + (qs ? '?' + qs : '') + window.location.hash,
+      '../explorer.html' + window.location.search + window.location.hash,
       window.location.href
     ).href;
-    try { sessionStorage.setItem('__redirectTarget', target); sessionStorage.setItem('__redirectFrom', window.location.href); } catch(e) {}
     window.location.replace(target);
   })();
 </script>
