@@ -85,6 +85,7 @@ ul.task-list li input[type="checkbox"] {
       '../explorer.html' + (qs ? '?' + qs : '') + window.location.hash,
       window.location.href
     ).href;
+    try { sessionStorage.setItem('__redirectTarget', target); sessionStorage.setItem('__redirectFrom', window.location.href); } catch(e) {}
     window.location.replace(target);
   })();
 </script>
