@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-84244d6014897f94eda7509784684fcb.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-c436d44d321b8ac04af0efde3e46f6bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -247,6 +247,8 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#result-set-shape-acceptance-cases" id="toc-result-set-shape-acceptance-cases" class="nav-link" data-scroll-target="#result-set-shape-acceptance-cases"><span class="header-section-number">1.6.5</span> Result-set shape acceptance cases</a></li>
   <li><a href="#state-inventory-addendum-for-c" id="toc-state-inventory-addendum-for-c" class="nav-link" data-scroll-target="#state-inventory-addendum-for-c"><span class="header-section-number">1.6.6</span> State-inventory addendum for (C)</a></li>
   <li><a href="#light-path-addendum-two-button-scope-selection-178-2026-05-08" id="toc-light-path-addendum-two-button-scope-selection-178-2026-05-08" class="nav-link" data-scroll-target="#light-path-addendum-two-button-scope-selection-178-2026-05-08"><span class="header-section-number">1.6.7</span> Light-path addendum: two-button scope selection (#178, 2026-05-08)</a></li>
+  <li><a href="#mockup-v1-addendum-in-map-overlay-sidebar-mirror-permanent-table-200-2026-05" id="toc-mockup-v1-addendum-in-map-overlay-sidebar-mirror-permanent-table-200-2026-05" class="nav-link" data-scroll-target="#mockup-v1-addendum-in-map-overlay-sidebar-mirror-permanent-table-200-2026-05"><span class="header-section-number">1.6.8</span> Mockup-v1 addendum: in-map overlay, sidebar mirror, permanent table (#200, 2026-05)</a></li>
+  <li><a href="#table-v2-addendum-server-side-pagination-218-2026-05" id="toc-table-v2-addendum-server-side-pagination-218-2026-05" class="nav-link" data-scroll-target="#table-v2-addendum-server-side-pagination-218-2026-05"><span class="header-section-number">1.6.9</span> Table v2 addendum: server-side pagination (#218, 2026-05)</a></li>
   </ul></li>
   <li><a href="#facet-count-contract" id="toc-facet-count-contract" class="nav-link" data-scroll-target="#facet-count-contract"><span class="header-section-number">1.7</span> 7. Facet-count contract</a></li>
   <li><a href="#out-of-scope" id="toc-out-of-scope" class="nav-link" data-scroll-target="#out-of-scope"><span class="header-section-number">1.8</span> 8. Out of scope</a></li>
@@ -265,7 +267,7 @@ ul.task-list li input[type="checkbox"] {
 <h1 data-number="1"><span class="header-section-number">1</span> Explorer State Contract</h1>
 <p>Doc-only contract for <code>explorer.qmd</code>. Locks down where every piece of explorer state lives, who owns it, when it gets written, and what the cross-filter rules are. Resolves <a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/164">#164</a>; unblocks the items in <a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/163">#163</a>.</p>
 <p><strong>Direction</strong>: imperative + URL-as-canonical-state. OJS cells are used as a DAG-aware bootstrap (run viewer once, run phase1 after viewer is ready, etc.), not as a reactive UI runtime. All user-driven UI updates go through <code>writeQueryState()</code> → <code>history.replaceState</code> and direct DOM mutation. Reading DOM checkboxes is the source of truth for facet state inside SQL builders; the URL is the source of truth across reloads.</p>
-<p>All file:line references below are against <code>explorer.qmd</code> at commit <code>94e7674</code> (the tree this doc is being written against).</p>
+<p>All file:line references below are against <code>explorer.qmd</code> at commit <code>94e7674</code> (the tree this doc was originally written against). The inventory has had targeted edits as later changes land — most notably the <strong>mockup-v1 PR</strong> (<a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/200">#200</a>) which removed the Globe/Table view toggle, relocated search into an in-map overlay, added a sidebar search input that mirrors the in-map one, and made the samples table a permanent surface below the globe. See §6 “Mockup-v1 addendum” for the full delta. Line numbers may not match exactly; the contract is the source of truth, not the line citations.</p>
 <hr>
 <section id="url-query-params-location.search" class="level2" data-number="1.1">
 <h2 data-number="1.1" data-anchor-id="url-query-params-location.search"><span class="header-section-number">1.1</span> 1. URL query params (<code>location.search</code>)</h2>
@@ -295,11 +297,11 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td><code>search</code></td>
-<td>DOM <code>#sampleSearch</code> value</td>
+<td>DOM <code>#sampleSearch</code> value (mirrored to <code>#sampleSearchSidebar</code>)</td>
 <td>omitted</td>
 <td>raw string</td>
-<td><code>applyQueryToSearch()</code> at start of <code>phase1</code> (<code>:937</code>)</td>
-<td><code>writeQueryState()</code> (<code>:445-446</code>) called from <code>doSearch()</code> (<code>:1789</code>) and from globe/table toggle</td>
+<td><code>applyQueryToSearch()</code> at start of <code>phase1</code> (hydrates both inputs)</td>
+<td><code>writeQueryState()</code> called from <code>doSearch()</code></td>
 <td>trim only; min 2 chars enforced at search time, not in URL</td>
 <td>written even on no-result searches</td>
 </tr>
@@ -344,26 +346,36 @@ ul.task-list li input[type="checkbox"] {
 <td>same</td>
 </tr>
 <tr class="even">
-<td><code>view</code></td>
-<td><code>body.classList.contains('table-view-active')</code></td>
-<td>omitted (= globe)</td>
-<td><code>table</code> only; absent ⇒ globe</td>
-<td><code>tableView</code> cell reads <code>params.get('view')</code> (<code>:1239-1240</code>) and calls <code>setView(...)</code> with <code>updateUrl=false</code></td>
-<td><code>writeQueryState()</code> from <code>setView(mode, true)</code> via globe/table button clicks (<code>:1217-1218</code>, <code>:1210</code>)</td>
-<td>only <code>table</code> is honored (<code>:1240</code>)</td>
-<td><code>writeQueryState()</code> reads body class, not <code>viewer.*</code></td>
+<td><del><code>view</code></del></td>
+<td><em>removed in mockup-v1 (#200)</em></td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>The Globe/Table toggle is gone — the samples table is now permanent below the globe. <code>writeQueryState()</code> does <code>params.delete('view')</code> to canonicalize legacy bookmarks. See §6 “Mockup-v1 addendum”</td>
 </tr>
 <tr class="odd">
+<td><code>search_scope</code></td>
+<td>local closure <code>_searchScope</code> in <code>zoomWatcher</code></td>
+<td>omitted (= <code>world</code>)</td>
+<td><code>area</code> only; absent ⇒ world</td>
+<td><code>_searchScope</code> hydrated at top of <code>zoomWatcher</code> from <code>params.get('search_scope')</code></td>
+<td><code>persistSearchScope()</code> from <code>doSearch()</code> and button clicks</td>
+<td>exact match <code>'area'</code></td>
+<td>sidebar <code>#sampleSearchSidebar</code> Enter always submits <code>world</code>, never <code>area</code> — see §6 mockup-v1 addendum</td>
+</tr>
+<tr class="even">
 <td><code>page</code></td>
-<td>inner closure <code>let page = 0</code> in <code>tableView</code> (<code>:1080</code>)</td>
+<td>inner closure <code>let page = 0</code> in <code>tableView</code></td>
 <td>not in URL</td>
 <td>—</td>
 <td>—</td>
-<td>resets to 0 on <code>refreshTable()</code> (<code>:1163</code>); ±1 on prev/next (<code>:1219-1220</code>)</td>
-<td>clamped to <code>[0, totalPages-1]</code> (<code>:1112</code>)</td>
+<td>resets to 0 on <code>refreshTable()</code>; ±1 on prev/next</td>
+<td>clamped to <code>[0, totalPages-1]</code></td>
 <td><strong>#163 item 6</strong> — table page is intentionally not URL state today; if/when added, must coexist with the cross-filter contract below</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>perf</code></td>
 <td>— (read-only feature flag)</td>
 <td>omitted</td>
@@ -532,41 +544,62 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>document.body.classList['table-view-active']</code></td>
-<td>view marker (table vs globe)</td>
-<td><code>setView()</code> in <code>tableView</code> (<code>:1198</code>)</td>
-<td><code>writeQueryState()</code> (<code>:462</code>); <code>isTableViewActive()</code> (<code>:755</code>)</td>
-<td>URL <code>view</code> param is <strong>derived</strong> from this class, not the other way around</td>
+<td><del><code>document.body.classList['table-view-active']</code></del></td>
+<td><em>removed in mockup-v1 (#200)</em></td>
+<td>—</td>
+<td>—</td>
+<td>The view marker class is gone with the Globe/Table toggle. The samples table is permanent below the globe; <code>isTableViewActive()</code> and <code>setView()</code> were deleted</td>
 </tr>
 <tr class="even">
 <td><code>data-facet</code>, <code>data-value</code> on <code>.facet-row</code> and <code>.facet-count</code></td>
 <td>facet selectors for in-place count mutation</td>
-<td>rendered in <code>renderFilter</code> (<code>:1053</code>) and the static source legend (<code>:270-273</code>)</td>
-<td><code>applyFacetCounts()</code> (<code>:553-565</code>)</td>
+<td>rendered in <code>renderFilter</code> and the static source legend</td>
+<td><code>applyFacetCounts()</code></td>
 <td>rebuilding the HTML would lose mid-interaction selections; <code>data-*</code> attrs are why we mutate counts in place</td>
 </tr>
 <tr class="odd">
 <td><code>data-lat</code>, <code>data-lng</code>, <code>data-pid</code> on <code>.sample-row</code></td>
 <td>click-to-fly payload for search/nearby results</td>
-<td>rendered in <code>doSearch()</code> (<code>:1822</code>) and <code>updateSamples()</code> not currently using data-* (only the search list does)</td>
-<td>search-row click handler (<code>:1832-1845</code>)</td>
+<td>rendered in <code>doSearch()</code></td>
+<td>search-row click handler</td>
 <td>the nearby-samples list does not have data-* today; click-to-fly only works from the search list</td>
 </tr>
 <tr class="even">
+<td><code>data-pid</code> on <code>.samples-table tbody tr</code></td>
+<td>click-to-select payload for the permanent table</td>
+<td>rendered in <code>tableView</code> <code>renderTable()</code></td>
+<td>table-row click handler (same ceremony as the search-row click — see §6 mockup-v1 addendum)</td>
+<td>per-PID lookup uses <code>pageRowsByPid: Map</code> cached per page at <code>loadPage()</code> time (table v2); only the current page is in memory</td>
+</tr>
+<tr class="odd">
+<td><code>tr.selected</code> on <code>.samples-table</code></td>
+<td>“this row is the current sample selection” visual marker</td>
+<td>table-row click handler (<code>add</code>); next click on a different row (<code>remove</code>); next <code>renderTable()</code> reflects current <code>viewer._globeState.selectedPid</code></td>
+<td>CSS only</td>
+<td>derived; do not read. The globe → table direction is <em>not</em> live (only repaints on the next page load)</td>
+</tr>
+<tr class="even">
+<td><code>#tableContainer.is-loading</code> + <code>aria-busy="true"</code></td>
+<td>“table query in flight” marker</td>
+<td><code>setLoading(true/false)</code> in <code>tableView</code> (table v2)</td>
+<td>CSS dim (<code>.samples-table</code> opacity 0.6); screen readers</td>
+<td>added in table v2 follow-up to PR #200 for stale-while-loading UX</td>
+</tr>
+<tr class="odd">
 <td><code>.recomputing</code> on <code>.facet-count</code></td>
 <td>transient “loading” styling during cross-filter recompute</td>
 <td><code>markFacetCountsRecomputing()</code> (<code>:570</code>)</td>
 <td><code>applyFacetCounts()</code> clears it (<code>:562</code>)</td>
 <td>UI-only; not state in the persistence sense</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>.zero</code> on <code>.facet-row</code></td>
 <td>“value has zero count under current filters” styling</td>
 <td><code>applyFacetCounts()</code> (<code>:565</code>)</td>
 <td>CSS only</td>
 <td>derived; do not read</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>.disabled</code> on <code>#sourceFilter .legend-item</code></td>
 <td>unchecked source visual</td>
 <td><code>updateSourceLegendState()</code> (<code>:395-400</code>)</td>
@@ -575,7 +608,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<p>DOM input elements (the four facet checkbox bodies + <code>#sampleSearch</code> + <code>#maxSamples</code>) are the <strong>source of truth</strong> for <code>getActiveSources()</code>, <code>getCheckedValues()</code>, <code>getTableMaxSamples()</code>, and the search input. SQL builders read these directly each call.</p>
+<p>DOM input elements (the four facet checkbox bodies + <code>#sampleSearch</code> + <code>#sampleSearchSidebar</code>) are the <strong>source of truth</strong> for <code>getActiveSources()</code>, <code>getCheckedValues()</code>, and the search input. SQL builders read <code>#sampleSearch</code> directly each call. <code>#sampleSearchSidebar</code> is kept in lock-step with <code>#sampleSearch</code> via a two-way <code>input</code>-event mirror (see §6 mockup-v1 addendum). The <code>#maxSamples</code> input and the <code>getTableMaxSamples()</code> / <code>clampTableMaxSamples()</code> helpers were removed in the table v2 follow-up — the samples table now paginates server-side via DuckDB <code>LIMIT/OFFSET</code> instead of fetching up to 25K rows up-front.</p>
 <hr>
 </section>
 <section id="widget-internal-state-viewer.-window." class="level2" data-number="1.4">
@@ -692,7 +725,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="urlparamshydrated-confirmed-gone" class="level3" data-number="1.4.2">
 <h3 data-number="1.4.2" data-anchor-id="urlparamshydrated-confirmed-gone"><span class="header-section-number">1.4.2</span> <code>_urlParamsHydrated</code> — confirmed gone</h3>
-<p>Grep for <code>_urlParamsHydrated</code> in <code>explorer.qmd</code> returns no hits. The flag from PR #159’s first cut was removed; the new contract is “URL → DOM hydration runs exactly once per cell that owns the corresponding DOM, gated only by the OJS DAG (phase1 ⇒ source/search hydration; facetFilters ⇒ facet hydration; tableView ⇒ view hydration).”</p>
+<p>Grep for <code>_urlParamsHydrated</code> in <code>explorer.qmd</code> returns no hits. The flag from PR #159’s first cut was removed; the new contract is “URL → DOM hydration runs exactly once per cell that owns the corresponding DOM, gated only by the OJS DAG (phase1 ⇒ source/search hydration; facetFilters ⇒ facet hydration). Mockup-v1 removed the <code>tableView ⇒ view</code> hydration step along with the <code>?view=</code> URL param.”</p>
 <hr>
 </section>
 </section>
@@ -705,7 +738,7 @@ db                 [DuckDBClient.of()]
 viewer             [creates Cesium viewer; reads readHash() once]
   └── phase1       [needs viewer + db; runs URL→DOM hydration for search + sources]
         └── facetFilters    [needs phase1; loads vocab + summaries; sets _baselineCounts; runs URL→DOM hydration for facet checkboxes]
-              ├── tableView    [needs facetFilters; reads view from URL once]
+              ├── tableView    [needs facetFilters; calls refreshTable() unconditionally on boot — no URL hydration]
               └── zoomWatcher  [needs facetFilters; registers ALL change handlers; runs deep-link pid restore]
                     └── perfPanel  [opt-in; needs phase1; renders perf panel if ?perf=1]</code></pre>
 <table class="caption-top table">
@@ -780,19 +813,27 @@ viewer             [creates Cesium viewer; reads readHash() once]
 <td><code>tableView</code></td>
 <td><code>:1071</code></td>
 <td><code>facetFilters</code></td>
-<td><code>#globe-layout</code>, <code>#tableContainer</code>, <code>#tableControls</code>, <code>#samplesTable</code>, <code>body.classList</code></td>
-<td>globe/table buttons; prev/next; max input; <strong>change</strong> on all four facet bodies</td>
-<td><code>replaceState</code> via <code>writeQueryState</code> (<code>view</code> flip)</td>
+<td><code>#tableContainer</code>, <code>#samplesTable</code>, <code>tr.selected</code> class</td>
+<td>prev/next; max input; <strong>change</strong> on all four facet bodies; table-row clicks</td>
+<td><code>replaceState</code> via <code>buildHash</code> from table-row click (sets <code>#pid</code> directly, mirrors sample-mode globe click)</td>
 </tr>
 <tr class="even">
 <td><code>zoomWatcher</code></td>
 <td><code>:1246</code></td>
 <td><code>phase1</code>, <code>facetFilters</code>, <code>db</code></td>
 <td>facet count text; stats; phase msg; sample card; samples list</td>
-<td>source filter <code>change</code>; material/context/object_type <code>change</code>; <code>camera.changed</code>; <code>window</code> <code>hashchange</code>; share button; search button; search input keydown</td>
-<td><code>pushState</code> and <code>replaceState</code> via <code>buildHash</code> (camera, mode flip, sample fly); <code>replaceState</code> via <code>writeQueryState</code> (filter changes, search submit, share)</td>
+<td>source filter <code>change</code>; material/context/object_type <code>change</code>; <code>camera.changed</code>; <code>camera.moveEnd</code> (sub-threshold pan settle, #205); <code>window</code> <code>hashchange</code>; share button; search button; in-map search input keydown; sidebar search input <code>input</code> (mirror) and keydown (world-scope submit)</td>
+<td><code>pushState</code> and <code>replaceState</code> via <code>buildHash</code> (camera changed/moveEnd, mode flip, sample fly, <strong>share button</strong>); <code>replaceState</code> via <code>writeQueryState</code> (filter changes, search submit)</td>
 </tr>
 <tr class="odd">
+<td><code>tableView</code> (post table-v2 viewport coupling)</td>
+<td>—</td>
+<td><code>facetFilters</code>, <code>viewer</code></td>
+<td>also listens to <code>viewer.camera.moveEnd</code> to re-scope table to viewport bbox</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr class="even">
 <td><code>perfPanel</code></td>
 <td><code>:1910</code></td>
 <td><code>phase1</code></td>
@@ -802,7 +843,7 @@ viewer             [creates Cesium viewer; reads readHash() once]
 </tr>
 </tbody>
 </table>
-<p>Note that <strong>two cells register <code>change</code> listeners on the four facet container elements</strong>: <code>tableView</code> (<code>:1233-1236</code>) marks the table dirty and refreshes if visible, and <code>zoomWatcher</code> (<code>:1617</code>, <code>:1649-1651</code>) reloads the globe and debounces the cross-filter count refresh. Both listeners fire on every facet change; this is intentional (each cell handles its own concerns) but is the single most “magical” coupling in the file — touch with care.</p>
+<p>Note that <strong>two cells register <code>change</code> listeners on the four facet container elements</strong>: <code>tableView</code> calls <code>refreshTable()</code> unconditionally (the table is permanent post-mockup-v1, so there’s no view gate); <code>zoomWatcher</code> reloads the globe and debounces the cross-filter count refresh. Both listeners fire on every facet change; this is intentional (each cell handles its own concerns) but is the single most “magical” coupling in the file — touch with care.</p>
 <hr>
 </section>
 <section id="search-semantics-decision" class="level2" data-number="1.6">
@@ -989,6 +1030,68 @@ viewer             [creates Cesium viewer; reads readHash() once]
 <li>Area mode requires coordinates by definition, so the <code>INNER JOIN</code> drops samples that have facets but no <code>samples_map_lite</code> row. World mode keeps them (via <code>LEFT JOIN</code>) since coord-less samples are still legitimate text matches.</li>
 </ul>
 <p>A future Heavy revisit may rethink (A) global-filter semantics if usage data shows users <em>expect</em> the map and facets to update with search. That decision is deferred until #170-#172 land.</p>
+</section>
+<section id="mockup-v1-addendum-in-map-overlay-sidebar-mirror-permanent-table-200-2026-05" class="level3" data-number="1.6.8">
+<h3 data-number="1.6.8" data-anchor-id="mockup-v1-addendum-in-map-overlay-sidebar-mirror-permanent-table-200-2026-05"><span class="header-section-number">1.6.8</span> Mockup-v1 addendum: in-map overlay, sidebar mirror, permanent table (<a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/200">#200</a>, 2026-05)</h3>
+<p>A coordinated UI refactor aligning the explorer with Hana’s wireframe. Built as a single PR sequenced into independently revertable commits. All changes are UI-relocation / surface-additive; the data/query contract is unchanged from the (C) decision + #178 light path above.</p>
+<p><strong>M-1A — Search controls relocated into an in-map overlay.</strong> The search input, the two scope buttons (Search Selected Areas / Search Entire World), help text, and <code>#searchResults</code> count moved from a top-of-page <code>.explorer-controls</code> block into <code>.map-search-overlay</code>, absolutely positioned over <code>#cesiumContainer</code> inside a new <code>.map-wrap</code> wrapper. All element IDs preserved so existing handlers in <code>zoomWatcher</code> and the <code>writeQueryState()</code> contract bind unchanged. Overlay positioning clears the Cesium toolbar column (<code>left: 50px</code>) and the base-layer picker dropdown wins z-stack (<code>z-index: 1100</code> vs overlay’s <code>1000</code>).</p>
+<p><strong>M-1B — Sidebar open-text search input that mirrors the in-map one.</strong> A second input <code>#sampleSearchSidebar</code> lives at the top of <code>.side-panel</code>. Two-way <code>input</code>-event mirror keeps both inputs in lock-step as a single logical query term:</p>
+<ul>
+<li>Typing in <code>#sampleSearchSidebar</code> propagates to <code>#sampleSearch</code>.</li>
+<li>Typing in <code>#sampleSearch</code> propagates to <code>#sampleSearchSidebar</code>.</li>
+<li>Mirror handlers guard against feedback loops by comparing values before assignment; programmatic <code>.value =</code> does not fire <code>input</code>, so the comparison is sufficient (no debounce flag).</li>
+<li><code>applyQueryToSearch()</code> hydrates <em>both</em> inputs from the <code>?search=</code> URL param.</li>
+<li><code>writeQueryState()</code> still reads from <code>#sampleSearch</code> only — mirror parity makes the choice arbitrary.</li>
+</ul>
+<p><strong>Sidebar Enter = world scope (Option B).</strong> Enter on <code>#sampleSearchSidebar</code> always calls <code>doSearch('world')</code>, regardless of the in-map two-button scope choice. Rationale: typed-text-from-sidebar implies “find anywhere”; the in-map buttons remain the explicit way to constrain to current viewport. Both Enter handlers gate on <code>!e.isComposing &amp;&amp; e.keyCode !== 229</code> so IMEs that emit Enter to commit a candidate don’t submit on the pre-commit value.</p>
+<p><strong>M-2 — Display-only color legend at bottom-center of the map.</strong> <code>.map-color-legend</code> is a static <code>aria-hidden="true"</code> swatch row with <code>pointer-events: none</code>. It mirrors the four-source palette from <code>assets/js/source-palette.js</code> and never affects filter state — the functional toggles remain in <code>#sourceFilter</code> in the sidebar. Sits above Cesium’s bottom-left credits via <code>bottom: 30px</code>.</p>
+<p><strong>M-5 — Permanent samples table; Globe/Table toggle removed.</strong> The biggest delta to this contract:</p>
+<ul>
+<li><code>#globeViewBtn</code>, <code>#tableViewBtn</code>, <code>body.table-view-active</code>, <code>isTableViewActive()</code>, and the <code>?view=</code> URL param are all <strong>gone</strong>.</li>
+<li>The samples table is always visible below the globe. Map height shrinks to <code>clamp(400px, 50vh, 540px)</code> (was 500/65vh/680) so the table fits below without a full-page-height feel.</li>
+<li><code>tableView</code> cell initializes by calling <code>refreshTable()</code> unconditionally on boot.</li>
+<li><code>writeQueryState()</code> does <code>params.delete('view')</code> to canonicalize legacy bookmarked <code>?view=table&amp;...</code> URLs. Caveat: only the next <code>writeQueryState()</code> call strips the param — hash-only writes via <code>buildHash(viewer)</code> (camera moves, sample/cluster click, Share) preserve <code>location.search</code> as-is, so <code>?view=</code> lingers until the user touches a filter, the search box, or anything else that flows through <code>writeQueryState()</code>.</li>
+<li><strong>Table-row click = sample-mode globe click.</strong> Clicking a row in <code>.samples-table tbody tr[data-pid]</code> reuses the same async-selection ceremony as the search-row click handler (and the on-globe sample-point click), with one table-specific addition: the direct hash write. Preconditions before any work: bail if <code>e.target.tagName === 'A'</code> (let inline source-link clicks through), bail if the row has no resolvable sample / no lat-lng, bail if <code>typeof viewer === 'undefined'</code>. Once preconditions pass:
+<ol type="1">
+<li><code>const isStale = freshSelectionToken(viewer)</code> — bump BEFORE any await.</li>
+<li><code>viewer._globeState.selectedPid</code> set; <code>selectedH3</code> cleared.</li>
+<li><code>updateSampleCard({...})</code> populates the sidebar.</li>
+<li><code>viewer.camera.flyTo({...})</code> at altitude <code>50000</code>.</li>
+<li><strong>Table-specific:</strong> <code>history.replaceState(null, '', buildHash(viewer))</code> writes the <code>#pid</code> hash directly. The search-row and globe-point paths do not need this — they rely on <code>zoomWatcher</code>’s camera listener to fold selection into the hash. The table-row path can fire at very-early-boot before <code>zoomWatcher</code> is wired and while <code>_suppressHashWrite</code> is still <code>true</code>, so it writes the hash itself.</li>
+<li>Repaint <code>.selected</code>: remove from any prior <code>tr.selected</code>, add to the clicked row — synchronously, before the async detail query.</li>
+<li>Lazy-load <code>description</code> from <code>wide_url</code> with the pid SQL-escaped via <code>pid.replace(/'/g, "''")</code>; gated on <code>if (isStale()) return</code> before any DOM/state mutation. The error branch also stale-checks. A <code>rowsByPid: Map</code> cached at <code>refreshTable()</code> time gives O(1) per-PID lookup on click.</li>
+</ol></li>
+<li><strong>Asymmetric selection sync.</strong> Clicking a table row updates the globe + sidebar + URL. Clicking a globe point or a search-result row does NOT live-update the table’s <code>.selected</code> class — the table only repaints <code>.selected</code> on the next <code>renderTable()</code>. Treated as acceptable scope for v1; bidirectional highlight is a follow-up.</li>
+</ul>
+<p><strong>State surfaces added by mockup-v1.</strong> See the table additions in §1 (URL params: <code>search_scope</code>; legacy <code>view</code> struck), §3 (DOM-as-state: <code>tr.selected</code>, <code>data-pid</code> on table rows; <code>body.table-view-active</code> struck), and §5 (OJS cell graph: <code>tableView</code> no longer writes <code>view</code> to URL; <code>tableView</code> does write <code>#pid</code> to hash via <code>buildHash</code>).</p>
+</section>
+<section id="table-v2-addendum-server-side-pagination-218-2026-05" class="level3" data-number="1.6.9">
+<h3 data-number="1.6.9" data-anchor-id="table-v2-addendum-server-side-pagination-218-2026-05"><span class="header-section-number">1.6.9</span> Table v2 addendum: server-side pagination (<a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/218">#218</a>, 2026-05)</h3>
+<p>Follow-up to the mockup-v1 PR. The samples table no longer fetches up to 25,000-100,000 rows up-front and paginates client-side. Each page is now its own DuckDB <code>LIMIT TABLE_PAGE_SIZE OFFSET page*size</code> query, plus one <code>COUNT(*)</code> query per filter change. Removes the <code>#maxSamples</code> input + <code>getTableMaxSamples()</code> / <code>clampTableMaxSamples()</code> helpers entirely.</p>
+<p><strong>Determinism.</strong> <code>ORDER BY pid</code> plus <code>WHERE pid IS NOT NULL</code> on <strong>both</strong> the page query and the <code>COUNT(*)</code> query makes “Page N is the same N rows” actually true, and keeps the count consistent with what’s pageable. Defensive null filter even though <code>pid</code> is the canonical identifier and should never be null — ORDER BY a column that contains nulls is only deterministic by accident on a read-only parquet snapshot, and an unfiltered count could over-enable pagination past the last non-null page.</p>
+<p><strong>Stale-while-loading.</strong> When filters change or the user pages, the existing rendered rows stay visible (dimmed to 60% opacity via <code>#tableContainer.is-loading .samples-table</code>) while the new page+count queries run in the DuckDB Web Worker. A CSS-only spinner appears in <code>#tableMeta</code>. <code>#tableContainer[aria-busy="true"]</code> exposes the state to screen readers. The pager-info text is cleared during load to avoid showing stale “Page 3 of 12 (200-300 of 1,200)” against an incoming filter set. <code>prefers-reduced-motion</code> is honored.</p>
+<p><strong>Race protection.</strong> A <code>pageGen</code> integer is bumped on every refresh. Inner queries (<code>loadCount</code>, <code>loadPage</code>) compare <code>gen === pageGen</code> BEFORE mutating <code>pageRows</code>, <code>pageRowsByPid</code>, <code>totalRows</code>, or <code>currentPage</code>. <code>refreshAll</code> / <code>refreshPage</code> re-check the same gen before clearing the loading state, so a faster newer load can win the visible UI even if an older load resolves last.</p>
+<p><strong>Error handling.</strong> <code>loadCount</code> and <code>loadPage</code> both return <code>true</code>/<code>false</code> to the orchestrator. Three distinct error surfaces:</p>
+<ul>
+<li><strong>Page load failed:</strong> meta shows the error, <code>lastPageFailed</code> flag flips on, and <code>renderTable()</code> swaps the table body for an explicit “Page query failed. Adjust filters or click Previous/Next to retry.” sentinel row (rather than leaving the old, now-inert rows visible with a cleared <code>pageRowsByPid</code>). Pager text is cleared.</li>
+<li><strong>Count failed but page succeeded:</strong> rows render, but <code>totalRows</code> stays <code>null</code>. Pager text shows “Page N” without the total. The Next button is disabled while <code>totalRows == null</code> (so a user can’t click it into a no-op handler).</li>
+<li><strong>Both failed:</strong> generic error meta; sentinel table state.</li>
+</ul>
+<p>This replaces the round-1 codex finding where the error meta was being overwritten by the success summary, and the round-2 finding where a failed page left old DOM visible but pageRowsByPid empty.</p>
+<p><strong>Click handler unchanged.</strong> Table-row click uses <code>pageRowsByPid: Map</code> (renamed from <code>rowsByPid</code>) which is now scoped to the current page only — sufficient since only the visible page has clickable rows.</p>
+<p><strong>Viewport coupling</strong> (PR #219, added shortly after table v2): both the page and count queries now include <code>viewerBboxSQL('latitude', 'longitude', 0.3)</code> which expands to <code>AND latitude BETWEEN &lt;s&gt; AND &lt;n&gt; AND &lt;lng-clause&gt;</code> (with dateline-crossing handling, including the post-padding wrap case where a non-wrapping rect spills past ±180 after the 30% expansion).</p>
+<p><strong>Known pre-existing wrap bug NOT fixed in this PR.</strong> <code>loadViewportSamples()</code> in <code>zoomWatcher</code> (the point-mode sample loader) has its own padding logic that does <em>not</em> split the longitude predicate when the padded rectangle wraps the antimeridian — <code>bounds.east - bounds.west</code> is meaningless for a wrapping viewport, and the resulting single <code>BETWEEN</code> clause can return zero matches. This PR’s table queries now route through <code>viewerBboxSQL()</code> and split the wrapped predicate correctly, so the <strong>table is fine</strong> at the dateline; the bug is now only in the point-mode count (phase-msg “Samples in View”). At wrapping viewports the two surfaces will therefore diverge: table shows the correct row set, phase-msg can read zero or undercount. Scoped out as a follow-up because the user’s primary complaint (table=6M vs phase-msg=153 at Crete) is unrelated to the dateline. Right fix is to share the <code>viewerBboxSQL</code>-style normalization with point-mode. The shared <code>VIEWPORT_PAD_FACTOR</code> (0.3) is applied by the table query, the point-mode loader, and the cluster-mode <code>countInViewport()</code> call sites, so all three surfaces use the same padded bbox for their “in view” counts in the non-dateline, non-facet-filtered case. Caveats called out below: point mode still has the antimeridian padding bug (#220), cluster counts are H3-cell-granularity approximations, and cluster H3 loads don’t apply the material/context/object-type facet filters — so under those conditions the counts can still diverge independent of this PR. Issue #221 was three sources of divergence:</p>
+<ol type="1">
+<li><strong>Cache reuse (point mode).</strong> The point-mode loader cached a padded bbox + <code>cachedTotalCount</code> and short-circuited cache-hit pans (re-using the prior count) while the table re-queried the current padded bbox each time. Removed: both surfaces always re-fetch.</li>
+<li><strong>Different trigger events (point mode).</strong> The table refreshed on every <code>viewer.camera.moveEnd</code>, but point-mode samples only refreshed through the debounced <code>camera.changed</code> handler (<code>percentageChanged = 0.1</code>), so small sub-10% pans refreshed the table without touching point-mode. Fixed: point-mode now also re-fetches on <code>moveEnd</code> (the <code>camera.changed</code> “already in point mode” branch is now a no-op).</li>
+<li><strong>Unpadded cluster bbox (cluster mode, round 2).</strong> The cluster “Samples in View” stat called <code>countInViewport(getViewportBounds())</code> with the <strong>raw</strong> view rectangle, while the table queried the 30%-padded bbox — so the table consistently overcounted by the padding ring (e.g.&nbsp;at alt=302 km over Egypt: table=34,983 vs phase-msg=34,879). Fixed: the three <code>countInViewport</code> call sites now pass <code>paddedViewportBounds(VIEWPORT_PAD_FACTOR)</code>, sharing the same wrap-normalization helper that <code>viewerBboxSQL</code> uses.</li>
+</ol>
+<p><code>exitPointMode()</code> bumps <code>requestId</code> so any sample query still in flight when the user zooms out is invalidated before it can repaint stat boxes / phase-msg with stale point-mode numbers.</p>
+<p>Residual cluster-mode divergence: even with matching bboxes, <code>countInViewport</code> filters H3 cells by their <em>center</em> and credits each cell’s full <code>sample_count</code>, while the table filters individual sample lat/lng — so at low H3 resolutions (res 4, alt &gt; 3 Mm) a small granularity-based gap remains. Inherent to cluster aggregation; not addressed here.</p>
+<p>Note: this is <strong>viewport-count parity only</strong>. The pre-existing antimeridian wrap bug in point-mode’s own bbox padding (<code>latitude/longitude BETWEEN ...</code> doesn’t split the wrapped longitude predicate) still causes the phase-msg to undercount near the dateline. That’s tracked separately (issue #220).</p>
+<p><code>doSearch('area')</code> calls the same helper without a padFactor (= undefined, no padding), since search has always been documented as “samples within the current map view.”</p>
+<p>The table re-fires on <code>viewer.camera.moveEnd</code>, so panning/zooming the globe re-scopes the table. <strong>Null-bbox handling</strong>: if the camera can’t produce a view rectangle (off-globe; rare), <code>viewerBboxSQL()</code> returns <code>null</code>. The table treats this as a status state (“No globe area in view; pan or zoom the globe to see samples.”) rather than falling back to a no-bbox query — that’s the bug shape PR #219 was filed against. Area search keeps its existing world fallback.</p>
+<p><strong>Boot ordering</strong>: the viewer cell’s <code>once()</code> postRender handler now sets <code>viewer._initialCameraApplied = true</code> after <code>setView</code>. The table defers its first refresh until either (a) the flag is true at cell-run time, or (b) the <code>camera.moveEnd</code> listener fires (which it will, once <code>setView</code> lands). This avoids the brief flash of world-view rows at boot when the URL hash specifies a deep-zoom camera.</p>
 <hr>
 </section>
 </section>
@@ -1025,9 +1128,9 @@ viewer             [creates Cesium viewer; reads readHash() once]
 <td>option (C); search renders a side panel + result-pin overlay, but does not alter facet counts</td>
 </tr>
 <tr class="even">
-<td>view mode (globe vs table)</td>
-<td><strong>NO</strong></td>
-<td>the same dataset underlies both; facet counts should not flip when the user toggles view</td>
+<td><del>view mode (globe vs table)</del></td>
+<td><em>moot — mockup-v1 (#200) removed the Globe/Table toggle; both surfaces are permanent</em></td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
