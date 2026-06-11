@@ -3469,19 +3469,48 @@ zoomWatcher = {
         }, 250);
     }
 
-    document.getElementById('heatmapToggle')?.addEventListener('change', () => {
+    document.getElementById('heatmapToggle')?.addEventListener('change', async () => {
         if (heatmapEnabled()) {
             refreshHeatmap();
+            // #233 phase 3: heatmap is mutually exclusive with the marker
+            // layers, so flip dot visibility and re-evaluate the facet apology
+            // note (which is meaningless once the heatmap shows filtered
+            // density directly). Both helpers read live state, so order vs the
+            // refresh/clear above does not matter.
+            applyLayerVisibility();
+            syncFacetNote();
         } else {
+            // #262 fix: heatmap-OFF must reload the altitude-appropriate marker
+            // layer, not just flip visibility. If the session lived entirely in
+            // heatmap mode the marker layer was never (re)loaded for the current
+            // view; toggling .show = true without data leaves an empty globe.
+            // Nulling currentRes defeats the "same-res skip" guard in the camera
+            // handler AND in the inline loadRes call below so the reload always
+            // fires even if the target resolution equals the stale stored value.
             clearHeatmap();
+            applyLayerVisibility();
+            syncFacetNote();
+            busyAcquire();
+            try {
+                currentRes = null;  // defeat same-res skip guard (#262)
+                const h = viewer.camera.positionCartographic.height;
+                if (searchIsActive() || h < ENTER_POINT_ALT) {
+                    // Search active: clusters cannot be text-filtered, so stay/
+                    // enter point mode.  Low altitude: enter point mode normally.
+                    await enterPointMode(false);
+                } else {
+                    // Cluster altitude: load the altitude-appropriate resolution.
+                    const target = h > 3000000 ? 4 : h > 300000 ? 6 : 8;
+                    const applied = await loadRes(target, { 4: h3_res4_url, 6: h3_res6_url, 8: h3_res8_url }[target]);
+                    // Chase: user may have zoomed inside ENTER_POINT_ALT while
+                    // the cluster load was in flight (mirrors the camera handler
+                    // pattern from issue #193).
+                    if (applied) await tryEnterPointModeIfNeeded();
+                }
+            } finally {
+                busyRelease();
+            }
         }
-        // #233 phase 3: heatmap is mutually exclusive with the marker
-        // layers, so flip dot visibility and re-evaluate the facet apology
-        // note (which is meaningless once the heatmap shows filtered
-        // density directly). Both helpers read live state, so order vs the
-        // refresh/clear above does not matter.
-        applyLayerVisibility();
-        syncFacetNote();
     });
     viewer._heatmapOverlay = { enabled: false, layer: null, lastRefreshAt: 0, lastPointCount: 0, lastKey: null };
     viewer._heatmapSkips = 0;  // tolerance-dedupe skip counter (test signal)
@@ -4247,6 +4276,7 @@ zoomWatcher = {
                         samplePointsLen: viewer.samplePoints.length,
                         samplePointsShown: viewer.samplePoints.show,
                         h3PointsShown: viewer.h3Points.show,
+                        h3PointsLen: viewer.h3Points.length,  // #262: needed to assert clusters loaded
                     };
                 } catch (e) { return { error: String(e) }; }
             };
