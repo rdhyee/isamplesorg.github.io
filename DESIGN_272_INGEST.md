@@ -1,0 +1,342 @@
+# DESIGN_272_INGEST.md
+
+Design document for ingesting 67,187 new OpenContext records into the iSamples derived-data pipeline (GitHub issue #272, follow-up phase).
+
+*All numbers in this document are from executed DuckDB queries against local files. See SPIKE_RESULTS.md for raw output.*
+
+*Prepared by rbotyee (Claude Code spike), 2026-06-12. RY decision gates marked explicitly.*
+
+---
+
+## 1. Background and context
+
+Issue #272 Phase 1 (PR #275, merged and live) overlaid corrected material/object-type concept mappings from Eric's fresh OC PQG onto the 1,043,604 OC pids already in the unified wide. That phase deliberately skipped new-record ingestion: **67,187 OC records present in Eric's 2026-06-09 wide are absent from the production `isamples_202606_wide.parquet`.**
+
+This document designs Phase 2: ingest those 67,187 records.
+
+### Key files
+
+| File | Path |
+|---|---|
+| Production base wide (Phase 1 output) | `https://data.isamples.org/isamples_202606_wide.parquet` |
+| Eric's fresh OC wide | `~/Data/iSample/pqg_refining/oc_isamples_pqg_wide_2026-06-09.parquet` |
+| Pre-Phase-1 wide (local copy) | `~/Data/iSample/pqg_refining/isamples_202604_wide.parquet` |
+
+> **Note:** The spike ran against the 202604 wide (locally available) rather than 202606 (remote only). For the two dimensions that differ — row_id range and IdentifiedConcept inventory — the spike accounts for the 202606 delta explicitly.
+
+---
+
+## 2. Gap characterization (all from executed queries)
+
+### 2.1 Record counts
+
+| Measure | Count |
+|---|---|
+| OC MaterialSampleRecords in our 202604 wide | 1,064,831 |
+| OC MaterialSampleRecords in Eric's fresh wide | 1,110,791 |
+| **New pids (Eric's \ ours)** | **67,187** |
+| Deleted pids (ours \ Eric's, not in Eric's at all) | 21,227 |
+
+The 21,227 "deleted" pids are records in the frozen iSamples Central export that no longer appear in Eric's fresh OC PQG (de-published, restructured, or merged OC items). They are **not** a problem for this ingestion — we keep them in our wide (they existed at harvest time); they simply won't be updated.
+
+### 2.2 Material type breakdown of new records
+
+First-non-root material per new MSR (Eric's OC concept arrays):
+
+| Material URI | Count |
+|---|---|
+| `material/1.0/biogenicnonorganicmaterial` | 22,236 |
+| `material/1.0/otheranthropogenicmaterial` | 19,072 |
+| `material/1.0/organicmaterial` | 10,315 |
+| `material/1.0/rock` | 7,766 |
+| NULL (root-only, no specific concept) | 7,282 |
+| `material/1.0/mineral` | 466 |
+| `material/1.0/anthropogenicmetal` | 48 |
+| `material/1.0/mixedsoilsedimentrock` | 2 |
+
+The 7,766 rock records are the Tall al-ʿUmayri Jordan lithics flagged by Eric during staging inspection (7,903 labelled "Lithic ID: …", of which 7,766 are rock-first-non-root).
+
+### 2.3 Geographic coverage
+
+All 67,187 new MSRs have **no geometry blob and no latitude/longitude directly on the MSR row** in Eric's wide. However:
+
+- 67,187 / 67,187 (100%) have coordinates accessible via the graph: `MSR → p__produced_by → SamplingEvent → p__sample_location → GeospatialCoordLocation.{geometry, latitude, longitude}`
+- Coordinate range: lat −55.19 to 71.04, lon −164.0 to 159.9 (global coverage, not just Jordan)
+- 0 duplicates in the coord path (each MSR maps to exactly 1 coordinate row)
+
+The builder (`build_frontend_derived.py`) reads `geometry` from the wide's MSR rows using `ST_X(geometry)`/`ST_Y(geometry)`. The ingestion step must **denormalize** the GeoCoordLoc geometry blob onto each new MSR row.
+
+### 2.4 New entity subgraph
+
+The 67,187 new MSRs bring a full entity subgraph that must be ingested together:
+
+| Entity type | Count | Already in our wide? |
+|---|---|---|
+| MaterialSampleRecord | 67,187 | 0 (new pids) |
+| SamplingEvent | 67,187 | 0 (all new PIDs absent) |
+| GeospatialCoordLocation (from SE) | 10,316 | 0 |
+| GeospatialCoordLocation (from SamplingSite) | 6,514 | 0 |
+| **Unique GeoCoordLoc total** | **11,399** | **0** |
+| SamplingSite | 6,514 | 0 |
+| Agent | 24 | 0 |
+| **Total new entity rows** | **~152,312** | — |
+
+No entity (by PID) from the new subgraph already exists in the 202604 wide. The 202606 wide is identical in entity inventory (it only changed p__ columns on existing rows + minted 1 concept), so this holds for 202606 too.
+
+### 2.5 IdentifiedConcept inventory
+
+New MSRs reference 14 distinct concept row_ids in Eric's wide. Of these:
+
+| Concept URI | In 202604? | In 202606? |
+|---|---|---|
+| `material/1.0/anthropogenicmetal` | YES | YES |
+| `material/1.0/biogenicnonorganicmaterial` | YES | YES |
+| `material/1.0/material` (root) | YES | YES |
+| `material/1.0/mineral` | YES | YES |
+| `material/1.0/mixedsoilsedimentrock` | YES | YES |
+| `material/1.0/organicmaterial` | YES | YES |
+| `material/1.0/otheranthropogenicmaterial` | NO | **YES** (minted by Phase 1) |
+| `material/1.0/rock` | YES | YES |
+| `materialsampleobjecttype/1.0/artifact` | YES | YES |
+| `materialsampleobjecttype/1.0/biologicalmaterialsample` | YES | YES |
+| `materialsampleobjecttype/1.0/materialsample` | YES | YES |
+| `materialsampleobjecttype/1.0/organismpart` | YES | YES |
+| `sampledfeature/1.0/earthsurface` | NO | NO (need to mint) |
+| `sampledfeature/1.0/pasthumanoccupationsite` | YES | YES |
+
+**Conclusion:** Using 202606 as the base, exactly **1 new concept must be minted**: `sampledfeature/1.0/earthsurface` (used by 3,924 of the new MSRs for `p__has_context_category`).
+
+### 2.6 Schema drift between our wide and Eric's wide
+
+| Dimension | Detail |
+|---|---|
+| Columns in ours NOT in Eric's | `p__curation` (INTEGER[]), `p__related_resource` (BIGINT[]) |
+| Columns in Eric's NOT in ours | none |
+| Type differences | `row_id`: ours=BIGINT, Eric's=INTEGER; `p__has_*` arrays: ours=BIGINT[], Eric's=INTEGER[] |
+| `n` (source) column | Eric's wide has NULL for all MSRs; ours uses 'OPENCONTEXT' |
+
+The two extra columns (`p__curation`, `p__related_resource`) are NULL for OC records in the existing wide (the frozen export never populated them for OC). New OC records will also have NULLs for these columns — that is the correct behavior.
+
+The `n` column mismatch is critical: **ingested rows must have `n = 'OPENCONTEXT'` set explicitly**.
+
+---
+
+## 3. Row-id allocation design
+
+### 3.1 Constraint
+
+Our wide has `row_id BIGINT` ranging 1–20,729,358. Eric's wide has `row_id INTEGER` ranging 1–2,465,485. These ranges **overlap** — we cannot reuse Eric's row_ids.
+
+### 3.2 Strategy: dense rank starting at `max_src + 1`
+
+All new rows get row_ids assigned by dense rank starting at `max(src.row_id) + 1 = 20,729,359`. The rank ordering must be deterministic (by a stable sort key) to make the output reproducible. Proposed ordering: by `(otype, pid)` — otype first groups entity classes together, pid within each class is stable.
+
+Revised row count:
+- New rows: ~152,312 (plus concept minting: +1)
+- New row_id range: 20,729,359 to ~20,881,671
+
+**This leaves substantial headroom** and avoids all collisions.
+
+### 3.3 p__ array rewriting
+
+Eric's wide stores `p__produced_by`, `p__sample_location`, etc. as INTEGER[] references into Eric's row_id space. All these references must be **remapped to the new row_ids** in our id space. This requires:
+
+1. Build a mapping table: Eric's `row_id` → new `row_id` for every entity in the new subgraph.
+2. Apply the mapping to all p__ columns on new MSR rows.
+
+**This is the most complex step** — see Section 4.3.
+
+---
+
+## 4. Pipeline design: `make ingest-272`
+
+### 4.1 Overview
+
+```
+202606_wide.parquet  +  oc_isamples_pqg_wide_2026-06-09.parquet
+    │
+    ▼ scripts/ingest_oc_records.py
+    │   Phase A: Identify new pids (Eric's \ ours)
+    │   Phase B: Extract full entity subgraph for new pids
+    │   Phase C: Assign new row_ids (dense rank, deterministic)
+    │   Phase D: Remap p__ arrays from Eric's id space to our id space
+    │   Phase E: Denormalize coords (geometry BLOB) onto new MSR rows
+    │   Phase F: Set n='OPENCONTEXT' on new MSR rows
+    │   Phase G: Mint new IdentifiedConcept rows (earthsurface)
+    │   Phase H: Hard-fail checks (dup row_ids, dup pids, all refs resolved)
+    │   Phase I: Write  src_rows UNION ALL new_rows → isamples_202608_wide.parquet
+    │
+    ▼ scripts/validate_oc_concept_enrichment.py (reused for concept rows)
+    │   (or a new validate_ingest.py — see Section 6)
+    │
+    ▼ scripts/build_frontend_derived.py
+    │
+    ▼ scripts/validate_frontend_derived.py --wide isamples_202608_wide.parquet
+```
+
+### 4.2 Tag convention
+
+The output should be tagged `isamples_202608` (next month tag) to reflect the new data vintage. RY decision gate: confirm tag before publishing.
+
+### 4.3 p__ array remapping in detail
+
+This is the core correctness challenge. Each new entity row in Eric's wide has a `row_id` in Eric's space (1–2,465,485). Each p__ column on a new MSR row is an `INTEGER[]` of those Eric row_ids. After ingestion, those integers must refer to our new row_ids (20,729,359+).
+
+Algorithm:
+
+```sql
+-- Step 1: collect all Eric row_ids that need remapping
+CREATE TEMP TABLE eric_id_map AS
+  SELECT eric_row_id,
+         max_src_row_id + DENSE_RANK() OVER (ORDER BY otype, pid) AS our_row_id
+  FROM all_new_entities;   -- new MSR + SE + Geo + Site + Agent + Concept
+
+-- Step 2: remap p__ arrays on new MSR rows
+-- Use list_transform or UNNEST+re-aggregate pattern
+SELECT
+  ...,
+  (SELECT list(m.our_row_id ORDER BY u.ord) 
+   FROM UNNEST(e.p__produced_by) WITH ORDINALITY AS u(rid, ord)
+   JOIN eric_id_map m ON m.eric_row_id = u.rid) AS p__produced_by,
+  ...
+FROM new_msr_rows e
+```
+
+> **Warning:** the UNNEST+correlated subquery approach must be avoided at 67K rows (we learned the MAP cross-join blowup lesson). Use the decorrelated pattern from `build_frontend_derived.py` (UNNEST WITH ORDINALITY + JOIN + arg_min/list-agg) or a pre-aggregated mapping table.
+
+### 4.4 Geometry denormalization
+
+The builder reads `geometry` from MSR rows. New MSR rows have no geometry. We must lift the geometry blob from the linked `GeospatialCoordLocation`:
+
+```sql
+-- In the new MSR rows:
+-- MSR.p__produced_by[1] -> SamplingEvent.row_id
+-- SamplingEvent.p__sample_location[1] -> GeoCoordLoc.row_id
+-- GeoCoordLoc.geometry -> copy to MSR.geometry
+-- GeoCoordLoc.latitude, .longitude -> copy to MSR.latitude, .longitude
+
+CREATE TEMP TABLE new_msr_coords AS
+  WITH msr_se AS (
+    SELECT m.pid, se.p__sample_location
+    FROM new_msr_eric m, UNNEST(m.p__produced_by) AS u(se_rid)
+    JOIN new_se_eric se ON se.row_id = u.se_rid
+  )
+  SELECT ms.pid, geo.geometry, geo.latitude, geo.longitude
+  FROM msr_se ms, UNNEST(ms.p__sample_location) AS u(geo_rid)
+  JOIN new_geo_eric geo ON geo.row_id = u.geo_rid;
+```
+
+Confirmed: 0 duplicate coord rows per pid; 67,187 / 67,187 (100%) have coords.
+
+### 4.5 Hard-fail invariants (trust gate)
+
+The script must refuse to write if any of these hold:
+
+1. **Duplicate new pids**: any pid in new MSR rows already in src wide → wrong grain
+2. **Duplicate row_ids**: any new row_id in the output overlaps an existing row_id
+3. **Unresolved p__ references**: any p__ array element in any new row points to a row_id that doesn't exist in the output
+4. **Missing n column**: any new MSR row has `n IS NULL` (must be 'OPENCONTEXT')
+5. **Missing geometry on placed MSR**: any new MSR with a coord path but null geometry in output
+6. **Row count**: output must equal `src_rows + new_entity_rows + minted_concepts`
+
+### 4.6 Makefile target
+
+```makefile
+# make ingest-272 TAG=isamples_202608
+ingest-272: $(OC_WIDE) 
+    $(PY) scripts/ingest_oc_records.py \
+        --src $(ENRICHED) \          # isamples_202606_wide.parquet
+        --oc-wide $(OC_WIDE) \       # oc_isamples_pqg_wide_2026-06-09.parquet
+        --out $(OUTDIR)/$(TAG)_wide.parquet
+    $(MAKE) derived DERIVED_WIDE=$(OUTDIR)/$(TAG)_wide.parquet TAG=$(TAG)
+    $(MAKE) validate TAG=$(TAG) SENTINEL_FLAG=
+```
+
+> **RY decision gate:** Should `ingest-272` stack on `all-272` (requiring 202606 wide as input) or should it operate independently against the R2 202606 URL? Stacking is cleaner but requires the local 202606 file.
+
+---
+
+## 5. Schema mapping: Eric's wide columns → our wide columns
+
+All 47 shared columns are taken directly from Eric's wide with the following transformations:
+
+| Column | Treatment |
+|---|---|
+| `row_id` | Replaced by new id from `eric_id_map` (see §4.3) |
+| `n` | Set to `'OPENCONTEXT'` (Eric's wide has NULL for all MSR rows) |
+| `p__produced_by`, `p__sample_location`, `p__sampling_site`, `p__site_location`, `p__registrant` | Remapped via `eric_id_map` (INTEGER[] → BIGINT[]) |
+| `p__has_material_category`, `p__has_sample_object_type`, `p__has_context_category` | Remapped via `eric_id_map` + `our_concept_map` (URI lookup for concepts) |
+| `p__keywords` | Remapped if non-null (INTEGER[] → BIGINT[]) |
+| `p__responsibility` | Remapped if non-null (INTEGER[] → BIGINT[]) |
+| `geometry` | Lifted from linked GeoCoordLoc row (WKB BLOB) |
+| `latitude`, `longitude` | Lifted from linked GeoCoordLoc row |
+| `p__curation` | NULL (INTEGER[] — not in Eric's wide, not applicable to OC) |
+| `p__related_resource` | NULL (BIGINT[] — not in Eric's wide) |
+
+No column present in Eric's wide is dropped (47 columns in, 49 in ours = 47 + 2 nulled columns).
+
+---
+
+## 6. Validation design
+
+The existing `validate_frontend_derived.py` covers Stage 4 (derived files). We need an additional trust gate for the new Stage 3c (ingest):
+
+**`scripts/validate_ingest.py`** (new, to be written with the impl):
+- Re-derive the new-pid set from inputs (Eric's wide \ src wide) and assert the output contains exactly those pids
+- Assert row count: `output_rows == src_rows + new_entity_rows + minted_concepts`
+- Assert no duplicate row_ids in output
+- Assert all p__ references in new rows resolve to existing rows in output
+- Assert new MSR rows have `n = 'OPENCONTEXT'`
+- Assert geometry non-null for all new MSRs that had a coord path
+- Assert concept count: `output IdentifiedConcept count == src concept count + minted count`
+
+The Stage 4 semantic gate (`validate_frontend_derived.py --wide`) should be run unchanged on the ingested wide — it doesn't know about Phase 2 vs Phase 1, it just validates the derived files against the wide.
+
+---
+
+## 7. Open decisions for RY
+
+| # | Decision | Options | Recommendation |
+|---|---|---|---|
+| D1 | **Base wide for ingestion** | 202606 (R2, download needed) vs 202604 (local) | 202606 — Phase 1 minted `otheranthropogenicmaterial`; using 202604 would create a conflict | 
+| D2 | **Output tag** | `isamples_202608` or another | `isamples_202608` seems appropriate given June 2026; RY to confirm |
+| D3 | **Deleted pids policy** | Leave 21,227 pids that Eric dropped (keep them in our wide) vs remove | Recommend: keep them. They existed at Central harvest time; pruning them out would be a new kind of edit this pipeline hasn't done before. Track as a separate issue if desired |
+| D4 | **n column for non-MSR entities** | SE/Geo/Site/Agent rows: set n='OPENCONTEXT' or leave NULL | Our wide does NOT currently set n on non-MSR entities (check: they all have NULL n). Recommend: NULL (match convention), only MSR gets n='OPENCONTEXT' |
+| D5 | **p__curation / p__related_resource** | NULL on new OC rows (frozen export never had them) vs attempt to populate | NULL — there is no source for these from Eric's PQG; they were NULL on existing OC rows too |
+| D6 | **Staging vs production** | Stage under new tag on R2 for inspection before `current/` cutover | Same pattern as Phase 1: stage first, inspect, promote only after RY + Eric sign off |
+| D7 | **Eric notification** | Notify Eric to inspect rock count | Should show ~38K now (30,272 + 7,766 new rock records); Eric should verify during staging |
+
+---
+
+## 8. Honest gaps — what this spike does NOT prove
+
+1. **202606 round-trip**: The spike used 202604 as the base wide (locally available). The actual ingestion will use 202606. Row_ids and concept inventory differ slightly. The spike accounts for this explicitly (earthsurface concept gap, otheranthropogenicmaterial already present) but the full 202606-based run has not been executed.
+
+2. **p__ array remapping correctness at scale**: The spike identified the remapping requirement and verified the entity subgraph counts but did not execute the full remapping SQL. The spike script writes to `/tmp/ingest_272_output/` and performs remapping — that is the proof of concept but should be reviewed before promotion.
+
+3. **SamplingSite deduplication**: The spike counts 6,514 SamplingSite rows in the new subgraph, all absent from our wide by pid. However, some may share real-world locations with existing SamplingSite rows that have different pids (different OC projects at the same site). This is a data-quality question, not a correctness issue for ingestion.
+
+4. **Keywords entities**: New MSRs may have `p__keywords` references to IdentifiedConcept rows in Eric's wide. The concept inventory check above covered only `p__has_material_category`, `p__has_sample_object_type`, and `p__has_context_category`. Keywords concept resolution should be checked explicitly during implementation.
+
+5. **Agent deduplication**: 24 Agent rows are linked from new MSRs (all absent from our wide by pid). If any are "the same organization" as an existing Agent by some other identifier, they'd be duplicated conceptually. Not a correctness issue for ingestion.
+
+6. **Geometry WKB encoding compatibility**: Eric's GeoCoordLoc geometry is stored as WKB BLOB. Our existing wide MSR rows also store geometry as WKB BLOB. The spike observed consistent encoding but did not formally verify WKB version bytes.
+
+7. **Downstream file sizes**: Adding ~152K rows to the 20.7M-row wide increases it by ~0.7%. The derived files (map_lite, facets) will grow correspondingly. This is trivially small but not explicitly measured in the spike.
+
+8. **No test fixtures**: The spike script in `scripts/ingest_oc_records.py` does not yet have fixture tests. The implementation PR should add `tests/test_ingest_oc_records.py` covering the remapping logic and trust-gate invariants.
+
+---
+
+## 9. Summary
+
+The ingestion is well-understood and low-risk:
+- 67,187 new MSRs + ~85,125 supporting entities = ~152,312 new rows
+- All new entities are absent from the current wide (no pid collisions)
+- All coords accessible via graph path (100% coverage)
+- 1 new concept to mint (earthsurface, used by 3,924 new MSRs)
+- Primary complexity: row_id remapping from Eric's space to ours
+- The Phase 1 overlay pattern (`enrich_wide_with_oc_concepts.py`) is the precedent for the write step
+- The full Stage 4 semantic gate runs unchanged on the output
+
+Estimated implementation effort: 1–2 sessions (script + tests + gate).
