@@ -4,7 +4,7 @@ Design document for ingesting 67,187 new OpenContext records into the iSamples d
 
 *All numbers in this document are from executed DuckDB queries against local files. See SPIKE_RESULTS.md for raw output.*
 
-*Prepared by rbotyee (Claude Code spike), 2026-06-12. RY decision gates marked explicitly.*
+*Prepared by rbotyee (Claude Code spike), 2026-06-12. Decisions resolved 2026-06-12 (see Section 7). See SYNC_RESULTS.md for actual run output.*
 
 ---
 
@@ -37,7 +37,7 @@ This document designs Phase 2: ingest those 67,187 records.
 | **New pids (Eric's \ ours)** | **67,187** |
 | Deleted pids (ours \ Eric's, not in Eric's at all) | 21,227 |
 
-The 21,227 "deleted" pids are records in the frozen iSamples Central export that no longer appear in Eric's fresh OC PQG (de-published, restructured, or merged OC items). They are **not** a problem for this ingestion — we keep them in our wide (they existed at harvest time); they simply won't be updated.
+**D3 DECISION (2026-06-12, RY):** These 21,227 stale pids ARE REMOVED. OpenContext mass-updated Murlo project PIDs; old PIDs would duplicate the same physical samples. This is a TRUE SYNC: add new + remove stale in one operation. The orphaned subgraph entities (SamplingEvent, GeoCoordLoc, SamplingSite) linked ONLY by removed MSRs are also removed. Agents are NOT removed (0 orphan agents found). See Section 3.5 for orphan analysis results.
 
 ### 2.2 Material type breakdown of new records
 
@@ -294,37 +294,54 @@ The Stage 4 semantic gate (`validate_frontend_derived.py --wide`) should be run 
 
 ---
 
-## 7. Open decisions for RY
+## 3.5 Orphan analysis (actuals from 202606 base)
 
-| # | Decision | Options | Recommendation |
-|---|---|---|---|
-| D1 | **Base wide for ingestion** | 202606 (R2, download needed) vs 202604 (local) | 202606 — Phase 1 minted `otheranthropogenicmaterial`; using 202604 would create a conflict | 
-| D2 | **Output tag** | `isamples_202608` or another | `isamples_202608` seems appropriate given June 2026; RY to confirm |
-| D3 | **Deleted pids policy** | Leave 21,227 pids that Eric dropped (keep them in our wide) vs remove | Recommend: keep them. They existed at Central harvest time; pruning them out would be a new kind of edit this pipeline hasn't done before. Track as a separate issue if desired |
-| D4 | **n column for non-MSR entities** | SE/Geo/Site/Agent rows: set n='OPENCONTEXT' or leave NULL | Our wide does NOT currently set n on non-MSR entities (check: they all have NULL n). Recommend: NULL (match convention), only MSR gets n='OPENCONTEXT' |
-| D5 | **p__curation / p__related_resource** | NULL on new OC rows (frozen export never had them) vs attempt to populate | NULL — there is no source for these from Eric's PQG; they were NULL on existing OC rows too |
-| D6 | **Staging vs production** | Stage under new tag on R2 for inspection before `current/` cutover | Same pattern as Phase 1: stage first, inspect, promote only after RY + Eric sign off |
-| D7 | **Eric notification** | Notify Eric to inspect rock count | Should show ~38K now (30,272 + 7,766 new rock records); Eric should verify during staging |
+For the 21,227 removed MSR pids, orphan entities (referenced ONLY by removed MSRs):
+
+| Entity type | Orphan count | Policy |
+|---|---|---|
+| MaterialSampleRecord | 21,227 | REMOVE (the removed pids themselves) |
+| SamplingEvent | 21,227 | REMOVE (each removed MSR had exactly 1 orphan SE) |
+| GeospatialCoordLocation | 21,227 | REMOVE (each orphan SE had 1 orphan geo via p__sample_location) |
+| SamplingSite | 928 | REMOVE (orphan sites via orphan SE p__sampling_site) |
+| Agent | 0 | KEEP (no orphan agents — all shared with surviving MSRs) |
+| **Total rows removed** | **64,609** | — |
+
+No SamplingSite geo refs (p__site_location) produced additional orphan geo rows (those 928 sites' geo rows were shared with surviving entities or already counted).
 
 ---
 
-## 8. Honest gaps — what this spike does NOT prove
+## 7. Decisions (all resolved 2026-06-12)
 
-1. **202606 round-trip**: The spike used 202604 as the base wide (locally available). The actual ingestion will use 202606. Row_ids and concept inventory differ slightly. The spike accounts for this explicitly (earthsurface concept gap, otheranthropogenicmaterial already present) but the full 202606-based run has not been executed.
+| # | Decision | **Resolution** |
+|---|---|---|
+| D1 | **Base wide for ingestion** | **202606** — downloaded from R2; sha256=57c01f922c52bac2c6a28abd504f38161f83c140a7149036b3d8e725be8aa3b1 |
+| D2 | **Output tag** | **isamples_202608** |
+| D3 | **Stale pids policy** | **REMOVE** — TRUE SYNC. 21,227 stale OC pids removed + 43,382 orphan subgraph entities. Rationale: Murlo project mass-PID-update; old pids would duplicate physical samples. |
+| D4 | **n column for non-MSR entities** | **NULL** — matches existing convention; only MSR rows get n='OPENCONTEXT' |
+| D5 | **p__curation / p__related_resource** | **NULL** — no source in Eric's PQG; matches existing OC rows |
+| D6 | **Staging vs production** | **Stage first** — output at /tmp/ingest_202608/; R2 publish human-gated |
+| D7 | **Eric notification** | OC rock count after sync: **37,953** (30,272 - 85 removed rocks + 7,766 new rocks). Eric to verify. |
 
-2. **p__ array remapping correctness at scale**: The spike identified the remapping requirement and verified the entity subgraph counts but did not execute the full remapping SQL. The spike script writes to `/tmp/ingest_272_output/` and performs remapping — that is the proof of concept but should be reviewed before promotion.
+---
 
-3. **SamplingSite deduplication**: The spike counts 6,514 SamplingSite rows in the new subgraph, all absent from our wide by pid. However, some may share real-world locations with existing SamplingSite rows that have different pids (different OC projects at the same site). This is a data-quality question, not a correctness issue for ingestion.
+## 8. Gap resolution (as of 2026-06-12 implementation)
 
-4. **Keywords entities**: New MSRs may have `p__keywords` references to IdentifiedConcept rows in Eric's wide. The concept inventory check above covered only `p__has_material_category`, `p__has_sample_object_type`, and `p__has_context_category`. Keywords concept resolution should be checked explicitly during implementation.
+1. ✅ **202606 round-trip**: DONE. Production run used 202606 as base. Confirmed: 1 concept minted (earthsurface), not 2.
 
-5. **Agent deduplication**: 24 Agent rows are linked from new MSRs (all absent from our wide by pid). If any are "the same organization" as an existing Agent by some other identifier, they'd be duplicated conceptually. Not a correctness issue for ingestion.
+2. ✅ **p__ array remapping correctness at scale**: DONE. Full remapping executed; post-write trust checks + 25-check validator all pass.
 
-6. **Geometry WKB encoding compatibility**: Eric's GeoCoordLoc geometry is stored as WKB BLOB. Our existing wide MSR rows also store geometry as WKB BLOB. The spike observed consistent encoding but did not formally verify WKB version bytes.
+3. **SamplingSite deduplication**: NOT resolved (acknowledged data-quality gap; not a correctness issue for ingestion).
 
-7. **Downstream file sizes**: Adding ~152K rows to the 20.7M-row wide increases it by ~0.7%. The derived files (map_lite, facets) will grow correspondingly. This is trivially small but not explicitly measured in the spike.
+4. ✅ **Keywords entities**: p__keywords concept resolution is included in the remap tables (remap_msr_kw). All keyword concept refs in new MSRs resolve via URI lookup against src IdentifiedConcept rows.
 
-8. **No test fixtures**: The spike script in `scripts/ingest_oc_records.py` does not yet have fixture tests. The implementation PR should add `tests/test_ingest_oc_records.py` covering the remapping logic and trust-gate invariants.
+5. **Agent deduplication**: NOT resolved (acknowledged; 24 new agents are conceptually distinct by pid).
+
+6. ✅ **Geometry WKB encoding**: Confirmed. Eric's geo uses GEOMETRY type; ingest converts with ST_AsWKB()::BLOB. Coord round-trip accurate to 6 decimal places (validated by build + validator).
+
+7. ✅ **File sizes measured**: 202608 wide is ~302MB (202606 was ~292MB, +3.4%). samp=6,726,892, samp_geo=6,026,242.
+
+8. ✅ **Fixture tests**: `tests/test_ingest_oc_records.py` added with 20 tests covering all trust-gate invariants, remapping, removal, and determinism.
 
 ---
 

@@ -1,34 +1,43 @@
 #!/usr/bin/env python3
-"""Ingest new OpenContext records from Eric's OC PQG wide into the unified wide.
+"""TRUE SYNC: ingest new OpenContext records + remove stale OC records.
 
 Issue #272 Phase 2 (follow-up to PR #275 overlay phase):
-  The overlay phase fixed concept mappings for ~1.04M existing OC pids.
-  This script ingests the ~67,187 NEW OC records that were absent from the
-  frozen iSamples Central export and therefore absent from the unified wide.
+  The overlay phase (Phase 1) fixed concept mappings for ~1.04M existing OC pids.
+  This script performs a TRUE SYNC against Eric's 2026-06-09 OC PQG wide:
+    ADD  67,187 new pids (in Eric's wide but not in src)
+    REMOVE 21,227 stale pids (in src but not in Eric's wide — Murlo project
+           mass-updated PIDs; old PIDs would duplicate the same physical samples)
+  + remove orphaned subgraph entities for the removed pids.
 
-WHAT IT DOES (single DuckDB pass, deterministic):
-  1. Identify new pids: present in Eric's OC wide, absent from src wide.
-  2. Extract the full entity subgraph for new pids:
+Decision D3 (2026-06-12, RY): REMOVE the stale pids. Rationale: OpenContext
+mass-updated Murlo project PIDs; keeping old pids would duplicate the same
+physical samples under two identifiers. This is a TRUE SYNC.
+
+WHAT IT DOES (single DuckDB session, deterministic):
+  1. Identify stale pids (src has, Eric doesn't) → rows to remove
+  2. Identify orphan subgraph entities (SE / Geo / Site) only referenced by
+     removed MSRs — safe to remove; agents are shared so NOT removed.
+  3. Identify new pids (Eric has, src doesn't) → rows to add
+  4. Extract full entity subgraph for new pids:
        MaterialSampleRecord + SamplingEvent + GeospatialCoordLocation +
        SamplingSite + Agent + (linked IdentifiedConcepts already in src)
-  3. Assign new row_ids: dense rank starting at max(src.row_id)+1,
+  5. Assign new row_ids: dense rank starting at max(src.row_id)+1,
      ordered deterministically by (otype, pid).
-  4. Build a mapping table: Eric's row_id → our new row_id.
-  5. Remap all p__ arrays on new rows from Eric's id space to our id space.
-     Concept references in p__has_* arrays resolved via URI lookup against
-     src wide's IdentifiedConcept rows (same pattern as enrich_wide_with_oc_concepts.py).
-  6. Denormalize geometry/lat/lon from GeoCoordLoc onto new MSR rows
+  6. Build a mapping table: Eric's row_id → our new row_id.
+  7. Remap all p__ arrays on new rows from Eric's id space to our id space.
+     Concept refs in p__has_* arrays resolved via URI lookup against src's
+     IdentifiedConcept rows (same pattern as enrich_wide_with_oc_concepts.py).
+  8. Denormalize geometry/lat/lon from GeoCoordLoc onto new MSR rows
      (builder reads geometry from MSR rows, not from GeoCoordLoc).
-  7. Set n='OPENCONTEXT' on new MSR rows (Eric's wide has NULL).
-  8. Mint new IdentifiedConcept rows for any concept URIs present in new
-     MSRs but absent from src wide (expected: only earthsurface in practice).
-  9. Hard-fail checks before writing (see HARD FAILURES below).
- 10. Write: src rows UNION ALL new entity rows → output wide.
- 11. Emit a {out}.manifest.json.
+  9. Set n='OPENCONTEXT' on new MSR rows (Eric's wide has NULL).
+ 10. Mint new IdentifiedConcept rows for any concept URIs in new MSRs but
+     absent from src wide (expected: sampledfeature/1.0/earthsurface).
+ 11. Hard-fail checks before writing (see HARD FAILURES below).
+ 12. Write: (src - removed - orphans) UNION ALL new_entities → output wide.
+ 13. Emit a {out}.manifest.json.
 
 WHAT IT DOES NOT DO (scope):
   - Does not re-run the Phase 1 concept overlay (already in src wide).
-  - Does not prune the 21,227 OC pids in src that are absent from Eric's wide.
   - Does not populate p__curation / p__related_resource (OC doesn't have them).
   - Does not ingest IdentifiedConcept rows for keywords beyond the p__has_* dims
     (keywords concepts should be verified separately).
@@ -39,8 +48,9 @@ HARD FAILURES (refuses to write):
   - duplicate row_ids in proposed new id set vs src wide
   - any p__ reference in a new row that cannot be resolved to a row_id in output
   - any new MSR with n != 'OPENCONTEXT' in the written output
-  - row count mismatch: output != src + new_entities + minted_concepts
+  - row count mismatch: output != (src - removed) + new_entities + minted_concepts
   - duplicate pids anywhere in output (union would create them if logic is wrong)
+  - any removed pid still present in output
 
 Usage:
   python scripts/ingest_oc_records.py \\
@@ -173,6 +183,118 @@ def main():
             f"OC duplicate MSR pids={n_dup_oc_pid_msr}. Refusing to proceed."
         )
 
+    # ---- Phase D3: identify stale pids to remove ---------------------------
+    con.execute(f"""
+    CREATE TEMP TABLE removed_pids AS
+      SELECT pid
+      FROM {SRC} WHERE otype='MaterialSampleRecord' AND n='{OC_SOURCE}'
+      EXCEPT
+      SELECT pid
+      FROM {OC} WHERE otype='MaterialSampleRecord';
+    """)
+    n_removed_pids = con.sql("SELECT COUNT(*) FROM removed_pids").fetchone()[0]
+    log(f"stale pids to remove: {n_removed_pids:,}", t0)
+
+    # ---- Phase D3 orphan analysis: find orphaned subgraph entities ----------
+    # Removed MSR rows (with their p__ arrays for tracing references)
+    con.execute(f"""
+    CREATE TEMP TABLE removed_msrs AS
+      SELECT s.* FROM {SRC} s
+      WHERE s.otype='MaterialSampleRecord' AND s.n='{OC_SOURCE}'
+        AND s.pid IN (SELECT pid FROM removed_pids);
+
+    -- SE refs from removed MSRs
+    CREATE TEMP TABLE removed_se_refs AS
+      SELECT DISTINCT u.se_id AS row_id
+      FROM removed_msrs, UNNEST(p__produced_by) AS u(se_id);
+
+    -- SE refs from all SURVIVING OC MSRs
+    CREATE TEMP TABLE surviving_se_refs AS
+      SELECT DISTINCT u.se_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__produced_by) AS u(se_id)
+      WHERE s.otype='MaterialSampleRecord' AND s.n='{OC_SOURCE}'
+        AND s.pid NOT IN (SELECT pid FROM removed_pids);
+
+    -- Orphan SEs: referenced only by removed MSRs
+    CREATE TEMP TABLE orphan_se_ids AS
+      SELECT row_id FROM removed_se_refs
+      WHERE row_id NOT IN (SELECT row_id FROM surviving_se_refs);
+
+    -- Geo refs from orphan SEs
+    CREATE TEMP TABLE orphan_se_geo_refs AS
+      SELECT DISTINCT u.geo_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
+      WHERE s.otype='SamplingEvent' AND s.row_id IN (SELECT row_id FROM orphan_se_ids);
+
+    -- Geo refs from surviving SEs
+    CREATE TEMP TABLE surviving_geo_refs AS
+      SELECT DISTINCT u.geo_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
+      WHERE s.otype='SamplingEvent' AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids);
+
+    -- Orphan geo: referenced only by orphan SEs, not surviving SEs
+    CREATE TEMP TABLE orphan_geo_ids AS
+      SELECT row_id FROM orphan_se_geo_refs
+      WHERE row_id NOT IN (SELECT row_id FROM surviving_geo_refs);
+
+    -- SamplingSite refs from orphan SEs
+    CREATE TEMP TABLE orphan_se_site_refs AS
+      SELECT DISTINCT u.site_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__sampling_site) AS u(site_id)
+      WHERE s.otype='SamplingEvent' AND s.row_id IN (SELECT row_id FROM orphan_se_ids);
+
+    -- SamplingSite refs from surviving SEs
+    CREATE TEMP TABLE surviving_site_refs AS
+      SELECT DISTINCT u.site_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__sampling_site) AS u(site_id)
+      WHERE s.otype='SamplingEvent' AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids);
+
+    -- Orphan SamplingSites
+    CREATE TEMP TABLE orphan_site_ids AS
+      SELECT row_id FROM orphan_se_site_refs
+      WHERE row_id NOT IN (SELECT row_id FROM surviving_site_refs);
+    """)
+
+    # Count orphan entities by type
+    orphan_counts = {
+        "removed_msrs": n_removed_pids,
+        "orphan_se": con.sql("SELECT COUNT(*) FROM orphan_se_ids").fetchone()[0],
+        "orphan_geo": con.sql("SELECT COUNT(*) FROM orphan_geo_ids").fetchone()[0],
+        "orphan_site": con.sql("SELECT COUNT(*) FROM orphan_site_ids").fetchone()[0],
+    }
+    total_orphan_rows = sum(orphan_counts.values())
+    log(f"orphan subgraph: msr={orphan_counts['removed_msrs']:,} "
+        f"se={orphan_counts['orphan_se']:,} "
+        f"geo={orphan_counts['orphan_geo']:,} "
+        f"site={orphan_counts['orphan_site']:,} "
+        f"total={total_orphan_rows:,}", t0)
+
+    # Build the set of all row_ids to exclude from the src
+    con.execute(f"""
+    CREATE TEMP TABLE rows_to_remove AS
+      -- Removed MSR rows
+      SELECT s.row_id FROM {SRC} s
+      WHERE s.otype='MaterialSampleRecord' AND s.n='{OC_SOURCE}'
+        AND s.pid IN (SELECT pid FROM removed_pids)
+      UNION ALL
+      -- Orphan SE rows
+      SELECT row_id FROM {SRC}
+      WHERE otype='SamplingEvent' AND row_id IN (SELECT row_id FROM orphan_se_ids)
+      UNION ALL
+      -- Orphan GeoCoordLoc rows
+      SELECT row_id FROM {SRC}
+      WHERE otype='GeospatialCoordLocation' AND row_id IN (SELECT row_id FROM orphan_geo_ids)
+      UNION ALL
+      -- Orphan SamplingSite rows
+      SELECT row_id FROM {SRC}
+      WHERE otype='SamplingSite' AND row_id IN (SELECT row_id FROM orphan_site_ids);
+    """)
+    n_rows_to_remove = con.sql("SELECT COUNT(*) FROM rows_to_remove").fetchone()[0]
+    if n_rows_to_remove != total_orphan_rows:
+        sys.exit(f"FATAL: rows_to_remove count {n_rows_to_remove:,} != expected {total_orphan_rows:,}. "
+                 f"Entity type mismatch or pid not found in src.")
+    log(f"rows_to_remove: {n_rows_to_remove:,} (matches orphan arithmetic)", t0)
+
     # ---- Phase A: identify new pids ----------------------------------------
     con.execute(f"""
     CREATE TEMP TABLE new_pids AS
@@ -185,7 +307,7 @@ def main():
     n_new_pids = con.sql("SELECT COUNT(*) FROM new_pids").fetchone()[0]
     log(f"new pids: {n_new_pids:,}", t0)
     if n_new_pids == 0:
-        sys.exit("INFO: no new pids to ingest. Output would be identical to src. Exiting.")
+        sys.exit("INFO: no new pids to ingest. Output would be identical to src minus removals. Exiting.")
 
     # Check none of the new pids sneak in as non-OPENCONTEXT records in src
     n_pid_collision = con.sql(f"""
@@ -338,8 +460,7 @@ def main():
     """).fetchone()[0]
 
     if n_unresolved_uris:
-        # These need to be minted — expected: only earthsurface when base is 202604.
-        # When base is 202606 (production), otheranthropogenicmaterial is already there.
+        # These need to be minted — expected: only earthsurface when base is 202606.
         missing = con.sql("""
             SELECT u.uri FROM new_concept_uris u
             LEFT JOIN src_concept_map m ON m.uri = u.uri
@@ -418,29 +539,6 @@ def main():
     # Build remapped MSR rows (concept p__ via URI lookup; structural p__ via eric_id_map)
     # Using UNNEST WITH ORDINALITY + JOIN + list() aggregation (decorrelated — no correlated subqueries)
     log("remapping p__ arrays for new MSR rows...", t0)
-
-    # Helper: build the array remapping SQL for a structural p__ column (entity refs, not concepts)
-    def remap_array_sql(table, col, nullable=True):
-        """Return SQL expr that remaps col (INTEGER[] in Eric's space) to our BIGINT[].
-        Uses a separate CTE; caller must compose appropriately."""
-        # This helper is used in the big COPY statement below
-        pass
-
-    # Build the new MSR rows with all p__ remapped
-    # We need:
-    #   p__produced_by: remap via eric_id_map (SE row_ids)
-    #   p__has_material_category, p__has_sample_object_type, p__has_context_category: remap via concept_id_lookup
-    #   p__registrant: remap via eric_id_map
-    #   p__responsibility: remap via eric_id_map (if present)
-    #   p__sampling_site, p__sample_location, p__site_location, p__keywords: remap via eric_id_map
-    #   p__curation, p__related_resource: NULL (not in Eric's wide)
-    #   geometry, latitude, longitude: from new_msr_coords
-    #   n: 'OPENCONTEXT'
-    #   row_id: from eric_id_map
-
-    # For each new MSR, pre-compute remapped arrays
-    # Pattern: UNNEST WITH ORDINALITY -> JOIN id_map -> list(our_row_id ORDER BY ord)
-    # Done via pre-aggregated temp tables (decorrelated, avoids planner blowup)
 
     con.execute("""
     -- Pre-aggregate remapped structural arrays for new MSRs
@@ -572,23 +670,35 @@ def main():
     if n_unresolved_concepts:
         sys.exit(f"FATAL: {n_unresolved_concepts} concept references in new MSRs do not resolve")
 
+    # Check that rows_to_remove doesn't contain any non-OC rows
+    n_non_oc_removal = con.sql(f"""
+        SELECT COUNT(*) FROM rows_to_remove rr
+        JOIN {SRC} s ON s.row_id = rr.row_id AND s.otype='MaterialSampleRecord'
+        WHERE s.n != '{OC_SOURCE}'
+    """).fetchone()[0]
+    if n_non_oc_removal:
+        sys.exit(f"FATAL: {n_non_oc_removal} removal targets are non-OC MSR rows (would corrupt other sources)")
+
     log("trust checks passed", t0)
 
     # ---- compute expected output row count -----------------------------------
     n_src = con.sql(f"SELECT COUNT(*) FROM {SRC}").fetchone()[0]
     n_new_entities = n_id_map  # entities in eric_id_map
-    n_out_expected = n_src + n_new_entities + n_minted
-    log(f"expected output rows: {n_src:,} src + {n_new_entities:,} new entities + "
-        f"{n_minted} concepts = {n_out_expected:,}", t0)
+    n_out_expected = n_src - n_rows_to_remove + n_new_entities + n_minted
+    log(f"expected output rows: {n_src:,} src - {n_rows_to_remove:,} removed + "
+        f"{n_new_entities:,} new entities + {n_minted} concepts = {n_out_expected:,}", t0)
 
     if args.dry_run:
         log("DRY RUN: skipping write step", t0)
         print("\n=== DRY RUN SUMMARY ===")
-        print(f"  new_pids:         {n_new_pids:,}")
-        print(f"  new_entities:     {n_new_entities:,}")
-        print(f"  minted_concepts:  {n_minted}")
-        print(f"  expected_out:     {n_out_expected:,}")
-        print(f"  trust_checks:     PASS")
+        print(f"  removed_pids:         {n_removed_pids:,}")
+        print(f"  orphan_rows:          {total_orphan_rows - n_removed_pids:,}")
+        print(f"  total_rows_removed:   {n_rows_to_remove:,}")
+        print(f"  new_pids:             {n_new_pids:,}")
+        print(f"  new_entities:         {n_new_entities:,}")
+        print(f"  minted_concepts:      {n_minted}")
+        print(f"  expected_out:         {n_out_expected:,}")
+        print(f"  trust_checks:         PASS")
         return 0
 
     # ---- Phase I: write output -----------------------------------------------
@@ -725,8 +835,9 @@ def main():
 
     write_sql = f"""
     COPY (
-      -- 1. All existing src rows (unchanged)
+      -- 1. Surviving src rows (all rows NOT in the removal set)
       SELECT * FROM {SRC}
+      WHERE row_id NOT IN (SELECT row_id FROM rows_to_remove)
 
       UNION ALL BY NAME
 
@@ -792,7 +903,8 @@ def main():
     n_out = con.sql(f"SELECT COUNT(*) FROM {OUT}").fetchone()[0]
     if n_out != n_out_expected:
         sys.exit(f"FATAL: row count {n_out:,} != expected {n_out_expected:,}. "
-                 f"(src={n_src:,} + new={n_new_entities:,} + minted={n_minted})")
+                 f"(src={n_src:,} - removed={n_rows_to_remove:,} + "
+                 f"new={n_new_entities:,} + minted={n_minted})")
 
     n_dup_out_rowid = con.sql(
         f"SELECT COUNT(*) FROM (SELECT row_id FROM {OUT} GROUP BY row_id HAVING COUNT(*)>1)"
@@ -816,11 +928,21 @@ def main():
     if n_wrong_n:
         sys.exit(f"FATAL: {n_wrong_n} new MSR rows have n != '{OC_SOURCE}'")
 
+    # Verify NONE of the removed pids remain in output
+    n_stale_pids_remain = con.sql(f"""
+        SELECT COUNT(*) FROM {OUT}
+        WHERE otype='MaterialSampleRecord' AND n='{OC_SOURCE}'
+          AND pid IN (SELECT pid FROM removed_pids)
+    """).fetchone()[0]
+    if n_stale_pids_remain:
+        sys.exit(f"FATAL: {n_stale_pids_remain} stale (removed) pids remain in output")
+
     out_oc_count = con.sql(
         f"SELECT COUNT(*) FROM {OUT} WHERE otype='MaterialSampleRecord' AND n='{OC_SOURCE}'"
     ).fetchone()[0]
     log(f"post-write: rows={n_out:,}  dup_rowids={n_dup_out_rowid}  "
-        f"dup_pids={n_dup_out_pid}  oc_msrs={out_oc_count:,}  n_check=PASS", t0)
+        f"dup_pids={n_dup_out_pid}  oc_msrs={out_oc_count:,}  "
+        f"stale_remain={n_stale_pids_remain}  n_check=PASS", t0)
 
     # ---- manifest -----------------------------------------------------------
     if not args.no_manifest:
@@ -829,7 +951,8 @@ def main():
             "argv": sys.argv,
             "git_sha": git_sha(),
             "duckdb_version": duckdb.__version__,
-            "policy": "Ingest new OC pids from Eric's fresh OC PQG wide (#272 phase 2)",
+            "policy": ("TRUE SYNC: add new OC pids + remove stale OC pids from Eric's fresh OC PQG wide "
+                       "(#272 phase 2, D3 decision 2026-06-12)"),
             "inputs": {
                 "src": {"path": args.src, "bytes": os.path.getsize(args.src),
                         "sha256": sha256_file(args.src)},
@@ -838,6 +961,14 @@ def main():
             },
             "counts": {
                 "src_rows": n_src,
+                "removed_pids": n_removed_pids,
+                "orphan_rows": total_orphan_rows - n_removed_pids,
+                "total_rows_removed": n_rows_to_remove,
+                "orphan_breakdown": {
+                    "orphan_se": orphan_counts["orphan_se"],
+                    "orphan_geo": orphan_counts["orphan_geo"],
+                    "orphan_site": orphan_counts["orphan_site"],
+                },
                 "new_pids": n_new_pids,
                 "new_entity_rows": n_new_entities,
                 "minted_concepts": n_minted,
