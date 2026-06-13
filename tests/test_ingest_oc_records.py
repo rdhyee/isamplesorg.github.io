@@ -670,3 +670,242 @@ def test_refuses_to_overwrite_input(pair):
     r = run_ingest(src, oc, src)
     assert r.returncode != 0
     assert "overwrite" in (r.stderr + r.stdout).lower()
+
+
+# ============================================================================
+# Fix #277 — OC description enrichment
+# ============================================================================
+
+def test_oc_description_enriched_from_eric_wide(pair):
+    """OC MSR pid-A gets its description from Eric's OC wide after ingestion.
+
+    The src wide stores 'desc pid-A' (a placeholder). Eric's wide also stores
+    'desc pid-A' by default from build_oc_wide(). We override pid-A's description
+    in Eric's wide to a realistic site-path string and verify the output carries
+    that enriched value, not the src placeholder.
+    """
+    src, oc, out = pair
+
+    # Patch Eric's wide to have a realistic description for pid-A.
+    # We rebuild oc with a custom description for pid-A.
+    oc_patched = out.replace("out.parquet", "oc_patched.parquet")
+    con = duckdb.connect()
+    con.execute("INSTALL spatial; LOAD spatial;")
+    # Read Eric's wide into a temp table, update pid-A's description, rewrite.
+    con.execute(f"""
+        COPY (
+            SELECT
+                row_id, pid, otype, n, geometry, latitude, longitude,
+                CASE WHEN pid='pid-A' AND otype='MaterialSampleRecord'
+                     THEN 'Open Context published "Sample" from: Europe/Cyprus/PKAP Survey Area/Unit 42'
+                     ELSE label
+                END AS label,
+                CASE WHEN pid='pid-A' AND otype='MaterialSampleRecord'
+                     THEN 'Open Context published "Sample" from: Europe/Cyprus/PKAP Survey Area/Unit 42'
+                     ELSE description
+                END AS description,
+                place_name, result_time, p__has_material_category, p__has_sample_object_type,
+                p__has_context_category, p__produced_by, p__sample_location, p__sampling_site,
+                p__site_location, p__registrant, p__keywords, p__responsibility,
+                thumbnail_url, scheme_name, scheme_uri
+            FROM read_parquet('{oc}')
+        ) TO '{oc_patched}' (FORMAT PARQUET)
+    """)
+    con.close()
+
+    r = run_ingest(src, oc_patched, out)
+    assert r.returncode == 0, r.stderr + r.stdout
+
+    row = get_msr(out, "pid-A")
+    assert row is not None
+    assert "Cyprus" in row["description"], (
+        f"Expected enriched description with 'Cyprus', got: {row['description']!r}"
+    )
+
+
+def test_non_oc_description_unchanged_by_enrichment(pair):
+    """Non-OC MSR (pid-NON-OC) description is not overwritten by the OC enrichment."""
+    src, oc, out = pair
+    r = run_ingest(src, oc, out)
+    assert r.returncode == 0, r.stderr + r.stdout
+
+    src_row = get_msr(src, "pid-NON-OC")
+    out_row = get_msr(out, "pid-NON-OC")
+    assert out_row is not None
+    # Non-OC rows must have same description as in src (enrichment must not touch them)
+    assert out_row["description"] == src_row["description"], (
+        f"Non-OC description changed: {src_row['description']!r} → {out_row['description']!r}"
+    )
+
+
+def test_oc_msr_count_unchanged_by_enrichment(pair):
+    """Description enrichment does not change the OC MSR row count."""
+    src, oc, out = pair
+    r = run_ingest(src, oc, out)
+    assert r.returncode == 0, r.stderr + r.stdout
+
+    con = duckdb.connect()
+    n_total = con.sql(f"SELECT COUNT(*) FROM read_parquet('{out}')").fetchone()[0]
+    n_oc_msr = con.sql(f"""
+        SELECT COUNT(*) FROM read_parquet('{out}')
+        WHERE otype='MaterialSampleRecord' AND n='OPENCONTEXT'
+    """).fetchone()[0]
+    con.close()
+    # 2 new OC MSRs (pid-A, pid-B), 1 removed (pid-C), 1 non-OC (pid-NON-OC) → 2 total OC MSRs
+    assert n_oc_msr == 2, f"Expected 2 OC MSRs after sync, got {n_oc_msr}"
+    # Row count must match the sync arithmetic (n_src - 3 removed + 8 new + 1 minted)
+    con2 = duckdb.connect()
+    n_src = con2.sql(f"SELECT COUNT(*) FROM read_parquet('{src}')").fetchone()[0]
+    con2.close()
+    assert n_total == n_src - 3 + 8 + 1, f"Total row count unexpected: {n_total}"
+
+
+# ============================================================================
+# Fix #283a — Empty-string facet filter
+# ============================================================================
+
+def test_empty_string_facet_values_filtered_from_summaries(tmp_path):
+    """build_facet_summaries must not produce rows with facet_value=''.
+
+    This is a synthetic test: we build a tiny samp_geo with an empty-string
+    context value and verify it does NOT appear in facet_summaries output.
+    """
+    import duckdb as _duckdb
+    BUILD = os.path.join(REPO, "scripts", "build_frontend_derived.py")
+    sys.path.insert(0, os.path.join(REPO, "scripts"))
+    import build_frontend_derived as B
+
+    con = _duckdb.connect()
+    con.execute("INSTALL h3 FROM community; LOAD h3; INSTALL spatial; LOAD spatial;")
+    # Create a synthetic samp_geo with an empty-string context and a real one
+    con.execute("""
+        CREATE OR REPLACE TEMP TABLE samp_geo AS
+        SELECT 'pid1' AS pid, 'GEOME' AS source,
+               'https://w3id.org/isample/vocabulary/material/1.0/rock' AS material,
+               '' AS context,   -- empty-string concept URI (the bug scenario)
+               'https://w3id.org/isample/vocabulary/materialsampleobjecttype/1.0/artifact' AS object_type,
+               'label1' AS label, 'desc1' AS description,
+               NULL::VARCHAR AS place_name, NULL::TIMESTAMP AS result_time,
+               10.0::DOUBLE AS latitude, 45.0::DOUBLE AS longitude,
+               1::UBIGINT AS h3_res4, 2::UBIGINT AS h3_res6, 3::UBIGINT AS h3_res8
+        UNION ALL
+        SELECT 'pid2', 'GEOME',
+               'https://w3id.org/isample/vocabulary/material/1.0/rock',
+               'https://w3id.org/isample/vocabulary/sampledfeature/1.0/earthsurface',
+               'https://w3id.org/isample/vocabulary/materialsampleobjecttype/1.0/artifact',
+               'label2', 'desc2', NULL, NULL, 11.0, 46.0, 1, 2, 3
+    """)
+
+    out = str(tmp_path / "facet_summaries.parquet")
+    B.build_facet_summaries(con, out)
+
+    rows = con.sql(f"SELECT * FROM read_parquet('{out}') WHERE facet_value = ''").fetchall()
+    assert rows == [], (
+        f"Expected no blank facet_value rows, but got: {rows}"
+    )
+    # Real context value should appear
+    real_rows = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE facet_type='context' AND facet_value != ''"
+    ).fetchone()[0]
+    assert real_rows >= 1, "Expected at least one non-blank context facet row"
+
+
+def test_empty_string_facet_values_filtered_from_cross_filter(tmp_path):
+    """build_facet_cross_filter must not produce rows with blank facet_value."""
+    import duckdb as _duckdb
+    sys.path.insert(0, os.path.join(REPO, "scripts"))
+    import build_frontend_derived as B
+
+    con = _duckdb.connect()
+    con.execute("INSTALL h3 FROM community; LOAD h3; INSTALL spatial; LOAD spatial;")
+    con.execute("""
+        CREATE OR REPLACE TEMP TABLE samp_geo AS
+        SELECT 'pid1' AS pid, 'GEOME' AS source,
+               'https://w3id.org/isample/vocabulary/material/1.0/rock' AS material,
+               '' AS context,
+               'https://w3id.org/isample/vocabulary/materialsampleobjecttype/1.0/artifact' AS object_type,
+               'label1' AS label, 'desc1' AS description,
+               NULL::VARCHAR AS place_name, NULL::TIMESTAMP AS result_time,
+               10.0::DOUBLE AS latitude, 45.0::DOUBLE AS longitude,
+               1::UBIGINT AS h3_res4, 2::UBIGINT AS h3_res6, 3::UBIGINT AS h3_res8
+    """)
+
+    out = str(tmp_path / "facet_cross_filter.parquet")
+    B.build_facet_cross_filter(con, out)
+
+    blank_rows = con.sql(f"SELECT * FROM read_parquet('{out}') WHERE facet_value = ''").fetchall()
+    assert blank_rows == [], (
+        f"Expected no blank facet_value in cross_filter, got: {blank_rows}"
+    )
+    blank_filter_rows = con.sql(
+        f"SELECT * FROM read_parquet('{out}') WHERE filter_context = ''"
+    ).fetchall()
+    assert blank_filter_rows == [], (
+        f"Expected no blank filter_context in cross_filter, got: {blank_filter_rows}"
+    )
+
+
+# ============================================================================
+# Fix #283b — specimentype/1.0 vocab labels
+# ============================================================================
+
+SPEC_URI_SOLID = "https://w3id.org/isample/vocabulary/specimentype/1.0/othersolidobject"
+SPEC_URI_PHYS = "https://w3id.org/isample/vocabulary/specimentype/1.0/physicalspecimen"
+
+# Path to the rebuilt vocab_labels.parquet (written to the ingest outdir).
+# If not present (e.g. in bare CI), we rebuild it on the fly.
+VOCAB_LABELS_PATH = "/tmp/ingest_202608/vocab_labels.parquet"
+
+
+def _get_vocab_labels_parquet():
+    """Return a path to vocab_labels.parquet, building it if needed."""
+    if os.path.exists(VOCAB_LABELS_PATH):
+        return VOCAB_LABELS_PATH
+    # Build into a temp file for CI / offline environments.
+    BUILD_VL = os.path.join(REPO, "scripts", "build_vocab_labels.py")
+    import tempfile
+    tmp = tempfile.mktemp(suffix=".parquet")
+    result = subprocess.run(
+        [sys.executable, BUILD_VL, "-o", tmp],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        pytest.skip(f"build_vocab_labels.py failed (network?): {result.stderr[:200]}")
+    return tmp
+
+
+def test_specimentype_othersolidobject_in_vocab_labels():
+    """specimentype/1.0/othersolidobject must be present with label 'Other solid object'."""
+    vl = _get_vocab_labels_parquet()
+    con = duckdb.connect()
+    row = con.sql(
+        f"SELECT pref_label FROM read_parquet('{vl}') WHERE uri='{SPEC_URI_SOLID}'"
+    ).fetchone()
+    con.close()
+    assert row is not None, f"{SPEC_URI_SOLID!r} not found in vocab_labels"
+    assert row[0] == "Other solid object", f"Expected 'Other solid object', got {row[0]!r}"
+
+
+def test_specimentype_physicalspecimen_in_vocab_labels():
+    """specimentype/1.0/physicalspecimen must be present with label 'Material sample'."""
+    vl = _get_vocab_labels_parquet()
+    con = duckdb.connect()
+    row = con.sql(
+        f"SELECT pref_label FROM read_parquet('{vl}') WHERE uri='{SPEC_URI_PHYS}'"
+    ).fetchone()
+    con.close()
+    assert row is not None, f"{SPEC_URI_PHYS!r} not found in vocab_labels"
+    assert row[0] == "Material sample", f"Expected 'Material sample', got {row[0]!r}"
+
+
+def test_specimentype_labels_have_lang_en():
+    """Both specimentype manual overrides must have lang='en'."""
+    vl = _get_vocab_labels_parquet()
+    con = duckdb.connect()
+    rows = con.sql(
+        f"SELECT uri, lang FROM read_parquet('{vl}') WHERE uri LIKE '%specimentype%'"
+    ).fetchall()
+    con.close()
+    assert len(rows) == 2, f"Expected 2 specimentype rows, got {len(rows)}: {rows}"
+    for uri, lang in rows:
+        assert lang == "en", f"Expected lang='en' for {uri!r}, got {lang!r}"

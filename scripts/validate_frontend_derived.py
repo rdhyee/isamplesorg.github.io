@@ -112,8 +112,9 @@ def main():
     check("facets.pid == map_lite.pid", diff == 0, f"{diff} pids differ between facets and map_lite")
 
     # --- 5. ALGEBRA: facet_summaries == GROUP BY facets (per dim) ---
+    # NOTE: build_frontend_derived.py filters both NULL and empty-string values (#283a fix).
     recompute = " UNION ALL ".join(
-        f"SELECT '{d}' AS facet_type, {d} AS facet_value, COUNT(*) AS c FROM {F} WHERE {d} IS NOT NULL GROUP BY {d}"
+        f"SELECT '{d}' AS facet_type, {d} AS facet_value, COUNT(*) AS c FROM {F} WHERE {d} IS NOT NULL AND {d} <> '' GROUP BY {d}"
         for d in ("source", "material", "context", "object_type"))
     mismatch = scalar(f"""
       WITH recomputed AS ({recompute}),
@@ -125,15 +126,19 @@ def main():
     check("facet_summaries == GROUP BY facets", mismatch == 0, f"{mismatch} (facet_type,value,count) rows disagree")
     check("facet_summaries.scheme all NULL", scalar(f"SELECT COUNT(*) FROM {S} WHERE scheme IS NOT NULL") == 0,
           "non-NULL scheme rows (contract: scheme is NULL)")
+    # --- 5b. blank facet values absent (#283a) ---
+    check("facet_summaries no blank values (#283a)", scalar(f"SELECT COUNT(*) FROM {S} WHERE facet_value = ''") == 0,
+          "blank empty-string facet_value rows (want 0; caused by GEOME empty-string concept URI)")
 
     # --- 6. ALGEBRA: facet_cross_filter single-dim rows == conditional GROUP BY facets ---
+    # NOTE: build_frontend_derived.py filters both NULL and empty-string values (#283a fix).
     dims = ("source", "material", "context", "object_type")
     parts = []
     for filt in dims:
         for fd in dims:
             parts.append(
                 f"SELECT '{filt}' AS fcol, {filt} AS fval, '{fd}' AS facet_type, {fd} AS facet_value, COUNT(*) AS c "
-                f"FROM {F} WHERE {filt} IS NOT NULL AND {fd} IS NOT NULL GROUP BY {filt}, {fd}")
+                f"FROM {F} WHERE {filt} IS NOT NULL AND {filt} <> '' AND {fd} IS NOT NULL AND {fd} <> '' GROUP BY {filt}, {fd}")
     recompute_cf = " UNION ALL ".join(parts)
     # normalize cross_filter single-dim rows into (fcol, fval, facet_type, facet_value, count)
     cf_single = f"""

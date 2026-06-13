@@ -249,5 +249,88 @@ id collision avoidance, overwrite guard.
 | File | sha256 |
 |---|---|
 | isamples_202606_wide.parquet | 57c01f922c52bac2c6a28abd504f38161f83c140a7149036b3d8e725be8aa3b1 |
-| oc_isamples_pqg_wide_2026-06-09.parquet | (see manifest) |
-| isamples_202608_wide.parquet | (see /tmp/ingest_202608/isamples_202608_wide.parquet.manifest.json) |
+| oc_isamples_pqg_wide_2026-06-09.parquet | 60d629279bb5702e50599eb5f49efa64d493545247886660e6cd31a44e21a8e9 |
+| isamples_202608_wide.parquet (pre-Phase 3) | 8a5c0a0470c71c517a31494fc285f304ecf78cc602594f7278c65500a68a48eb |
+| isamples_202608_wide.parquet (post-Phase 3, final) | 3d3dbd05b9c607de3eed413b2da95aaee5232ebfd435593042316e6512065e59 |
+
+---
+
+## Phase 3 — Bug fixes folded into 202608 (2026-06-12)
+
+*Three bugs from triage report /tmp/triage-2026-06-12/FINDINGS.md folded in.*
+
+### Fix application
+
+| Fix | Script modified | Trust gate |
+|---|---|---|
+| #277 description enrichment | `scripts/ingest_oc_records.py` (Phase J added) | Cyprus OC MSR count |
+| #283a empty-string facet filter | `scripts/build_frontend_derived.py` | Blank facet_value count |
+| #283b specimentype/1.0 labels | `scripts/build_vocab_labels.py` | specimentype URIs in vocab_labels |
+
+Description enrichment was applied to the already-written 202608 wide (post-sync, pre-derived rebuild) using a UNION ALL approach: OC MSR rows (1.1M) joined with Eric's wide for descriptions, all other rows passed through unchanged. Total write time: ~2s.
+
+### Verification query outputs (all run 2026-06-12)
+
+#### a. Cyprus description count
+```
+SELECT COUNT(*) FROM isamples_202608_wide WHERE otype='MaterialSampleRecord' AND n='OPENCONTEXT' AND description ILIKE '%Cyprus%'
+Result: 69,230   (was 0 before fix; matches Eric's OC-specific wide exactly)
+```
+
+#### b. Blank facet entry count
+```
+SELECT COUNT(*) FROM isamples_202608_facet_summaries WHERE facet_value = ''
+Result: 0   (was 586 before fix — 586 GEOME records with empty-string concept URI)
+```
+
+#### c. specimentype label lookup
+```
+SELECT uri, pref_label, lang FROM vocab_labels WHERE uri LIKE '%specimentype%'
+Result:
+  ('specimentype/1.0/othersolidobject', 'Other solid object', 'en')
+  ('specimentype/1.0/physicalspecimen', 'Material sample',    'en')
+  (Both rows present with correct labels)
+```
+
+#### d. Total validator checks
+```
+validate_frontend_derived.py --dir /tmp/ingest_202608/ --tag isamples_202608 --wide ...
+Result: ALL CHECKS PASS (26/26)
+  (25 original checks + 1 new: "facet_summaries no blank values (#283a)")
+```
+
+#### e. OC MSR count (unchanged by description enrichment)
+```
+SELECT COUNT(*) FROM isamples_202608_wide WHERE otype='MaterialSampleRecord' AND n='OPENCONTEXT'
+Result: 1,110,791   (unchanged from Phase 2 sync)
+```
+
+#### f. Rock count (OC only, unchanged by description enrichment)
+```
+SELECT COUNT(*) FROM isamples_202608_sample_facets_v2 WHERE material LIKE '%/rock' AND source='OPENCONTEXT'
+Result: 37,953   (unchanged from Phase 2 sync)
+```
+
+### Fixture tests
+```
+pytest tests/test_ingest_oc_records.py -v
+28/28 passed in 5.28s
+
+New tests added (8 new):
+  Fix #277: test_oc_description_enriched_from_eric_wide
+            test_non_oc_description_unchanged_by_enrichment
+            test_oc_msr_count_unchanged_by_enrichment
+  Fix #283a: test_empty_string_facet_values_filtered_from_summaries
+             test_empty_string_facet_values_filtered_from_cross_filter
+  Fix #283b: test_specimentype_othersolidobject_in_vocab_labels
+             test_specimentype_physicalspecimen_in_vocab_labels
+             test_specimentype_labels_have_lang_en
+```
+
+### Updated output manifest
+```
+/tmp/ingest_202608/isamples_202608_wide.parquet.manifest.json
+  output.bytes:  300,665,838  (was 300,427,562 — enriched descriptions are longer)
+  output.sha256: 3d3dbd05b9c607de3eed413b2da95aaee5232ebfd435593042316e6512065e59
+  phase3_fixes:  [#277, #283a, #283b] documented in manifest
+```

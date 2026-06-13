@@ -357,3 +357,47 @@ The ingestion is well-understood and low-risk:
 - The full Stage 4 semantic gate runs unchanged on the output
 
 Estimated implementation effort: 1–2 sessions (script + tests + gate).
+
+---
+
+## 10. Phase 3 — Bug fixes folded into 202608 (2026-06-12)
+
+Three bugs discovered during triage are fixed before staging 202608. All fixes are folded into the 202608 rebuild so the published dataset is clean from the start.
+
+### Fix A — #277: OC description enrichment
+
+**Root cause**: The 202608 (and previous 202606) combined wide stores OC sample `description` as terse Linked Data metadata (`'updated': 2023-10-05T04:45:54Z`) instead of the human-readable site-path strings (`Open Context published "Sample" from: Europe/Cyprus/PKAP Survey Area/...`) present in Eric's OC PQG wide.
+
+**Impact**: Text search for "Cyprus" returns 0 matches in the deployed explorer (expected ≈ 69,230).
+
+**Fix**: Added **Phase J** to `scripts/ingest_oc_records.py`. After the sync write, the script reads the output wide, LEFT JOINs on `pid` with Eric's OC wide for OC MSR rows only, overwrites `description` with Eric's value if non-null, and atomically replaces the output. Non-OC rows and rows with NULL description in Eric's wide are unchanged.
+
+**Trust gate**: Cyprus OC MSR count after enrichment must be ≈ 69,230.
+
+**Schema note**: `description` is a simple VARCHAR in both wides. Row counts are invariant.
+
+### Fix B — #283a: Empty-string facet filter
+
+**Root cause**: 586 GEOME records have an empty string (`''`) as their `context` (Sampled Feature) facet value because their `p__has_context_category` points to an `IdentifiedConcept` row with `pid = ''`. The facet-summary builder filtered `IS NOT NULL` but not empty strings, so `''` appeared as a blank selectable facet entry with count 586.
+
+**Fix**: Changed the WHERE filter in `build_facet_summaries` and `build_facet_cross_filter` in `scripts/build_frontend_derived.py` from `IS NOT NULL` to `IS NOT NULL AND {d} <> ''`. Also updated the algebraic recompute in `scripts/validate_frontend_derived.py` to match, and added check 5b (`facet_summaries no blank values (#283a)`).
+
+**Trust gate**: `SELECT COUNT(*) FROM facet_summaries WHERE facet_value = ''` must be 0.
+
+### Fix C — #283b: Deprecated specimentype/1.0 label mappings
+
+**Root cause**: 169 SESAR records use deprecated-namespace object_type URIs (`specimentype/1.0/othersolidobject`, `specimentype/1.0/physicalspecimen`) that are absent from `vocab_labels.parquet`. The explorer's `prettyLabel()` falls back to displaying the raw URI path tail.
+
+**Fix**: Added `MANUAL_LABEL_OVERRIDES` to `scripts/build_vocab_labels.py` — two hardcoded rows injected before the dedupe step. Rebuilt `vocab_labels.parquet` (now 539 rows, up from 537).
+
+**Trust gate**: Both URIs present in `vocab_labels.parquet` with correct `pref_label` values.
+
+### Fixture tests added (tests/test_ingest_oc_records.py)
+
+| Group | Tests added |
+|---|---|
+| Fix #277 | `test_oc_description_enriched_from_eric_wide`, `test_non_oc_description_unchanged_by_enrichment`, `test_oc_msr_count_unchanged_by_enrichment` |
+| Fix #283a | `test_empty_string_facet_values_filtered_from_summaries`, `test_empty_string_facet_values_filtered_from_cross_filter` |
+| Fix #283b | `test_specimentype_othersolidobject_in_vocab_labels`, `test_specimentype_physicalspecimen_in_vocab_labels`, `test_specimentype_labels_have_lang_en` |
+
+All 28 tests pass (`pytest tests/test_ingest_oc_records.py -v`).

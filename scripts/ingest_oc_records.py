@@ -944,6 +944,62 @@ def main():
         f"dup_pids={n_dup_out_pid}  oc_msrs={out_oc_count:,}  "
         f"stale_remain={n_stale_pids_remain}  n_check=PASS", t0)
 
+    # ---- Phase J: description enrichment (#277) ---------------------------------
+    # OC sample descriptions in the combined wide are terse LD metadata strings
+    # ('updated': 2023-10-05...) instead of the human-readable site-path strings
+    # ('Open Context published "Sample" from: Europe/Cyprus/PKAP Survey Area/...')
+    # present in Eric's OC wide. Overwrite `description` for ALL OC MSR pids in
+    # the output from Eric's wide. This covers both existing ~1.04M pids that
+    # survived the sync and the 67,187 newly added pids.
+    #
+    # Implementation: single DuckDB COPY rewriting only the description column
+    # for OC MSR rows; all other columns and all non-OC rows pass through as-is.
+    # Row counts are invariant (JOIN on pid, not a filter).
+    log("description enrichment (#277): copying OC descriptions from Eric's wide…", t0)
+
+    tmp_enriched = args.out + ".enriching.tmp"
+    # Use a UNION ALL approach for efficiency: join only OC MSR rows (1.1M) with
+    # Eric's wide for descriptions, then pass all non-OC rows through unchanged.
+    # This avoids a full-scan LEFT JOIN on 20M rows (which materializes the full
+    # wide in memory and is very slow). Both branches use SELECT * REPLACE for
+    # schema-agnostic column handling.
+    con.execute(f"""
+    COPY (
+      -- OC MSR rows: overwrite description from Eric's wide where available
+      SELECT w.* REPLACE (
+        CASE WHEN oc.description IS NOT NULL THEN oc.description ELSE w.description END AS description
+      )
+      FROM read_parquet('{args.out}') w
+      LEFT JOIN (
+        SELECT pid, description FROM {OC} WHERE otype='MaterialSampleRecord'
+      ) oc ON oc.pid = w.pid
+      WHERE w.otype='MaterialSampleRecord' AND w.n='{OC_SOURCE}'
+
+      UNION ALL BY NAME
+
+      -- All non-OC rows: pass through unchanged (no description modification)
+      SELECT * FROM read_parquet('{args.out}')
+      WHERE NOT (otype='MaterialSampleRecord' AND n='{OC_SOURCE}')
+    ) TO '{tmp_enriched}' (FORMAT PARQUET, COMPRESSION ZSTD)
+    """)
+
+    # Trust gate: verify row count is unchanged, then check Cyprus count
+    n_enriched = con.sql(f"SELECT COUNT(*) FROM read_parquet('{tmp_enriched}')").fetchone()[0]
+    if n_enriched != n_out:
+        os.unlink(tmp_enriched)
+        sys.exit(f"FATAL: description enrichment changed row count {n_out:,} → {n_enriched:,}")
+
+    n_cyprus = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{tmp_enriched}') "
+        f"WHERE otype='MaterialSampleRecord' AND n='{OC_SOURCE}' "
+        f"AND description ILIKE '%Cyprus%'"
+    ).fetchone()[0]
+    log(f"description enrichment trust gate: Cyprus OC MSR count = {n_cyprus:,} (expect ≈ 69,230)", t0)
+
+    # Atomically replace the output with the enriched version
+    os.replace(tmp_enriched, args.out)
+    log(f"description enrichment complete: replaced {args.out}", t0)
+
     # ---- manifest -----------------------------------------------------------
     if not args.no_manifest:
         manifest = {
