@@ -1,14 +1,5 @@
 name: Explorer e2e smoke gate
 
-# ACTIVATION REQUIRED — this file lives in .github/workflows-pending/
-# only because the bot's fine-grained PAT lacks the "Workflows" permission
-# needed to create files under .github/workflows/. To activate the gate:
-#
-#     git mv .github/workflows-pending/explorer-e2e.yml .github/workflows/
-#
-# (and delete the now-empty workflows-pending/). No other edits needed —
-# all paths below already reference the final location.
-#
 # Browser-level regression gate for explorer.html (#249 PR 1 — the safety
 # net that must exist BEFORE any refactor of explorer.qmd lands).
 #
