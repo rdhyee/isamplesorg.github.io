@@ -196,7 +196,19 @@ def main():
     log(f"stale pids to remove: {n_removed_pids:,}", t0)
 
     # ---- Phase D3 orphan analysis: find orphaned subgraph entities ----------
-    # Removed MSR rows (with their p__ arrays for tracing references)
+    # General formulation: a candidate row is REMOVED iff its row_id does NOT appear
+    # in any p__* array column across ALL SURVIVING rows (any otype, any source).
+    # "Surviving rows" = all rows that remain after removing the stale MSRs + orphan
+    # subgraph. We compute orphans in dependency order:
+    #   1. orphan SEs  (only referenced by removed MSRs)
+    #   2. orphan SamplingSites  (only referenced by orphan SEs, not surviving SEs)
+    #   3. orphan Geos  (only referenced by orphan SEs via p__sample_location AND
+    #                    orphan Sites via p__site_location — NOT by surviving SEs or
+    #                    surviving Sites)
+    # Note: Sites are computed BEFORE Geos so that surviving_geo_refs can correctly
+    # exclude Geos still referenced by surviving SamplingSites (via p__site_location).
+    # This fixes the bug where geos referenced by surviving sites were incorrectly
+    # deleted because orphan determination only checked p__sample_location on SEs.
     con.execute(f"""
     CREATE TEMP TABLE removed_msrs AS
       SELECT s.* FROM {SRC} s
@@ -220,24 +232,7 @@ def main():
       SELECT row_id FROM removed_se_refs
       WHERE row_id NOT IN (SELECT row_id FROM surviving_se_refs);
 
-    -- Geo refs from orphan SEs
-    CREATE TEMP TABLE orphan_se_geo_refs AS
-      SELECT DISTINCT u.geo_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
-      WHERE s.otype='SamplingEvent' AND s.row_id IN (SELECT row_id FROM orphan_se_ids);
-
-    -- Geo refs from surviving SEs
-    CREATE TEMP TABLE surviving_geo_refs AS
-      SELECT DISTINCT u.geo_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
-      WHERE s.otype='SamplingEvent' AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids);
-
-    -- Orphan geo: referenced only by orphan SEs, not surviving SEs
-    CREATE TEMP TABLE orphan_geo_ids AS
-      SELECT row_id FROM orphan_se_geo_refs
-      WHERE row_id NOT IN (SELECT row_id FROM surviving_geo_refs);
-
-    -- SamplingSite refs from orphan SEs
+    -- SamplingSite refs from orphan SEs  (Step 2: sites before geos)
     CREATE TEMP TABLE orphan_se_site_refs AS
       SELECT DISTINCT u.site_id AS row_id
       FROM {SRC} s, UNNEST(s.p__sampling_site) AS u(site_id)
@@ -249,10 +244,37 @@ def main():
       FROM {SRC} s, UNNEST(s.p__sampling_site) AS u(site_id)
       WHERE s.otype='SamplingEvent' AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids);
 
-    -- Orphan SamplingSites
+    -- Orphan SamplingSites: only referenced by orphan SEs (not by any surviving SE)
     CREATE TEMP TABLE orphan_site_ids AS
       SELECT row_id FROM orphan_se_site_refs
       WHERE row_id NOT IN (SELECT row_id FROM surviving_site_refs);
+
+    -- Geo refs from orphan SEs (via p__sample_location)
+    CREATE TEMP TABLE orphan_se_geo_refs AS
+      SELECT DISTINCT u.geo_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
+      WHERE s.otype='SamplingEvent' AND s.row_id IN (SELECT row_id FROM orphan_se_ids);
+
+    -- Geo refs from surviving SEs (via p__sample_location)
+    -- AND from surviving SamplingSites (via p__site_location).
+    -- FIX: include p__site_location refs from non-orphan SamplingSites so that
+    -- a Geo referenced by a surviving Site is NOT marked as orphan even if it
+    -- was also referenced by an orphan SE.
+    CREATE TEMP TABLE surviving_geo_refs AS
+      SELECT DISTINCT u.geo_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
+      WHERE s.otype='SamplingEvent'
+        AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids)
+      UNION
+      SELECT DISTINCT u.geo_id AS row_id
+      FROM {SRC} s, UNNEST(s.p__site_location) AS u(geo_id)
+      WHERE s.otype='SamplingSite'
+        AND s.row_id NOT IN (SELECT row_id FROM orphan_site_ids);
+
+    -- Orphan Geos: referenced only by orphan SEs/Sites, not by any surviving SE or Site
+    CREATE TEMP TABLE orphan_geo_ids AS
+      SELECT row_id FROM orphan_se_geo_refs
+      WHERE row_id NOT IN (SELECT row_id FROM surviving_geo_refs);
     """)
 
     # Count orphan entities by type
@@ -947,49 +969,45 @@ def main():
         f"dup_pids={n_dup_out_pid}  oc_msrs={out_oc_count:,}  "
         f"stale_remain={n_stale_pids_remain}  n_check=PASS", t0)
 
-    # ---- B2B: full dangling-ref trust gate: ALL p__* row_id reference columns ----
-    # After remapping, EVERY p__* array on new rows must resolve to a row_id in the output.
-    # Structural p__* columns (not concept dims, not OUR_ONLY_COLS) contain internal row_id refs.
-    # This is a HARD FAIL if any dangling ref is found.
-    log("running full dangling-ref trust gate on all p__* reference columns...", t0)
-    # p__* columns that contain row_id references on new rows.
-    # These are ALL p__* array columns (BIGINT[] or INTEGER[]) except OUR_ONLY_COLS
-    # (p__curation, p__related_resource which are left NULL on new rows).
-    # Concept dims (p__has_*) reference IdentifiedConcept row_ids, not concept URIs directly,
-    # so they are also valid row_id refs and must be checked here.
+    # ---- Mandatory in-script dangling-ref gate: ALL rows, ALL p__* columns ----
+    # Scan EVERY p__* array column across the ENTIRE output (not just new rows).
+    # Surviving src rows must also be checked because orphan deletion can create
+    # dangling refs in old rows (e.g. surviving SamplingSites whose p__site_location
+    # pointed at geos that were incorrectly deleted as orphans).
+    # This is a HARD FAIL if any dangling ref is found — build aborted.
+    log("running mandatory dangling-ref gate on ALL rows, ALL p__* columns...", t0)
     p_ref_cols = [
         col for col, typ in src_cols
-        if col.startswith("p__") and col not in OUR_ONLY_COLS
+        if col.startswith("p__")
         and any(t in typ.upper() for t in ("BIGINT", "INTEGER"))
     ]
     n_total_dangling = 0
-    dangling_details = []
+    dangling_details = {}
     out_row_ids_subq = f"SELECT row_id FROM {OUT}"
     for p_col in p_ref_cols:
-        # Only check new entity rows (new MSRs, SEs, Sites, Geos, Agents) for dangling refs.
-        # Old surviving src rows were already consistent; we only need to gate the new rows.
+        # Check ALL rows in output (both surviving src rows and new rows)
         n_dangle = con.sql(f"""
-            WITH new_row_ids AS (
-                SELECT our_row_id FROM eric_id_map
-                UNION ALL
-                SELECT our_row_id FROM new_concepts_to_mint
-            )
+            WITH all_row_ids AS ({out_row_ids_subq}),
+                 refs AS (
+                     SELECT unnest(w.{p_col}) AS ref_id
+                     FROM {OUT} w
+                     WHERE w.{p_col} IS NOT NULL AND len(w.{p_col}) > 0
+                 )
             SELECT COUNT(*)
-            FROM {OUT} w, UNNEST(w.{p_col}) AS u(ref_id)
-            WHERE w.row_id IN (SELECT our_row_id FROM new_row_ids)
-              AND u.ref_id IS NOT NULL
-              AND u.ref_id NOT IN ({out_row_ids_subq})
+            FROM refs
+            LEFT JOIN all_row_ids ON refs.ref_id = all_row_ids.row_id
+            WHERE all_row_ids.row_id IS NULL
         """).fetchone()[0]
-        if n_dangle:
-            n_total_dangling += n_dangle
-            dangling_details.append(f"{p_col}={n_dangle}")
+        dangling_details[p_col] = n_dangle
+        n_total_dangling += n_dangle
+    for col, cnt in sorted(dangling_details.items()):
+        print(f"  {col}: {cnt} dangling refs", flush=True)
     if n_total_dangling:
         raise RuntimeError(
-            f"Trust gate FAIL: {n_total_dangling} dangling p__* references in new rows: "
-            f"{', '.join(dangling_details)}. "
-            f"Affected columns: {[d.split('=')[0] for d in dangling_details]}"
+            f"INTEGRITY FAIL: {n_total_dangling} dangling references in output. "
+            f"Per-column: {dangling_details}. Build aborted — do NOT emit manifest."
         )
-    log(f"full dangling-ref trust gate: PASS (0 dangling refs across {len(p_ref_cols)} p__* columns)", t0)
+    log(f"Dangling ref check: PASS (0 dangling across {len(p_ref_cols)} columns)", t0)
 
     # ---- Phase J: description enrichment (#277) ---------------------------------
     # OC sample descriptions in the combined wide are terse LD metadata strings

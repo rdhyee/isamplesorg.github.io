@@ -471,3 +471,45 @@ pytest tests/test_ingest_oc_records.py -v
 New test added (Phase 4):
   Blocker 1: test_cross_source_shared_entity_not_orphaned
 ```
+
+---
+
+## Phase 5 — Site-Location Orphan Fix (2026-06-13)
+
+### General Orphan Formulation
+
+The Phase 4 dangling-ref gate (B2B) only checked NEW rows. Surviving src rows that pointed to deleted Geos were not checked. This left 4,606 dangling `p__site_location` refs in old SamplingSite rows.
+
+The correct orphan determination order is:
+1. Compute **orphan SEs** (referenced only by removed MSRs)
+2. Compute **orphan SamplingSites** (referenced only by orphan SEs, not surviving SEs)
+3. Compute **orphan Geos**: referenced only by orphan SEs AND orphan SamplingSites — i.e., NOT by any surviving SE (via `p__sample_location`) AND NOT by any surviving SamplingSite (via `p__site_location`)
+
+Step 2 must complete before step 3 so that `surviving_geo_refs` correctly excludes Geos still held by surviving Sites.
+
+### Mandatory In-Script Dangling-Ref Gate
+
+The post-write gate now scans ALL rows (surviving + new) across ALL p__* columns (both BIGINT[] and INTEGER[]). It:
+- Unnests each p__* column on the entire output
+- Left-joins against all output row_ids
+- Prints per-column count
+- Raises `RuntimeError` if any total > 0 (manifest not emitted, build aborted)
+
+This gate catches both new-row mapping errors (covered by B2B) AND old-row dangling refs introduced by incorrect orphan deletion (the Phase 5 defect).
+
+### Regression Test
+
+`test_site_location_geo_not_orphaned` in `tests/test_ingest_oc_records.py`:
+- Scenario: OC SE references Geo via p__sample_location; surviving SESAR SE → same Site → same Geo via p__site_location
+- Asserts Geo survives, zero p__site_location dangling refs
+- Confirmed FAILS on old code (Phase 4 logic), PASSES on fixed code (Phase 5)
+
+### Fixture tests (30 total after Phase 5)
+
+```
+pytest tests/test_ingest_oc_records.py -v
+30/30 passed in ~10s
+
+New test added (Phase 5):
+  test_site_location_geo_not_orphaned
+```

@@ -415,3 +415,136 @@ pytest tests/test_ingest_oc_records.py -v
 New test (Phase 4):
   test_cross_source_shared_entity_not_orphaned  PASS
 ```
+
+---
+
+## Phase 5 — Site-Location Orphan Fix (2026-06-13)
+
+### Defect Description
+
+The Phase 4 build (commit 4dbf342) contained 4,606 dangling `p__site_location` references. The Phase 4 dangling-ref gate (B2B) only checked NEW rows; surviving src rows that pointed to deleted Geos were not verified.
+
+**Root cause**: Orphan-Geo determination only considered SamplingEvents' `p__sample_location` path. 4,606 GeospatialCoordLocation rows were ALSO referenced by surviving SamplingSites via `p__site_location`. The Murlo removal orphaned those Geos via the SE path and deleted them — leaving the surviving Sites' `p__site_location` dangling.
+
+**Evidence**:
+- All 4,606 affected sites are pre-existing base sites (row_id < 20,729,359)
+- 202606 base had ZERO such dangling refs
+- The sync introduced them by deleting Geos referenced by both orphan SEs AND surviving Sites
+
+### Fixes Applied
+
+**Fix 1 — General orphan formulation** (`scripts/ingest_oc_records.py`, orphan analysis section):
+- Reordered computation: orphan SamplingSites computed BEFORE orphan Geos
+- `surviving_geo_refs` now includes Geos referenced by non-orphan SamplingSites via `p__site_location` (UNION with Geos from non-orphan SEs via `p__sample_location`)
+- A Geo is now marked orphan only if unreferenced by BOTH surviving SEs and surviving Sites
+
+**Fix 2 — Mandatory all-rows dangling-ref gate** (`scripts/ingest_oc_records.py`, post-write):
+- Replaced the "new rows only" B2B gate with a gate that scans ALL rows (surviving + new) across ALL 12 p__* columns
+- Prints per-column dangling count; raises `RuntimeError` if total > 0 (build aborted, manifest not emitted)
+- Catches exactly the defect that B2B missed: dangling refs in OLD surviving rows
+
+**Regression test** (`tests/test_ingest_oc_records.py`):
+- Added `test_site_location_geo_not_orphaned`
+- Scenario: OC MSR removed; orphan SE references Geo via p__sample_location; surviving SESAR SE references same Site via p__sampling_site; Site references same Geo via p__site_location
+- Confirmed FAILS on old code (Geo deleted), PASSES on fixed code (Geo retained)
+
+### Production Rebuild Execution Log
+
+```
+[   0.0s] schema checks passed
+[   0.2s] stale pids to remove: 21,227
+[  16.3s] orphan subgraph: msr=21,227 se=21,227 geo=16,621 site=928 total=60,003
+[  16.4s] rows_to_remove: 60,003 (matches orphan arithmetic)
+[  16.4s] new pids: 67,187
+[  16.4s] extracting entity subgraph for new pids...
+[  16.8s] subgraph: msr=67,187 se=67,187 geo=11,399 site=6,514 agent=24
+[  16.8s] src max_row_id=20,729,359
+[  16.8s] id_map: 152,311 entries, new row_id range 20729360 to 20,881,670, collisions=0
+[  16.9s] minting 1 new IdentifiedConcept rows: ['https://w3id.org/isample/vocabulary/sampledfeature/1.0/earthsurface']
+[  16.9s] minted_concepts=1
+[  17.0s] coords: 67,187 pids with coords, 0 duplicate-coord pids
+[  17.0s] remapping p__ arrays for new MSR rows...
+[  17.6s] p__ remapping tables built
+[  17.6s] running pre-write trust checks...
+[  17.7s] trust checks passed
+[  17.7s] expected output rows: 20,729,359 src - 60,003 removed + 152,311 new entities + 1 concepts = 20,821,668
+[  17.7s] writing output...
+[  22.8s] wrote /tmp/ingest_202608/isamples_202608_wide.parquet
+[  23.1s] post-write: rows=20,821,668  dup_rowids=0  dup_pids=0  oc_msrs=1,110,791  stale_remain=0  n_check=PASS
+[  23.1s] running mandatory dangling-ref gate on ALL rows, ALL p__* columns...
+  p__curation: 0 dangling refs
+  p__has_context_category: 0 dangling refs
+  p__has_material_category: 0 dangling refs
+  p__has_sample_object_type: 0 dangling refs
+  p__keywords: 0 dangling refs
+  p__produced_by: 0 dangling refs
+  p__registrant: 0 dangling refs
+  p__related_resource: 0 dangling refs
+  p__responsibility: 0 dangling refs
+  p__sample_location: 0 dangling refs
+  p__sampling_site: 0 dangling refs
+  p__site_location: 0 dangling refs
+[  25.8s] Dangling ref check: PASS (0 dangling across 12 columns)
+[  25.8s] description enrichment (#277): copying OC descriptions from Eric's wide…
+[  29.1s] description enrichment trust gate: Cyprus OC MSR count = 69,230 (expect ≈ 69,230)
+[  29.1s] description enrichment complete: replaced /tmp/ingest_202608/isamples_202608_wide.parquet
+[  29.7s] manifest -> /tmp/ingest_202608/isamples_202608_wide.parquet.manifest.json
+[  29.7s] done
+```
+
+### New Orphan Breakdown (compare to Phase 4)
+
+| Entity type | Phase 4 | Phase 5 | Delta |
+|---|---|---|---|
+| MaterialSampleRecord removed | 21,227 | 21,227 | 0 |
+| SamplingEvent orphaned | 21,227 | 21,227 | 0 |
+| GeospatialCoordLocation orphaned | 21,227 | 16,621 | **-4,606** (the fix) |
+| SamplingSite orphaned | 928 | 928 | 0 |
+| **Total rows removed** | **64,609** | **60,003** | **-4,606** |
+
+The 4,606 Geos that were wrongly deleted in Phase 4 are now correctly retained. Total output rows increased by 4,606: 20,817,062 → 20,821,668.
+
+### Per-Column Dangling Sweep (verbatim from script output)
+
+```
+  p__curation: 0 dangling refs
+  p__has_context_category: 0 dangling refs
+  p__has_material_category: 0 dangling refs
+  p__has_sample_object_type: 0 dangling refs
+  p__keywords: 0 dangling refs
+  p__produced_by: 0 dangling refs
+  p__registrant: 0 dangling refs
+  p__related_resource: 0 dangling refs
+  p__responsibility: 0 dangling refs
+  p__sample_location: 0 dangling refs
+  p__sampling_site: 0 dangling refs
+  p__site_location: 0 dangling refs
+Dangling ref check: PASS (0 dangling across 12 columns)
+```
+
+### Verification Query Results (Phase 5)
+
+| Check | Result | Expected | Status |
+|---|---|---|---|
+| b. Independent p__site_location dangling check | 0 | 0 | ✓ |
+| c. OC MSR count | 1,110,791 | 1,110,791 | ✓ |
+| d. Rock count (OC, from facets, material LIKE '%/rock') | 37,953 | 37,953 | ✓ |
+| e. Cyprus description count | 69,230 | ≥69,230 | ✓ |
+| f. Blank facet entries (facet_summaries.facet_value='') | 0 | 0 | ✓ |
+| g. Whitespace-only facet entries | 0 | 0 | ✓ |
+| h. Removed Murlo pids in output | 0 | 0 | ✓ |
+| i. New r2p24 pids in output | 15,409 | 15,409 | ✓ |
+| j. Validator checks | 26/26 PASS | ≥26 | ✓ |
+| k. specimentype labels | 2 | 2 | ✓ |
+| l. Total output rows | 20,821,668 | ~20,817,062+4,606 | ✓ |
+
+### Fixture Tests
+
+```
+pytest tests/test_ingest_oc_records.py -v
+30/30 passed in ~10s
+
+New test (Phase 5):
+  test_site_location_geo_not_orphaned  PASS
+  (Confirmed FAILS on old code: Geo 20 deleted; PASSES on fixed code: Geo 20 retained)
+```

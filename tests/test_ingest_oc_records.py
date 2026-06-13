@@ -1049,3 +1049,150 @@ def test_cross_source_shared_entity_not_orphaned(tmp_path):
         assert se_exists == 1, f"SESAR_keep_me p__produced_by row_id={pb} not found in output (dangling ref!)"
 
     con.close()
+
+
+# ============================================================================
+# Fix #272 Phase 5 — surviving SamplingSite's p__site_location Geo not orphaned
+# ============================================================================
+
+def test_site_location_geo_not_orphaned(tmp_path):
+    """A GeospatialCoordLocation referenced by a surviving SamplingSite via
+    p__site_location must NOT be deleted as an orphan even if it is also
+    referenced by an orphan SamplingEvent via p__sample_location.
+
+    Scenario:
+      src:
+        - OC MSR pid='OC_removed', n='OPENCONTEXT'
+            → p__produced_by=[10] (SE row_id=10)
+        - SE row_id=10, p__sample_location=[20], p__sampling_site=[30]
+            - Geo row_id=20
+            - SamplingSite row_id=30, p__site_location=[20]  ← same Geo!
+        - SESAR MSR pid='SESAR_kept', n='SESAR'
+            → p__produced_by=[40] (SE row_id=40)
+        - SE row_id=40, p__sampling_site=[30]  ← references surviving Site
+
+      Eric's OC wide: does NOT contain 'OC_removed' → it becomes stale
+        - Contains 'NEW_OC_pid' (new)
+
+    After sync:
+      - 'OC_removed' MSR is removed
+      - SE row_id=10 is orphaned (only referenced by removed OC MSR's p__produced_by)
+      - SamplingSite row_id=30 SURVIVES (referenced by SESAR SE row_id=40)
+      - GeospatialCoordLocation row_id=20 SURVIVES (referenced by surviving Site
+        row_id=30 via p__site_location) — this is the critical assertion
+      - Zero dangling p__site_location refs in output
+
+    OLD CODE (BUG): surviving_geo_refs only checked p__sample_location on SEs.
+      Since SE row_id=10 is orphaned, Geo row_id=20 appeared to have NO surviving
+      SE references → incorrectly deleted → dangling p__site_location on Site row_id=30.
+
+    NEW CODE (FIX): surviving_geo_refs also checks p__site_location on non-orphan
+      SamplingSites → Geo row_id=20 is retained.
+    """
+    src = str(tmp_path / "src_sl.parquet")
+    oc = str(tmp_path / "oc_sl.parquet")
+    out = str(tmp_path / "out_sl.parquet")
+
+    GEO_ROW_ID = 20
+    SE_OC_ROW_ID = 10
+    SITE_ROW_ID = 30
+    SE_SESAR_ROW_ID = 40
+
+    build_src_wide(
+        src,
+        msr_rows=[
+            # OC MSR that will be removed (not in Eric's wide)
+            {
+                "row_id": 1000, "pid": "OC_removed", "n": "OPENCONTEXT",
+                "p__produced_by": [SE_OC_ROW_ID],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 45.0, "longitude": 10.0,
+            },
+            # SESAR MSR whose SE references the surviving SamplingSite
+            {
+                "row_id": 1001, "pid": "SESAR_kept", "n": "SESAR",
+                "p__produced_by": [SE_SESAR_ROW_ID],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 45.1, "longitude": 10.1,
+            },
+        ],
+        concept_rows=SRC_CONCEPT_ROWS,
+        se_rows=[
+            # OC's SE: sample_location → Geo 20, sampling_site → Site 30
+            (SE_OC_ROW_ID, "se-oc", [GEO_ROW_ID], [SITE_ROW_ID]),
+            # SESAR's SE: sampling_site → Site 30 (keeps Site alive)
+            (SE_SESAR_ROW_ID, "se-sesar", None, [SITE_ROW_ID]),
+        ],
+        geo_rows=[
+            (GEO_ROW_ID, "geo-shared", 45.0, 10.0),
+        ],
+        site_rows=[
+            # SamplingSite references Geo via p__site_location
+            (SITE_ROW_ID, "site-shared", [GEO_ROW_ID]),
+        ],
+    )
+
+    # Eric's OC wide: NEW_OC_pid only (OC_removed is absent → stale)
+    build_oc_wide(
+        oc,
+        msr_rows=[
+            {
+                "row_id": 1, "pid": "NEW_OC_pid",
+                "p__produced_by": [501],
+                "p__has_material_category": [OC_ROCK_CONCEPT_ID],
+            },
+        ],
+        concept_rows=OC_CONCEPT_ROWS,
+        se_rows=[(501, "se-new-oc", [601], None)],
+        geo_rows=[(601, "geo-new-oc", 46.0, 11.0)],
+    )
+
+    r = run_ingest(src, oc, out)
+    assert r.returncode == 0, f"ingest failed:\nSTDERR: {r.stderr}\nSTDOUT: {r.stdout}"
+
+    con = duckdb.connect()
+
+    # OC_removed must be gone
+    assert con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='OC_removed'"
+    ).fetchone()[0] == 0, "OC_removed must be removed"
+
+    # SESAR_kept must survive
+    assert con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='SESAR_kept' AND otype='MaterialSampleRecord'"
+    ).fetchone()[0] == 1, "SESAR_kept must survive"
+
+    # SE row_id=10 (OC's SE) must be orphaned
+    assert con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='se-oc' AND otype='SamplingEvent'"
+    ).fetchone()[0] == 0, "se-oc (orphan SE) must be removed"
+
+    # SamplingSite row_id=30 must survive (referenced by SESAR SE)
+    assert con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='site-shared' AND otype='SamplingSite'"
+    ).fetchone()[0] == 1, "site-shared must survive — still referenced by SESAR's SE"
+
+    # GeospatialCoordLocation row_id=20 MUST survive (this is the critical fix assertion)
+    assert con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='geo-shared' AND otype='GeospatialCoordLocation'"
+    ).fetchone()[0] == 1, (
+        "geo-shared (Geo row_id=20) must NOT be orphaned — "
+        "surviving SamplingSite still references it via p__site_location"
+    )
+
+    # Zero dangling p__site_location refs in output (the production-scale symptom)
+    dangling = con.sql(f"""
+        WITH all_row_ids AS (SELECT row_id FROM read_parquet('{out}')),
+        site_refs AS (
+            SELECT unnest(p__site_location) AS ref_id
+            FROM read_parquet('{out}')
+            WHERE otype='SamplingSite'
+              AND p__site_location IS NOT NULL AND len(p__site_location) > 0
+        )
+        SELECT COUNT(*) FROM site_refs
+        LEFT JOIN all_row_ids ON site_refs.ref_id = all_row_ids.row_id
+        WHERE all_row_ids.row_id IS NULL
+    """).fetchone()[0]
+    assert dangling == 0, f"p__site_location dangling refs: {dangling} (expected 0)"
+
+    con.close()
