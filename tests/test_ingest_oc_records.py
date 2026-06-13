@@ -852,14 +852,15 @@ def test_empty_string_facet_values_filtered_from_cross_filter(tmp_path):
 SPEC_URI_SOLID = "https://w3id.org/isample/vocabulary/specimentype/1.0/othersolidobject"
 SPEC_URI_PHYS = "https://w3id.org/isample/vocabulary/specimentype/1.0/physicalspecimen"
 
-# Path to the rebuilt vocab_labels.parquet (written to the ingest outdir).
-# If not present (e.g. in bare CI), we rebuild it on the fly.
-VOCAB_LABELS_PATH = "/tmp/ingest_202608/vocab_labels.parquet"
+# Optional fast-path: if ISAMPLES_VOCAB_LABELS points at an already-built
+# vocab_labels.parquet, reuse it; otherwise (CI / fresh checkout) we rebuild
+# it on the fly. No machine-specific default — avoids leaking a local path.
+VOCAB_LABELS_PATH = os.environ.get("ISAMPLES_VOCAB_LABELS", "")
 
 
 def _get_vocab_labels_parquet():
     """Return a path to vocab_labels.parquet, building it if needed."""
-    if os.path.exists(VOCAB_LABELS_PATH):
+    if VOCAB_LABELS_PATH and os.path.exists(VOCAB_LABELS_PATH):
         return VOCAB_LABELS_PATH
     # Build into a temp file for CI / offline environments.
     BUILD_VL = os.path.join(REPO, "scripts", "build_vocab_labels.py")
