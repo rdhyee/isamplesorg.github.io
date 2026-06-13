@@ -208,12 +208,12 @@ def main():
       SELECT DISTINCT u.se_id AS row_id
       FROM removed_msrs, UNNEST(p__produced_by) AS u(se_id);
 
-    -- SE refs from all SURVIVING OC MSRs
+    -- SE refs from ALL SURVIVING MSRs (any source — cross-source orphan protection)
     CREATE TEMP TABLE surviving_se_refs AS
       SELECT DISTINCT u.se_id AS row_id
       FROM {SRC} s, UNNEST(s.p__produced_by) AS u(se_id)
-      WHERE s.otype='MaterialSampleRecord' AND s.n='{OC_SOURCE}'
-        AND s.pid NOT IN (SELECT pid FROM removed_pids);
+      WHERE s.otype='MaterialSampleRecord'
+        AND NOT (s.n='{OC_SOURCE}' AND s.pid IN (SELECT pid FROM removed_pids));
 
     -- Orphan SEs: referenced only by removed MSRs
     CREATE TEMP TABLE orphan_se_ids AS
@@ -368,10 +368,13 @@ def main():
       SELECT e.* FROM {OC} e
       WHERE e.otype='GeospatialCoordLocation' AND e.row_id IN (SELECT eric_row_id FROM all_geo_ids);
 
-    -- Agent ids from MSR (p__registrant)
+    -- Agent ids from MSR (p__registrant AND p__responsibility — both columns ref Agents)
     CREATE TEMP TABLE agent_ids AS
       SELECT DISTINCT u.agent_id AS eric_row_id
-      FROM new_msr_eric, UNNEST(p__registrant) AS u(agent_id);
+      FROM new_msr_eric, UNNEST(p__registrant) AS u(agent_id)
+      UNION
+      SELECT DISTINCT u.agent_id AS eric_row_id
+      FROM new_msr_eric, UNNEST(p__responsibility) AS u(agent_id);
 
     -- Agent rows
     CREATE TEMP TABLE new_agent_eric AS
@@ -944,6 +947,50 @@ def main():
         f"dup_pids={n_dup_out_pid}  oc_msrs={out_oc_count:,}  "
         f"stale_remain={n_stale_pids_remain}  n_check=PASS", t0)
 
+    # ---- B2B: full dangling-ref trust gate: ALL p__* row_id reference columns ----
+    # After remapping, EVERY p__* array on new rows must resolve to a row_id in the output.
+    # Structural p__* columns (not concept dims, not OUR_ONLY_COLS) contain internal row_id refs.
+    # This is a HARD FAIL if any dangling ref is found.
+    log("running full dangling-ref trust gate on all p__* reference columns...", t0)
+    # p__* columns that contain row_id references on new rows.
+    # These are ALL p__* array columns (BIGINT[] or INTEGER[]) except OUR_ONLY_COLS
+    # (p__curation, p__related_resource which are left NULL on new rows).
+    # Concept dims (p__has_*) reference IdentifiedConcept row_ids, not concept URIs directly,
+    # so they are also valid row_id refs and must be checked here.
+    p_ref_cols = [
+        col for col, typ in src_cols
+        if col.startswith("p__") and col not in OUR_ONLY_COLS
+        and any(t in typ.upper() for t in ("BIGINT", "INTEGER"))
+    ]
+    n_total_dangling = 0
+    dangling_details = []
+    out_row_ids_subq = f"SELECT row_id FROM {OUT}"
+    for p_col in p_ref_cols:
+        # Only check new entity rows (new MSRs, SEs, Sites, Geos, Agents) for dangling refs.
+        # Old surviving src rows were already consistent; we only need to gate the new rows.
+        n_dangle = con.sql(f"""
+            WITH new_row_ids AS (
+                SELECT our_row_id FROM eric_id_map
+                UNION ALL
+                SELECT our_row_id FROM new_concepts_to_mint
+            )
+            SELECT COUNT(*)
+            FROM {OUT} w, UNNEST(w.{p_col}) AS u(ref_id)
+            WHERE w.row_id IN (SELECT our_row_id FROM new_row_ids)
+              AND u.ref_id IS NOT NULL
+              AND u.ref_id NOT IN ({out_row_ids_subq})
+        """).fetchone()[0]
+        if n_dangle:
+            n_total_dangling += n_dangle
+            dangling_details.append(f"{p_col}={n_dangle}")
+    if n_total_dangling:
+        raise RuntimeError(
+            f"Trust gate FAIL: {n_total_dangling} dangling p__* references in new rows: "
+            f"{', '.join(dangling_details)}. "
+            f"Affected columns: {[d.split('=')[0] for d in dangling_details]}"
+        )
+    log(f"full dangling-ref trust gate: PASS (0 dangling refs across {len(p_ref_cols)} p__* columns)", t0)
+
     # ---- Phase J: description enrichment (#277) ---------------------------------
     # OC sample descriptions in the combined wide are terse LD metadata strings
     # ('updated': 2023-10-05...) instead of the human-readable site-path strings
@@ -980,6 +1027,8 @@ def main():
       -- All non-OC rows: pass through unchanged (no description modification)
       SELECT * FROM read_parquet('{args.out}')
       WHERE NOT (otype='MaterialSampleRecord' AND n='{OC_SOURCE}')
+
+      ORDER BY row_id
     ) TO '{tmp_enriched}' (FORMAT PARQUET, COMPRESSION ZSTD)
     """)
 
@@ -995,6 +1044,16 @@ def main():
         f"AND description ILIKE '%Cyprus%'"
     ).fetchone()[0]
     log(f"description enrichment trust gate: Cyprus OC MSR count = {n_cyprus:,} (expect ≈ 69,230)", t0)
+    # Hard trust gate: only applies at production scale (out_oc_count > 1M) to avoid
+    # false-positive failures on small synthetic fixtures that lack Cyprus descriptions.
+    # Threshold 69,000 is conservative relative to the observed production count of 69,230.
+    CYPRUS_THRESHOLD = 69000
+    if out_oc_count > 1_000_000 and n_cyprus < CYPRUS_THRESHOLD:
+        os.unlink(tmp_enriched)
+        raise RuntimeError(
+            f"Trust gate FAIL: Cyprus description count {n_cyprus:,} < {CYPRUS_THRESHOLD:,} threshold. "
+            f"Description enrichment may have failed or OC wide is missing Cyprus data."
+        )
 
     # Atomically replace the output with the enriched version
     os.replace(tmp_enriched, args.out)

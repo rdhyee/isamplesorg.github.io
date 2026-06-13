@@ -401,3 +401,73 @@ Three bugs discovered during triage are fixed before staging 202608. All fixes a
 | Fix #283b | `test_specimentype_othersolidobject_in_vocab_labels`, `test_specimentype_physicalspecimen_in_vocab_labels`, `test_specimentype_labels_have_lang_en` |
 
 All 28 tests pass (`pytest tests/test_ingest_oc_records.py -v`).
+
+---
+
+## Phase 4 — Codex Blocker Fixes (2026-06-13)
+
+A Codex pre-merge review of the Phase 3 code found 3 latent bugs (blockers) and 4 nits. The STAGED DATA in /tmp/ingest_202608/ was verified correct (zero dangling refs), but the CODE contained landmines that would silently corrupt a future re-run. All bugs are fixed and the pipeline was rebuilt from scratch.
+
+### Blocker 1: Cross-source orphan protection
+
+**File**: `scripts/ingest_oc_records.py`, lines ~213-216 (surviving_se_refs query)
+
+**Bug**: The `surviving_se_refs`, `surviving_geo_refs`, and `surviving_site_refs` queries were filtered to `s.n='OPENCONTEXT'`, meaning a SamplingEvent/Geo/Site referenced by a surviving SESAR/GEOME/Smithsonian MSR was NOT protected and could be wrongly deleted as an orphan.
+
+**Fix**: Removed the `n='OPENCONTEXT'` filter from `surviving_se_refs`. The surviving refs now come from ALL surviving MaterialSampleRecords regardless of source. The condition `NOT (s.n='OPENCONTEXT' AND s.pid IN removed_pids)` correctly covers both OC survivors and all non-OC MSRs.
+
+**Impact**: In production, shared SEs/Geos/Sites (referenced by both OC and non-OC MSRs) would have been incorrectly deleted, creating dangling refs in SESAR/GEOME rows. The actual 202608 data was unaffected (the production run had 0 shared SEs between OC-removed and non-OC MSRs), but the latent bug was critical.
+
+**Regression test**: `test_cross_source_shared_entity_not_orphaned` — confirmed FAILS on old code and PASSES on fixed code.
+
+### Blocker 2: Incomplete reference extraction + trust gate
+
+**File**: `scripts/ingest_oc_records.py`
+
+**Bug A** (line ~373): Agent extraction only queried `p__registrant`. Agents in `p__responsibility` were remapped into `eric_id_map` but their Agent entity rows were never extracted — meaning `p__responsibility` references on new MSR rows pointed to row_ids that didn't exist in the output (dangling refs).
+
+**Fix A**: Extended `agent_ids` UNION to also include `p__responsibility`:
+```sql
+UNION
+SELECT DISTINCT u.agent_id FROM new_msr_eric, UNNEST(p__responsibility) AS u(agent_id)
+```
+
+**Bug B** (line ~648): The pre-write trust gate only checked `p__produced_by` and 3 concept dims. Other p__* columns (p__registrant, p__responsibility, p__sample_location, etc.) were not verified.
+
+**Fix B**: Added a comprehensive post-write dangling-ref trust gate (B2B) that checks EVERY p__* array column (BIGINT[] and INTEGER[]) on new rows against the output row_id set. HARD FAIL (RuntimeError) if any dangling ref is found. Covers 10 columns total.
+
+### Blocker 3: Non-deterministic output order (Phase J)
+
+**File**: `scripts/ingest_oc_records.py`, Phase J UNION ALL (~line 966)
+
+**Bug**: Phase J rewrites the output with a UNION ALL (OC MSR rows + non-OC rows) but lacked `ORDER BY row_id`. The initial Phase I write had `ORDER BY row_id`, but Phase J's rewrite lost it — making sha256 non-reproducible across runs.
+
+**Fix**: Added `ORDER BY row_id` to the Phase J COPY query before the final `TO ... PARQUET` write.
+
+### Nit A: Whitespace-only facet values
+
+**Files**: `scripts/build_frontend_derived.py`, `scripts/validate_frontend_derived.py`
+
+Changed `{d} <> ''` to `NULLIF(TRIM({d}), '') IS NOT NULL` in both `build_facet_summaries` and `build_facet_cross_filter`. Updated validator check 5b to use `TRIM(facet_value) = ''` to catch whitespace-only values.
+
+### Nit B: Cyprus enrichment as hard trust gate
+
+**File**: `scripts/ingest_oc_records.py`
+
+Changed the Cyprus description count from a log statement to a hard `RuntimeError` when `n_cyprus < 69,000` (at production scale, i.e., when `out_oc_count > 1,000,000`). Synthetic fixtures skip the gate to avoid false positives.
+
+### Nit C: B1 regression test
+
+**File**: `tests/test_ingest_oc_records.py`
+
+Added `test_cross_source_shared_entity_not_orphaned`: synthetic fixture with OC MSR to-be-removed + SESAR MSR sharing SE/Site/Geo. Confirmed test FAILS on old code, PASSES on fixed code.
+
+### Fixture tests (29 total after Phase 4)
+
+```
+pytest tests/test_ingest_oc_records.py -v
+29/29 passed in ~11s
+
+New test added (Phase 4):
+  Blocker 1: test_cross_source_shared_entity_not_orphaned
+```

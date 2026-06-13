@@ -910,3 +910,142 @@ def test_specimentype_labels_have_lang_en():
     assert len(rows) == 2, f"Expected 2 specimentype rows, got {len(rows)}: {rows}"
     for uri, lang in rows:
         assert lang == "en", f"Expected lang='en' for {uri!r}, got {lang!r}"
+
+
+# ============================================================================
+# Blocker 1 — cross-source orphan protection (Nit C + Nit D)
+# ============================================================================
+
+def test_cross_source_shared_entity_not_orphaned(tmp_path):
+    """SE and SamplingSite shared between a removed OC MSR and a surviving SESAR MSR
+    must NOT be deleted as orphans.
+
+    Scenario:
+      src:
+        - OC MSR  pid='OC_remove_me'  → SE row_id=100  → SamplingSite row_id=200
+        - SE row_id=100
+        - SamplingSite row_id=200
+        - SESAR MSR pid='SESAR_keep_me'  ALSO → SE row_id=100 + SamplingSite row_id=200
+      Eric's OC wide:
+        - pid='NEW_OC_pid' (new OC record, NOT 'OC_remove_me' → it's gone)
+
+    After sync:
+      - 'OC_remove_me' is removed (not in Eric's wide)
+      - SE row_id=100 is STILL referenced by 'SESAR_keep_me' → must survive
+      - SamplingSite row_id=200 is STILL referenced by 'SESAR_keep_me' → must survive
+
+    Old code (surviving_se_refs filtered to n='OPENCONTEXT') would incorrectly
+    mark SE 100 and Site 200 as orphans and delete them, breaking the SESAR MSR.
+    New code (all-source surviving refs) must keep them.
+    """
+    src = str(tmp_path / "src_b1.parquet")
+    oc = str(tmp_path / "oc_b1.parquet")
+    out = str(tmp_path / "out_b1.parquet")
+
+    # row_ids in src space
+    SE_ROW_ID = 100
+    SITE_ROW_ID = 200
+    GEO_ROW_ID = 300
+
+    # Build src wide: OC MSR to-be-removed + SESAR MSR sharing SE+Site
+    build_src_wide(
+        src,
+        msr_rows=[
+            # OC MSR that will be removed (not in Eric's wide)
+            {
+                "row_id": 1000, "pid": "OC_remove_me", "n": "OPENCONTEXT",
+                "p__produced_by": [SE_ROW_ID],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 45.0, "longitude": 10.0,
+            },
+            # SESAR MSR that ALSO references SE 100 + Site 200 (shared!)
+            {
+                "row_id": 1001, "pid": "SESAR_keep_me", "n": "SESAR",
+                "p__produced_by": [SE_ROW_ID],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 45.1, "longitude": 10.1,
+            },
+        ],
+        concept_rows=SRC_CONCEPT_ROWS,
+        se_rows=[
+            # SE shared between OC + SESAR MSRs
+            (SE_ROW_ID, "se-shared", [GEO_ROW_ID], [SITE_ROW_ID]),
+        ],
+        geo_rows=[
+            (GEO_ROW_ID, "geo-shared", 45.0, 10.0),
+        ],
+        site_rows=[
+            (SITE_ROW_ID, "site-shared", [GEO_ROW_ID]),
+        ],
+    )
+
+    # Build Eric's OC wide: NEW_OC_pid (new), NOT OC_remove_me → it becomes stale
+    # Use a simple SE + geo for the new OC record
+    build_oc_wide(
+        oc,
+        msr_rows=[
+            {
+                "row_id": 1, "pid": "NEW_OC_pid",
+                "p__produced_by": [501],
+                "p__has_material_category": [OC_ROCK_CONCEPT_ID],
+            },
+        ],
+        concept_rows=OC_CONCEPT_ROWS,
+        se_rows=[(501, "se-new", [601], None)],
+        geo_rows=[(601, "geo-new", 46.0, 11.0)],
+    )
+
+    r = run_ingest(src, oc, out)
+    assert r.returncode == 0, f"ingest failed:\nSTDERR: {r.stderr}\nSTDOUT: {r.stdout}"
+
+    con = duckdb.connect()
+
+    # SESAR MSR must survive
+    sesar_row = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='SESAR_keep_me' AND otype='MaterialSampleRecord'"
+    ).fetchone()[0]
+    assert sesar_row == 1, "SESAR_keep_me MSR should survive — it was not an OC record"
+
+    # OC MSR must be gone
+    oc_row = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='OC_remove_me' AND otype='MaterialSampleRecord'"
+    ).fetchone()[0]
+    assert oc_row == 0, "OC_remove_me MSR should have been removed"
+
+    # Shared SE must survive (still referenced by SESAR_keep_me)
+    se_count = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='se-shared' AND otype='SamplingEvent'"
+    ).fetchone()[0]
+    assert se_count == 1, (
+        "se-shared (SE row_id=100) must NOT be orphaned — still referenced by SESAR_keep_me"
+    )
+
+    # Shared SamplingSite must survive
+    site_count = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='site-shared' AND otype='SamplingSite'"
+    ).fetchone()[0]
+    assert site_count == 1, (
+        "site-shared (SamplingSite row_id=200) must NOT be orphaned — still referenced by SESAR_keep_me's SE"
+    )
+
+    # Shared Geo must survive
+    geo_count = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='geo-shared' AND otype='GeospatialCoordLocation'"
+    ).fetchone()[0]
+    assert geo_count == 1, (
+        "geo-shared (Geo row_id=300) must NOT be orphaned — still referenced by the shared SE"
+    )
+
+    # SESAR MSR's p__produced_by must still resolve to a valid SE
+    pb = con.sql(f"""
+        SELECT p__produced_by[1] FROM read_parquet('{out}')
+        WHERE pid='SESAR_keep_me' AND otype='MaterialSampleRecord'
+    """).fetchone()[0]
+    if pb is not None:
+        se_exists = con.sql(f"""
+            SELECT COUNT(*) FROM read_parquet('{out}')
+            WHERE row_id = {pb} AND otype='SamplingEvent'
+        """).fetchone()[0]
+        assert se_exists == 1, f"SESAR_keep_me p__produced_by row_id={pb} not found in output (dangling ref!)"
+
+    con.close()

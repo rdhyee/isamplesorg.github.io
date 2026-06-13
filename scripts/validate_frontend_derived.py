@@ -126,9 +126,9 @@ def main():
     check("facet_summaries == GROUP BY facets", mismatch == 0, f"{mismatch} (facet_type,value,count) rows disagree")
     check("facet_summaries.scheme all NULL", scalar(f"SELECT COUNT(*) FROM {S} WHERE scheme IS NOT NULL") == 0,
           "non-NULL scheme rows (contract: scheme is NULL)")
-    # --- 5b. blank facet values absent (#283a) ---
-    check("facet_summaries no blank values (#283a)", scalar(f"SELECT COUNT(*) FROM {S} WHERE facet_value = ''") == 0,
-          "blank empty-string facet_value rows (want 0; caused by GEOME empty-string concept URI)")
+    # --- 5b. blank facet values absent (#283a) — also catches whitespace-only values ---
+    check("facet_summaries no blank values (#283a)", scalar(f"SELECT COUNT(*) FROM {S} WHERE TRIM(facet_value) = ''") == 0,
+          "blank/whitespace-only facet_value rows (want 0; caused by GEOME empty-string concept URI)")
 
     # --- 6. ALGEBRA: facet_cross_filter single-dim rows == conditional GROUP BY facets ---
     # NOTE: build_frontend_derived.py filters both NULL and empty-string values (#283a fix).

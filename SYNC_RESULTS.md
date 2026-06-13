@@ -334,3 +334,84 @@ New tests added (8 new):
   output.sha256: 3d3dbd05b9c607de3eed413b2da95aaee5232ebfd435593042316e6512065e59
   phase3_fixes:  [#277, #283a, #283b] documented in manifest
 ```
+
+---
+
+## Phase 4 — Codex Blocker Fixes (2026-06-13)
+
+*Rebuild from scratch with all blocker + nit fixes. Output at /tmp/ingest_202608_v4/.*
+
+### Fixes applied
+
+| Fix | File | Change |
+|---|---|---|
+| Blocker 1 (B1): cross-source orphan guard | `scripts/ingest_oc_records.py` lines ~213-216 | Removed `n='OPENCONTEXT'` from `surviving_se_refs`; now covers all surviving MSRs |
+| Blocker 2A (B2A): Agent extraction from p__responsibility | `scripts/ingest_oc_records.py` lines ~372-375 | Added `UNION` to extract agents from `p__responsibility` as well as `p__registrant` |
+| Blocker 2B (B2B): Full p__* dangling-ref trust gate | `scripts/ingest_oc_records.py` post-write section | New HARD FAIL gate checking all 10 p__* ref columns (BIGINT[] + INTEGER[]) on new rows |
+| Blocker 3 (B3): Deterministic Phase J output order | `scripts/ingest_oc_records.py` Phase J | Added `ORDER BY row_id` to Phase J UNION ALL before COPY TO PARQUET |
+| Nit A: Whitespace-only facet filter | `scripts/build_frontend_derived.py`, `validate_frontend_derived.py` | `NULLIF(TRIM({d}), '') IS NOT NULL` replaces `{d} <> ''`; validator uses `TRIM()` check |
+| Nit B: Cyprus count hard trust gate | `scripts/ingest_oc_records.py` Phase J trust gate | Now raises RuntimeError if cyprus_count < 69,000 at production scale |
+| Nit C: B1 regression test | `tests/test_ingest_oc_records.py` | Added `test_cross_source_shared_entity_not_orphaned` |
+
+### B1 regression test confirmation
+
+- OLD code (with `n='OPENCONTEXT'` filter): `test_cross_source_shared_entity_not_orphaned` FAILS (se-shared deleted as false orphan)
+- NEW code (all-source surviving refs): `test_cross_source_shared_entity_not_orphaned` PASSES
+
+### Production rebuild execution log
+
+```
+[   0.0s] schema checks passed
+[   0.2s] stale pids to remove: 21,227
+[  14.4s] orphan subgraph: msr=21,227 se=21,227 geo=21,227 site=928 total=64,609
+[  14.4s] rows_to_remove: 64,609 (matches orphan arithmetic)
+[  14.4s] new pids: 67,187
+[  14.4s] extracting entity subgraph for new pids...
+[  14.9s] subgraph: msr=67,187 se=67,187 geo=11,399 site=6,514 agent=24
+[  14.9s] src max_row_id=20,729,359
+[  15.0s] id_map: 152,311 entries, new row_id range 20729360 to 20,881,670, collisions=0
+[  15.0s] minting 1 new IdentifiedConcept rows: ['https://w3id.org/isample/vocabulary/sampledfeature/1.0/earthsurface']
+[  15.0s] minted_concepts=1
+[  15.1s] coords: 67,187 pids with coords, 0 duplicate-coord pids
+[  15.1s] remapping p__ arrays for new MSR rows...
+[  15.7s] p__ remapping tables built
+[  15.7s] running pre-write trust checks...
+[  15.7s] trust checks passed
+[  15.7s] expected output rows: 20,729,359 src - 64,609 removed + 152,311 new entities + 1 concepts = 20,817,062
+[  15.7s] writing output...
+[  23.7s] wrote /tmp/ingest_202608_v4/isamples_202608_wide.parquet
+[  24.1s] post-write: rows=20,817,062  dup_rowids=0  dup_pids=0  oc_msrs=1,110,791  stale_remain=0  n_check=PASS
+[  24.1s] running full dangling-ref trust gate on all p__* reference columns...
+[  38.9s] full dangling-ref trust gate: PASS (0 dangling refs across 10 p__* columns)
+[  38.9s] description enrichment (#277): copying OC descriptions from Eric's wide…
+[  42.7s] description enrichment trust gate: Cyprus OC MSR count = 69,230 (expect ≈ 69,230)
+[  42.7s] description enrichment complete
+[  43.3s] manifest -> /tmp/ingest_202608_v4/isamples_202608_wide.parquet.manifest.json
+[  43.3s] done
+```
+
+### Verification query results (Phase 4)
+
+| Check | Result | Expected | Status |
+|---|---|---|---|
+| a. Zero dangling refs (all 10 p__* cols, ALL rows) | 0 | 0 | ✓ |
+| b. OC MSR count | 1,110,791 | 1,110,791 | ✓ |
+| c. Rock count (OC MSRs) | 37,953 | 37,953 | ✓ |
+| d. Cyprus description count | 69,230 | ≥69,230 | ✓ |
+| e. Blank facet entries | 0 | 0 | ✓ |
+| f. Whitespace-only facet entries | 0 | 0 | ✓ |
+| g. Removed Murlo pids in output | 0 | 0 | ✓ |
+| h. New r2p24 pids | 15,409 | 15,409 | ✓ |
+| i. Validator checks | 26/26 PASS | ≥26 | ✓ |
+| j. specimentype labels | 2 entries | 2 | ✓ |
+| k. Total output rows | 20,817,062 | 20,817,062 | ✓ |
+
+### Fixture tests
+
+```
+pytest tests/test_ingest_oc_records.py -v
+29/29 passed in 11.12s
+
+New test (Phase 4):
+  test_cross_source_shared_entity_not_orphaned  PASS
+```

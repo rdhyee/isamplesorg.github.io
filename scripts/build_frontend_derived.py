@@ -185,7 +185,7 @@ def build_h3_summary(con, out, res):
 
 def build_facet_summaries(con, out):
     union = " UNION ALL ".join(
-        f"SELECT '{d}' AS facet_type, {d} AS facet_value FROM samp_geo WHERE {d} IS NOT NULL AND {d} <> ''"
+        f"SELECT '{d}' AS facet_type, {d} AS facet_value FROM samp_geo WHERE NULLIF(TRIM({d}), '') IS NOT NULL"
         for d in FACET_DIMS)
     con.execute(f"""COPY (
         SELECT facet_type, facet_value, NULL::INTEGER AS scheme, COUNT(*) AS count
@@ -206,7 +206,7 @@ def build_facet_cross_filter(con, out):
             f"SELECT NULL::VARCHAR AS filter_source, NULL::VARCHAR AS filter_material, "
             f"NULL::VARCHAR AS filter_context, NULL::VARCHAR AS filter_object_type, "
             f"'{fd}' AS facet_type, {fd} AS facet_value, COUNT(*) AS count "
-            f"FROM samp_geo WHERE {fd} IS NOT NULL AND {fd} <> '' GROUP BY {fd}")
+            f"FROM samp_geo WHERE NULLIF(TRIM({fd}), '') IS NOT NULL GROUP BY {fd}")
     for filt in FACET_DIMS:
         for fd in FACET_DIMS:
             cols = ", ".join(
@@ -214,7 +214,7 @@ def build_facet_cross_filter(con, out):
                 for c in FACET_DIMS)
             selects.append(
                 f"SELECT {cols}, '{fd}' AS facet_type, {fd} AS facet_value, COUNT(*) AS count "
-                f"FROM samp_geo WHERE {filt} IS NOT NULL AND {filt} <> '' AND {fd} IS NOT NULL AND {fd} <> '' GROUP BY {filt}, {fd}")
+                f"FROM samp_geo WHERE NULLIF(TRIM({filt}), '') IS NOT NULL AND NULLIF(TRIM({fd}), '') IS NOT NULL GROUP BY {filt}, {fd}")
     con.execute(f"""COPY (
         SELECT filter_source, filter_material, filter_context, filter_object_type,
                facet_type, facet_value, count
