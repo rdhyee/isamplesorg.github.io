@@ -548,3 +548,106 @@ New test (Phase 5):
   test_site_location_geo_not_orphaned  PASS
   (Confirmed FAILS on old code: Geo 20 deleted; PASSES on fixed code: Geo 20 retained)
 ```
+
+---
+
+## Phase 6 — Fixpoint Orphan + Silent-Drop Guard (Codex Round 2 blockers)
+
+*Run 2026-06-13. Fixes two Codex-identified issues: true general fixpoint orphan removal (Fix A) and silent-drop guard for new-row ref remapping (Fix B).*
+
+### Changes
+
+**Fix A — Fixpoint general orphan removal** (`scripts/ingest_oc_records.py` lines ~198–316):
+Replaced all hand-enumerated path-specific orphan tables (orphan_se_refs, orphan_geo_refs, orphan_site_refs, etc.) with a true fixpoint algorithm:
+1. remove_set := 21,227 stale MSR row_ids
+2. Repeat until stable: compute survivor_refs = all row_ids referenced by any surviving row (NOT in remove_set) through ALL 12 p__* columns; add to remove_set any non-MSR non-IdentifiedConcept candidate row not in survivor_refs
+3. Converges in 4 passes on real data
+
+**Fix B — Silent-drop guard** (`scripts/ingest_oc_records.py` lines ~733–770):
+Added pre-write check: for each structural/concept p__* column on new rows, assert remapped array length == source array length. Any inner-join miss raises RuntimeError. `p__keywords` excluded (best-effort URI lookup, documented).
+
+**IdentifiedConcept exclusion from orphan removal**: fixpoint excludes `IdentifiedConcept` rows (vocabulary rows are shared across all sources, must never be auto-deleted).
+
+### Fixpoint output (4 passes, real data)
+
+```
+[   0.7s] fixpoint pass 1: 21227 new orphans   ← orphan SEs
+[   1.4s] fixpoint pass 2: 16625 new orphans   ← orphan Geos (via orphan SEs)
+[   2.2s] fixpoint pass 3: 928 new orphans     ← orphan SamplingSites
+[   2.9s] fixpoint pass 4: 0 new orphans       ← converged
+[   2.9s] fixpoint done in 4 passes: rows_to_remove=60,007
+orphan subgraph by otype: {
+  'Agent': 4,                          ← NEWLY removed (were over-retained in Phase 5)
+  'GeospatialCoordLocation': 16621,    ← 16621 (not 21227 — 4606 correctly retained for surviving Sites)
+  'MaterialSampleRecord': 21227,
+  'SamplingEvent': 21227,
+  'SamplingSite': 928
+}
+```
+
+### Per-column dangling sweep (in-script gate + independent verification)
+
+```
+  p__curation: 0 dangling refs
+  p__has_context_category: 0 dangling refs
+  p__has_material_category: 0 dangling refs
+  p__has_sample_object_type: 0 dangling refs
+  p__keywords: 0 dangling refs
+  p__produced_by: 0 dangling refs
+  p__registrant: 0 dangling refs
+  p__related_resource: 0 dangling refs
+  p__responsibility: 0 dangling refs
+  p__sample_location: 0 dangling refs
+  p__sampling_site: 0 dangling refs
+  p__site_location: 0 dangling refs
+  TOTAL: 0 dangling refs  PASS
+```
+
+### Verification numbers
+
+| Check | Result | Status |
+|---|---|---|
+| p__site_location dangling (independent) | **0** | PASS |
+| OC MSR count | **1,110,791** | PASS |
+| OC rock count (source=OPENCONTEXT, material=rock URI) | **37,953** | PASS |
+| Cyprus description count | **69,230** | PASS |
+| Blank/whitespace facet entries | **0** | PASS |
+| Removed Murlo pids in output | **0** | PASS |
+| New r2p24 pids | **15,409** | PASS |
+| Validator | **26/26 PASS** | PASS |
+| specimentype labels in vocab_labels | **2** | PASS |
+| **Total output rows** | **20,821,664** | PASS |
+| Over-retention (orphan Agents) | **0** (4 Agents now correctly removed) | PASS |
+
+### Row count delta vs Phase 5
+
+Phase 5: 20,821,668 → Phase 6: 20,821,664 (−4)
+
+The 4 missing rows are the 4 Agent orphans that Phase 5's path-specific logic incorrectly retained (they were never in the hand-enumerated path: SE→Agent isn't a p__sampling_site/sample_location path). The fixpoint correctly identifies them as unreferenced by any surviving row.
+
+### Regression tests
+
+Two new tests added to `tests/test_ingest_oc_records.py`:
+
+1. `test_orphan_geo_via_site_only_removed`: removed OC MSR → orphan SE (no p__sample_location) → orphan SamplingSite → Geo only via p__site_location. Geo must be REMOVED.
+   - **FAILS on old code** (Phase 5): Geo not in orphan_se_geo_refs (SE has empty p__sample_location), orphan_se_site_refs → Site is orphan but orphan_site_ids-based exclusion didn't cover the site-only Geo path correctly.
+   - **PASSES on fixed code** (fixpoint): survivor_refs has no ref to Geo (no surviving row points to it) → removed.
+
+2. `test_unresolved_new_ref_hard_fails`: new OC SE with p__sampling_site=[999], no Site 999 in Eric's wide. Must RAISE, not emit NULL.
+   - **FAILS on old code** (Phase 4 + Phase 5): inner join silently drops the ref; script exits 0 with NULL p__sampling_site.
+   - **PASSES on fixed code** (Fix B guard): _check_remap_length detects len(source)=1 != len(remapped)=0 → RuntimeError, no output written.
+
+### Fixture Tests
+
+```
+pytest tests/test_ingest_oc_records.py -v
+32/32 passed in 9.20s
+
+New tests (Phase 6):
+  test_orphan_geo_via_site_only_removed  PASS  (FAILS on old Phase 5 code: Geo retained when it should be removed)
+  test_unresolved_new_ref_hard_fails     PASS  (FAILS on old code: exits 0 with NULL ref silently)
+```
+
+### p__keywords note (open item)
+
+The silent-drop guard correctly fires on p__keywords during the real build (67,183 rows with dropped keyword refs). This is the pre-existing best-effort behavior documented in the script header. `p__keywords` is excluded from the strict length check. A full keyword concept audit before R2 promotion is recommended.

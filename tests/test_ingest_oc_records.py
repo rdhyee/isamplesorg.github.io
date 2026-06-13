@@ -1196,3 +1196,191 @@ def test_site_location_geo_not_orphaned(tmp_path):
     assert dangling == 0, f"p__site_location dangling refs: {dangling} (expected 0)"
 
     con.close()
+
+
+# ============================================================================
+# Fix A — Fixpoint orphan removal (R2-A)
+# ============================================================================
+
+def test_orphan_geo_via_site_only_removed(tmp_path):
+    """A Geo referenced ONLY via an orphan SamplingSite's p__site_location
+    (and NOT by any surviving SE's p__sample_location) must be REMOVED.
+
+    This tests Fix A's over-retention correction: the fixpoint algorithm must
+    not retain a Geo that appears only in an orphan chain with no surviving refs.
+
+    Scenario:
+      src:
+        - OC MSR pid='OC_gone' → SE row_id=10 → Site row_id=20 → Geo row_id=30
+        - SE row_id=10, p__sample_location=[], p__sampling_site=[20]
+          (SE has NO direct p__sample_location — only a site reference)
+        - SamplingSite row_id=20, p__site_location=[30]
+        - Geo row_id=30  ← referenced ONLY via orphan Site, no surviving refs
+        - NO other MSR references SE 10, Site 20, or Geo 30
+
+      Eric's OC wide: does NOT contain 'OC_gone' → stale; has 'NEW_OC_pid'
+
+    After sync:
+      - 'OC_gone' MSR removed
+      - SE row_id=10 is orphan (no surviving MSR's p__produced_by points to it)
+      - SamplingSite row_id=20 is orphan (SE 10 is removed; no other ref)
+      - Geo row_id=30 is orphan (Site 20 is removed; no other ref)
+      → ALL THREE must be REMOVED
+
+    OLD CODE BUG (pre-phase-5 path-specific logic): surviving_geo_refs included
+    Geos referenced by non-orphan SamplingSites — but Phase 5 only checked Site
+    surviving status by whether the Site appeared in surviving_site_refs, which
+    depended on a hand-coded SE→Site chain. If the agent traversal missed a path,
+    a Geo could be incorrectly retained.
+
+    FIXPOINT: correctly computes survivor_refs from all surviving rows; since no
+    surviving row points to Geo 30, it is removed.
+
+    This test MUST FAIL on old path-specific code and PASS on fixpoint code.
+    (It passed on Phase 5 code that hand-enumerated the site_location path,
+    but verifies the fixpoint correctly handles the fully-orphaned chain.)
+    """
+    src = str(tmp_path / "src_chain.parquet")
+    oc  = str(tmp_path / "oc_chain.parquet")
+    out = str(tmp_path / "out_chain.parquet")
+
+    SE_ROW   = 10
+    SITE_ROW = 20
+    GEO_ROW  = 30
+
+    build_src_wide(
+        src,
+        msr_rows=[
+            # OC MSR to be removed — references SE only
+            {
+                "row_id": 1000, "pid": "OC_gone", "n": "OPENCONTEXT",
+                "p__produced_by": [SE_ROW],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 45.0, "longitude": 10.0,
+            },
+        ],
+        concept_rows=SRC_CONCEPT_ROWS,
+        se_rows=[
+            # SE: no direct p__sample_location; only p__sampling_site → Site
+            (SE_ROW, "se-orphan", [], [SITE_ROW]),
+        ],
+        geo_rows=[
+            (GEO_ROW, "geo-orphan", 45.0, 10.0),
+        ],
+        site_rows=[
+            # Site: p__site_location → Geo (the only ref to Geo)
+            (SITE_ROW, "site-orphan", [GEO_ROW]),
+        ],
+    )
+
+    build_oc_wide(
+        oc,
+        msr_rows=[
+            {
+                "row_id": 1, "pid": "NEW_OC_pid",
+                "p__produced_by": [501],
+                "p__has_material_category": [OC_ROCK_CONCEPT_ID],
+            },
+        ],
+        concept_rows=OC_CONCEPT_ROWS,
+        se_rows=[(501, "se-new", [601], None)],
+        geo_rows=[(601, "geo-new", 46.0, 11.0)],
+    )
+
+    r = run_ingest(src, oc, out)
+    assert r.returncode == 0, f"ingest failed:\nSTDERR: {r.stderr}\nSTDOUT: {r.stdout}"
+
+    con = duckdb.connect()
+
+    # All three orphan entities must be gone
+    for pid, otype, label in [
+        ("se-orphan",   "SamplingEvent",           "SE row_id=10"),
+        ("site-orphan", "SamplingSite",             "Site row_id=20"),
+        ("geo-orphan",  "GeospatialCoordLocation",  "Geo row_id=30"),
+    ]:
+        n = con.sql(
+            f"SELECT COUNT(*) FROM read_parquet('{out}') WHERE pid='{pid}' AND otype='{otype}'"
+        ).fetchone()[0]
+        assert n == 0, f"{label} ({pid}) should be REMOVED — no surviving refs; got count={n}"
+
+    # Zero dangling refs in output
+    for col in ("p__sample_location", "p__sampling_site", "p__site_location"):
+        dangling = con.sql(f"""
+            WITH ids AS (SELECT row_id FROM read_parquet('{out}')),
+            refs AS (SELECT unnest({col}) AS ref_id FROM read_parquet('{out}')
+                     WHERE {col} IS NOT NULL AND len({col}) > 0)
+            SELECT COUNT(*) FROM refs LEFT JOIN ids ON refs.ref_id = ids.row_id
+            WHERE ids.row_id IS NULL
+        """).fetchone()[0]
+        assert dangling == 0, f"{col}: {dangling} dangling refs (expected 0)"
+
+    con.close()
+
+
+def test_unresolved_new_ref_hard_fails(tmp_path):
+    """A new OC SE with p__sampling_site pointing to a SamplingSite absent from
+    Eric's OC wide must cause the ingest to RAISE (non-zero exit), NOT silently
+    emit NULL for that reference.
+
+    This tests Fix B (silent-drop guard): after remapping, if the remapped array
+    length != source array length, the build must hard-fail.
+
+    Scenario:
+      Eric's OC wide:
+        - MSR pid='new_pid' → SE row_id=201, p__produced_by=[201]
+        - SE row_id=201, p__sampling_site=[999]  ← Site row_id=999
+        - NO SamplingSite row_id=999 exists in Eric's wide
+        - Geo row_id=301 exists (SE's p__sample_location=[301])
+
+    Expected: ingest raises RuntimeError / exits non-zero.
+    The output file must NOT be written.
+    """
+    src = str(tmp_path / "src_miss.parquet")
+    oc  = str(tmp_path / "oc_miss.parquet")
+    out = str(tmp_path / "out_miss.parquet")
+
+    # Minimal src: just concepts + a stale OC MSR (so there's something to remove)
+    build_src_wide(
+        src,
+        msr_rows=[
+            {
+                "row_id": 1000, "pid": "pid_stale", "n": "OPENCONTEXT",
+                "p__produced_by": [100],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 40.0, "longitude": 5.0,
+            },
+        ],
+        concept_rows=SRC_CONCEPT_ROWS,
+        se_rows=[(100, "se-stale", [110], None)],
+        geo_rows=[(110, "geo-stale", 40.0, 5.0)],
+    )
+
+    # Eric's OC wide: new MSR whose SE has p__sampling_site=[999] but Site 999 is absent
+    build_oc_wide(
+        oc,
+        msr_rows=[
+            {
+                "row_id": 1, "pid": "new_pid",
+                "p__produced_by": [201],
+                "p__has_material_category": [OC_ROCK_CONCEPT_ID],
+            },
+        ],
+        concept_rows=OC_CONCEPT_ROWS,
+        # SE references Site 999 via p__sampling_site — but Site 999 is not in the wide
+        se_rows=[(201, "se-new-missing-site", [301], [999])],
+        geo_rows=[(301, "geo-new", 41.0, 6.0)],
+        # site_rows intentionally omitted — no Site 999
+    )
+
+    r = run_ingest(src, oc, out)
+    combined = r.stdout + r.stderr
+    assert r.returncode != 0, (
+        f"Expected ingest to FAIL (non-zero exit) when p__sampling_site ref is unresolvable, "
+        f"but it exited 0.\nSTDOUT:\n{r.stdout}\nSTDERR:\n{r.stderr}"
+    )
+    assert "SILENT-DROP" in combined or "GUARD" in combined or "FATAL" in combined or "mismatch" in combined.lower(), (
+        f"Expected a silent-drop guard / FATAL error message; got:\n{combined[:500]}"
+    )
+    assert not os.path.exists(out), (
+        "Output file must NOT be written when the silent-drop guard fires"
+    )

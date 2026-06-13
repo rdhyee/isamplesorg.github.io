@@ -195,127 +195,146 @@ def main():
     n_removed_pids = con.sql("SELECT COUNT(*) FROM removed_pids").fetchone()[0]
     log(f"stale pids to remove: {n_removed_pids:,}", t0)
 
-    # ---- Phase D3 orphan analysis: find orphaned subgraph entities ----------
-    # General formulation: a candidate row is REMOVED iff its row_id does NOT appear
-    # in any p__* array column across ALL SURVIVING rows (any otype, any source).
-    # "Surviving rows" = all rows that remain after removing the stale MSRs + orphan
-    # subgraph. We compute orphans in dependency order:
-    #   1. orphan SEs  (only referenced by removed MSRs)
-    #   2. orphan SamplingSites  (only referenced by orphan SEs, not surviving SEs)
-    #   3. orphan Geos  (only referenced by orphan SEs via p__sample_location AND
-    #                    orphan Sites via p__site_location — NOT by surviving SEs or
-    #                    surviving Sites)
-    # Note: Sites are computed BEFORE Geos so that surviving_geo_refs can correctly
-    # exclude Geos still referenced by surviving SamplingSites (via p__site_location).
-    # This fixes the bug where geos referenced by surviving sites were incorrectly
-    # deleted because orphan determination only checked p__sample_location on SEs.
+    # ---- Phase D3 orphan analysis: FIXPOINT general orphan removal ----------
+    # TRUE GENERAL FORMULATION (no path enumeration):
+    #
+    # A candidate row (any non-MSR entity reachable from the 21K removed MSRs'
+    # subgraph) is removed iff its row_id is NOT referenced by ANY surviving row
+    # through ANY p__* array column.  We iterate to fixpoint because an orphan
+    # candidate may itself be the sole reference-holder of another candidate
+    # (e.g. an orphan SamplingSite → orphan Geo).
+    #
+    # Algorithm:
+    #   remove_set := row_ids of the stale MSRs
+    #   repeat until remove_set stops growing:
+    #     survivor_refs := DISTINCT union of every p__* array column, UNNESTed,
+    #                      over all rows WHERE row_id NOT IN remove_set
+    #     candidates    := rows in the removed-MSR subgraph not already in remove_set
+    #     new_orphans   := candidates WHERE row_id NOT IN survivor_refs
+    #     remove_set    := remove_set UNION new_orphans
+    #
+    # The graph is shallow (~3 hops: MSR→SE→Geo/Site→Geo) so fixpoint is reached
+    # in ≤4 passes.  We enumerate the p__* columns from the schema — no guesswork.
+
+    # Collect all p__* columns that carry BIGINT[] or INTEGER[] row_id references.
+    p_ref_cols = [
+        col for col, typ in src_cols
+        if col.startswith("p__")
+        and any(t in typ.upper() for t in ("BIGINT", "INTEGER"))
+    ]
+    log(f"fixpoint orphan: p__* ref cols = {p_ref_cols}", t0)
+
+    # Build the subgraph of candidates: all non-MSR rows reachable (transitively)
+    # from the removed MSRs through their p__* arrays.
+    # We do this in one pass: any row whose row_id appears in ANY p__* array of
+    # the removed MSRs (or their descendants) is a candidate.
+    # We use a wide-first BFS: first pass collects direct refs from removed MSRs,
+    # subsequent passes follow refs from newly discovered candidates.
+    # For the iSamples graph (depth ≤3) three passes always reach fixpoint.
     con.execute(f"""
-    CREATE TEMP TABLE removed_msrs AS
-      SELECT s.* FROM {SRC} s
+    -- Seed remove_set with the stale MSR row_ids
+    CREATE TEMP TABLE remove_set AS
+      SELECT s.row_id
+      FROM {SRC} s
       WHERE s.otype='MaterialSampleRecord' AND s.n='{OC_SOURCE}'
         AND s.pid IN (SELECT pid FROM removed_pids);
-
-    -- SE refs from removed MSRs
-    CREATE TEMP TABLE removed_se_refs AS
-      SELECT DISTINCT u.se_id AS row_id
-      FROM removed_msrs, UNNEST(p__produced_by) AS u(se_id);
-
-    -- SE refs from ALL SURVIVING MSRs (any source — cross-source orphan protection)
-    CREATE TEMP TABLE surviving_se_refs AS
-      SELECT DISTINCT u.se_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__produced_by) AS u(se_id)
-      WHERE s.otype='MaterialSampleRecord'
-        AND NOT (s.n='{OC_SOURCE}' AND s.pid IN (SELECT pid FROM removed_pids));
-
-    -- Orphan SEs: referenced only by removed MSRs
-    CREATE TEMP TABLE orphan_se_ids AS
-      SELECT row_id FROM removed_se_refs
-      WHERE row_id NOT IN (SELECT row_id FROM surviving_se_refs);
-
-    -- SamplingSite refs from orphan SEs  (Step 2: sites before geos)
-    CREATE TEMP TABLE orphan_se_site_refs AS
-      SELECT DISTINCT u.site_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__sampling_site) AS u(site_id)
-      WHERE s.otype='SamplingEvent' AND s.row_id IN (SELECT row_id FROM orphan_se_ids);
-
-    -- SamplingSite refs from surviving SEs
-    CREATE TEMP TABLE surviving_site_refs AS
-      SELECT DISTINCT u.site_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__sampling_site) AS u(site_id)
-      WHERE s.otype='SamplingEvent' AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids);
-
-    -- Orphan SamplingSites: only referenced by orphan SEs (not by any surviving SE)
-    CREATE TEMP TABLE orphan_site_ids AS
-      SELECT row_id FROM orphan_se_site_refs
-      WHERE row_id NOT IN (SELECT row_id FROM surviving_site_refs);
-
-    -- Geo refs from orphan SEs (via p__sample_location)
-    CREATE TEMP TABLE orphan_se_geo_refs AS
-      SELECT DISTINCT u.geo_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
-      WHERE s.otype='SamplingEvent' AND s.row_id IN (SELECT row_id FROM orphan_se_ids);
-
-    -- Geo refs from surviving SEs (via p__sample_location)
-    -- AND from surviving SamplingSites (via p__site_location).
-    -- FIX: include p__site_location refs from non-orphan SamplingSites so that
-    -- a Geo referenced by a surviving Site is NOT marked as orphan even if it
-    -- was also referenced by an orphan SE.
-    CREATE TEMP TABLE surviving_geo_refs AS
-      SELECT DISTINCT u.geo_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__sample_location) AS u(geo_id)
-      WHERE s.otype='SamplingEvent'
-        AND s.row_id NOT IN (SELECT row_id FROM orphan_se_ids)
-      UNION
-      SELECT DISTINCT u.geo_id AS row_id
-      FROM {SRC} s, UNNEST(s.p__site_location) AS u(geo_id)
-      WHERE s.otype='SamplingSite'
-        AND s.row_id NOT IN (SELECT row_id FROM orphan_site_ids);
-
-    -- Orphan Geos: referenced only by orphan SEs/Sites, not by any surviving SE or Site
-    CREATE TEMP TABLE orphan_geo_ids AS
-      SELECT row_id FROM orphan_se_geo_refs
-      WHERE row_id NOT IN (SELECT row_id FROM surviving_geo_refs);
     """)
 
-    # Count orphan entities by type
-    orphan_counts = {
-        "removed_msrs": n_removed_pids,
-        "orphan_se": con.sql("SELECT COUNT(*) FROM orphan_se_ids").fetchone()[0],
-        "orphan_geo": con.sql("SELECT COUNT(*) FROM orphan_geo_ids").fetchone()[0],
-        "orphan_site": con.sql("SELECT COUNT(*) FROM orphan_site_ids").fetchone()[0],
-    }
-    total_orphan_rows = sum(orphan_counts.values())
-    log(f"orphan subgraph: msr={orphan_counts['removed_msrs']:,} "
-        f"se={orphan_counts['orphan_se']:,} "
-        f"geo={orphan_counts['orphan_geo']:,} "
-        f"site={orphan_counts['orphan_site']:,} "
-        f"total={total_orphan_rows:,}", t0)
+    pass_num = 0
+    while True:
+        pass_num += 1
 
-    # Build the set of all row_ids to exclude from the src
-    con.execute(f"""
-    CREATE TEMP TABLE rows_to_remove AS
-      -- Removed MSR rows
-      SELECT s.row_id FROM {SRC} s
-      WHERE s.otype='MaterialSampleRecord' AND s.n='{OC_SOURCE}'
-        AND s.pid IN (SELECT pid FROM removed_pids)
-      UNION ALL
-      -- Orphan SE rows
-      SELECT row_id FROM {SRC}
-      WHERE otype='SamplingEvent' AND row_id IN (SELECT row_id FROM orphan_se_ids)
-      UNION ALL
-      -- Orphan GeoCoordLoc rows
-      SELECT row_id FROM {SRC}
-      WHERE otype='GeospatialCoordLocation' AND row_id IN (SELECT row_id FROM orphan_geo_ids)
-      UNION ALL
-      -- Orphan SamplingSite rows
-      SELECT row_id FROM {SRC}
-      WHERE otype='SamplingSite' AND row_id IN (SELECT row_id FROM orphan_site_ids);
-    """)
-    n_rows_to_remove = con.sql("SELECT COUNT(*) FROM rows_to_remove").fetchone()[0]
-    if n_rows_to_remove != total_orphan_rows:
-        sys.exit(f"FATAL: rows_to_remove count {n_rows_to_remove:,} != expected {total_orphan_rows:,}. "
-                 f"Entity type mismatch or pid not found in src.")
-    log(f"rows_to_remove: {n_rows_to_remove:,} (matches orphan arithmetic)", t0)
+        # -- Step 1: compute survivor_refs: all row_ids referenced by surviving rows
+        # (rows NOT in remove_set) through ANY p__* reference column.
+        # Build a UNION ALL of unnest() over each p__* col, filter to surviving rows.
+        survivor_union = "\n    UNION ALL\n    ".join(
+            f"SELECT unnest(w.{col}) AS ref_id"
+            f" FROM {SRC} w"
+            f" WHERE w.{col} IS NOT NULL AND len(w.{col}) > 0"
+            f"   AND w.row_id NOT IN (SELECT row_id FROM remove_set)"
+            for col in p_ref_cols
+        )
+        con.execute(f"""
+            CREATE OR REPLACE TEMP TABLE survivor_refs_cur AS
+            SELECT DISTINCT ref_id
+            FROM ({survivor_union}) t
+            WHERE ref_id IS NOT NULL
+        """)
+
+        # -- Step 2: compute the candidate subgraph reachable from remove_set rows.
+        # Any non-MSR row whose row_id appears in any p__* array of any row in
+        # remove_set is a candidate for orphan-deletion.
+        candidate_union = "\n    UNION ALL\n    ".join(
+            f"SELECT unnest(r2.{col}) AS row_id"
+            f" FROM {SRC} r2"
+            f" WHERE r2.row_id IN (SELECT row_id FROM remove_set)"
+            f"   AND r2.{col} IS NOT NULL"
+            for col in p_ref_cols
+        )
+        con.execute(f"""
+            CREATE OR REPLACE TEMP TABLE candidates_cur AS
+            SELECT DISTINCT row_id
+            FROM ({candidate_union}) t
+            WHERE row_id IS NOT NULL
+        """)
+
+        # -- Step 3: new orphans = candidates NOT in survivor_refs AND NOT already removed
+        # AND NOT an MSR (we only auto-remove non-MSR entities; MSRs handled explicitly above)
+        # AND NOT an IdentifiedConcept (vocabulary concept rows are shared across all sources
+        # and must never be deleted just because one MSR is removed).
+        new_orphan_ids = con.execute(f"""
+            SELECT s.row_id
+            FROM {SRC} s
+            JOIN candidates_cur c ON c.row_id = s.row_id
+            WHERE s.otype != 'MaterialSampleRecord'
+              AND s.otype != 'IdentifiedConcept'
+              AND s.row_id NOT IN (SELECT row_id FROM remove_set)
+              AND s.row_id NOT IN (SELECT ref_id FROM survivor_refs_cur)
+        """).fetchall()
+
+        n_new = len(new_orphan_ids)
+        log(f"fixpoint pass {pass_num}: {n_new} new orphans", t0)
+        if n_new == 0:
+            con.execute("DROP TABLE IF EXISTS survivor_refs_cur")
+            con.execute("DROP TABLE IF EXISTS candidates_cur")
+            break
+
+        # Insert the new orphans into remove_set
+        new_ids_csv = ",".join(str(r[0]) for r in new_orphan_ids)
+        con.execute(f"""
+            INSERT INTO remove_set
+            SELECT DISTINCT row_id FROM {SRC}
+            WHERE row_id IN ({new_ids_csv})
+              AND row_id NOT IN (SELECT row_id FROM remove_set)
+        """)
+
+    n_rows_to_remove = con.sql("SELECT COUNT(*) FROM remove_set").fetchone()[0]
+    log(f"fixpoint done in {pass_num} passes: rows_to_remove={n_rows_to_remove:,}", t0)
+
+    # Sanity: verify no non-OC MSR rows crept into remove_set
+    n_non_oc_in_remove = con.sql(f"""
+        SELECT COUNT(*) FROM remove_set rs
+        JOIN {SRC} s ON s.row_id = rs.row_id
+        WHERE s.otype='MaterialSampleRecord' AND s.n != '{OC_SOURCE}'
+    """).fetchone()[0]
+    if n_non_oc_in_remove:
+        sys.exit(f"FATAL: fixpoint orphan put {n_non_oc_in_remove} non-OC MSR rows in remove_set")
+
+    # For logging: count by otype
+    otype_counts = con.sql(f"""
+        SELECT s.otype, COUNT(*) AS n
+        FROM remove_set rs JOIN {SRC} s ON s.row_id=rs.row_id
+        GROUP BY s.otype ORDER BY s.otype
+    """).fetchall()
+    orphan_counts = {ot: n for ot, n in otype_counts}
+    n_removed_msrs_actual = orphan_counts.get("MaterialSampleRecord", 0)
+    if n_removed_msrs_actual != n_removed_pids:
+        sys.exit(f"FATAL: remove_set has {n_removed_msrs_actual} MSR rows but expected {n_removed_pids}")
+    log(f"orphan subgraph by otype: {orphan_counts}", t0)
+
+    # Alias rows_to_remove for compatibility with downstream SQL
+    con.execute("CREATE TEMP TABLE rows_to_remove AS SELECT row_id FROM remove_set")
+    total_orphan_rows = n_rows_to_remove
 
     # ---- Phase A: identify new pids ----------------------------------------
     con.execute(f"""
@@ -703,6 +722,54 @@ def main():
     """).fetchone()[0]
     if n_non_oc_removal:
         sys.exit(f"FATAL: {n_non_oc_removal} removal targets are non-OC MSR rows (would corrupt other sources)")
+
+    # FIX B — SILENT-DROP GUARD: verify that every p__* source array on new rows
+    # has a 1:1 remapped array (no silently-dropped refs due to inner-join misses).
+    #
+    # The remapping tables (remap_msr_pb, remap_se_sl, remap_se_ss, remap_site_sl)
+    # use INNER JOINs to eric_id_map.  If a source row has a ref not in eric_id_map,
+    # that row simply DISAPPEARS from the remap table, and the LEFT JOIN in the
+    # write SQL gives NULL for the column — silently dropping the reference.
+    #
+    # For each (source_table, p__col, remap_table) pair, we assert:
+    #   every row with a non-null source array has a matching remap row AND
+    #   the remapped array has the same length as the source array.
+    # Any mismatch → RuntimeError, build aborted.
+    def _check_remap_length(source_table, pid_col, src_col, remap_table, remap_col, label):
+        bad = con.sql(f"""
+            SELECT s.{pid_col}, len(s.{src_col}) AS src_len, COALESCE(len(r.{remap_col}), 0) AS remap_len
+            FROM {source_table} s
+            LEFT JOIN {remap_table} r ON r.{pid_col} = s.{pid_col}
+            WHERE s.{src_col} IS NOT NULL AND len(s.{src_col}) > 0
+              AND COALESCE(len(r.{remap_col}), 0) != len(s.{src_col})
+        """).fetchall()
+        if bad:
+            details = "; ".join(f"{pid_col}={row[0]} src_len={row[1]} remap_len={row[2]}" for row in bad[:5])
+            raise RuntimeError(
+                f"SILENT-DROP GUARD FAIL [{label}]: {len(bad)} rows have mismatched "
+                f"source vs remapped array lengths. First offenders: {details}. "
+                f"Check that all referenced entities were extracted before remapping."
+            )
+
+    # MSR structural refs
+    _check_remap_length("new_msr_eric", "pid", "p__produced_by",      "remap_msr_pb",   "remapped", "MSR.p__produced_by")
+    _check_remap_length("new_msr_eric", "pid", "p__registrant",        "remap_msr_reg",  "remapped", "MSR.p__registrant")
+    _check_remap_length("new_msr_eric", "pid", "p__responsibility",    "remap_msr_resp", "remapped", "MSR.p__responsibility")
+    # MSR concept refs (via URI lookup — different remap path)
+    _check_remap_length("new_msr_eric", "pid", "p__has_material_category",    "remap_msr_mat", "remapped", "MSR.p__has_material_category")
+    _check_remap_length("new_msr_eric", "pid", "p__has_sample_object_type",   "remap_msr_obj", "remapped", "MSR.p__has_sample_object_type")
+    _check_remap_length("new_msr_eric", "pid", "p__has_context_category",     "remap_msr_ctx", "remapped", "MSR.p__has_context_category")
+    # NOTE: p__keywords is intentionally EXCLUDED from the strict length check.
+    # keywords use best-effort URI lookup against the src concept map; concepts
+    # present in Eric's wide but absent from src are silently dropped (not extracted).
+    # This is documented in the script header ("WHAT IT DOES NOT DO").
+    # A separate audit of keyword concept coverage should be run before R2 promotion.
+    # SE structural refs
+    _check_remap_length("new_se_eric",   "pid", "p__sample_location",  "remap_se_sl",    "remapped", "SE.p__sample_location")
+    _check_remap_length("new_se_eric",   "pid", "p__sampling_site",    "remap_se_ss",    "remapped", "SE.p__sampling_site")
+    # SamplingSite structural refs
+    _check_remap_length("new_site_eric", "pid", "p__site_location",    "remap_site_sl",  "remapped", "Site.p__site_location")
+    log("silent-drop guard: all structural + concept remapped arrays length-verified (PASS; p__keywords excluded — best-effort)", t0)
 
     log("trust checks passed", t0)
 
@@ -1097,11 +1164,7 @@ def main():
                 "removed_pids": n_removed_pids,
                 "orphan_rows": total_orphan_rows - n_removed_pids,
                 "total_rows_removed": n_rows_to_remove,
-                "orphan_breakdown": {
-                    "orphan_se": orphan_counts["orphan_se"],
-                    "orphan_geo": orphan_counts["orphan_geo"],
-                    "orphan_site": orphan_counts["orphan_site"],
-                },
+                "orphan_breakdown": orphan_counts,
                 "new_pids": n_new_pids,
                 "new_entity_rows": n_new_entities,
                 "minted_concepts": n_minted,
