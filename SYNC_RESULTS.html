@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>sync_results – iSamples</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./assets/isamplesfavicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c1e64c2409ffa41d8278daa552b940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./assets/isampleslogopetal.png" alt="" class="navbar-logo light-content">
+    <img src="./assets/isampleslogopetal.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">iSamples</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./explorer.html"> 
+<span class="menu-text">Interactive Explorer</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-to-use" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">How to Use</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-to-use">    
+        <li>
+    <a class="dropdown-item" href="./how-to-use.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/zenodo_isamples_analysis.html">
+ <span class="dropdown-text">Deep-Dive Analysis</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">About</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+        <li>
+    <a class="dropdown-item" href="./about.html">
+ <span class="dropdown-text">Objectives</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html#team">
+ <span class="dropdown-text">PIs and Contributors</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html#photo-gallery">
+ <span class="dropdown-text">Photo Gallery</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html#background-history">
+ <span class="dropdown-text">Background &amp; History</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-architecture--vocabularies" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Architecture &amp; Vocabularies</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-architecture--vocabularies">    
+        <li>
+    <a class="dropdown-item" href="./design/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./design/requirements.html">
+ <span class="dropdown-text">Requirements</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://isamples.org/metadata/">
+ <span class="dropdown-text">Metadata Model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./models/index.html">
+ <span class="dropdown-text">Vocabularies</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/narrow_vs_wide_performance.html">
+ <span class="dropdown-text">Technical: Narrow vs Wide</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/why_h3.html">
+ <span class="dropdown-text">Technical: Why H3?</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-research--resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Research &amp; Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-research--resources">    
+        <li>
+    <a class="dropdown-item" href="./pubs.html">
+ <span class="dropdown-text">Publications &amp; Conferences</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./pubs.html#zenodo-community">
+ <span class="dropdown-text">Zenodo Community</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./pubs.html#github-repositories">
+ <span class="dropdown-text">Github Repositories</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/isamplesorg"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://isamples.slack.com/"> <i class="bi bi-slack" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#sync_results.md" id="toc-sync_results.md" class="nav-link active" data-scroll-target="#sync_results.md"><span class="header-section-number">1</span> SYNC_RESULTS.md</a>
+  <ul>
+  <li><a href="#environment" id="toc-environment" class="nav-link" data-scroll-target="#environment"><span class="header-section-number">1.1</span> Environment</a></li>
+  <li><a href="#gap-characterization-against-202606-base" id="toc-gap-characterization-against-202606-base" class="nav-link" data-scroll-target="#gap-characterization-against-202606-base"><span class="header-section-number">1.2</span> Gap characterization against 202606 base</a>
+  <ul class="collapse">
+  <li><a href="#q1-oc-msr-count-in-202606-wide" id="toc-q1-oc-msr-count-in-202606-wide" class="nav-link" data-scroll-target="#q1-oc-msr-count-in-202606-wide"><span class="header-section-number">1.2.1</span> Q1: OC MSR count in 202606 wide</a></li>
+  <li><a href="#q2-oc-msr-count-in-erics-wide" id="toc-q2-oc-msr-count-in-erics-wide" class="nav-link" data-scroll-target="#q2-oc-msr-count-in-erics-wide"><span class="header-section-number">1.2.2</span> Q2: OC MSR count in Eric’s wide</a></li>
+  <li><a href="#q3-new-pids-erics-202606" id="toc-q3-new-pids-erics-202606" class="nav-link" data-scroll-target="#q3-new-pids-erics-202606"><span class="header-section-number">1.2.3</span> Q3: New pids (Eric’s &nbsp;202606)</a></li>
+  <li><a href="#q4-stale-pids-202606-erics-d3-removed" id="toc-q4-stale-pids-202606-erics-d3-removed" class="nav-link" data-scroll-target="#q4-stale-pids-202606-erics-d3-removed"><span class="header-section-number">1.2.4</span> Q4: Stale pids (202606 &nbsp;Eric’s) — D3: REMOVED</a></li>
+  <li><a href="#q5-expected-oc-msr-after-sync" id="toc-q5-expected-oc-msr-after-sync" class="nav-link" data-scroll-target="#q5-expected-oc-msr-after-sync"><span class="header-section-number">1.2.5</span> Q5: Expected OC MSR after sync</a></li>
+  <li><a href="#q6-total-rows-in-202606-wide" id="toc-q6-total-rows-in-202606-wide" class="nav-link" data-scroll-target="#q6-total-rows-in-202606-wide"><span class="header-section-number">1.2.6</span> Q6: Total rows in 202606 wide</a></li>
+  <li><a href="#q7-max-row_id-in-202606" id="toc-q7-max-row_id-in-202606" class="nav-link" data-scroll-target="#q7-max-row_id-in-202606"><span class="header-section-number">1.2.7</span> Q7: max row_id in 202606</a></li>
+  <li><a href="#q8-rock-count-in-202606-oc-msrs" id="toc-q8-rock-count-in-202606-oc-msrs" class="nav-link" data-scroll-target="#q8-rock-count-in-202606-oc-msrs"><span class="header-section-number">1.2.8</span> Q8: Rock count in 202606 (OC MSRs)</a></li>
+  <li><a href="#q9-identifiedconcept-count-in-202606" id="toc-q9-identifiedconcept-count-in-202606" class="nav-link" data-scroll-target="#q9-identifiedconcept-count-in-202606"><span class="header-section-number">1.2.9</span> Q9: IdentifiedConcept count in 202606</a></li>
+  <li><a href="#q10-earthsurface-in-202606" id="toc-q10-earthsurface-in-202606" class="nav-link" data-scroll-target="#q10-earthsurface-in-202606"><span class="header-section-number">1.2.10</span> Q10: earthsurface in 202606</a></li>
+  </ul></li>
+  <li><a href="#orphan-analysis-d3-removal-subgraph" id="toc-orphan-analysis-d3-removal-subgraph" class="nav-link" data-scroll-target="#orphan-analysis-d3-removal-subgraph"><span class="header-section-number">1.3</span> Orphan analysis (D3 removal subgraph)</a></li>
+  <li><a href="#production-run-execution-log" id="toc-production-run-execution-log" class="nav-link" data-scroll-target="#production-run-execution-log"><span class="header-section-number">1.4</span> Production run execution log</a></li>
+  <li><a href="#post-write-verification-queries-all-run-against-202608-wide-derived-files" id="toc-post-write-verification-queries-all-run-against-202608-wide-derived-files" class="nav-link" data-scroll-target="#post-write-verification-queries-all-run-against-202608-wide-derived-files"><span class="header-section-number">1.5</span> Post-write verification queries (all run against 202608 wide + derived files)</a>
+  <ul class="collapse">
+  <li><a href="#va-row-count-by-otype-in-output" id="toc-va-row-count-by-otype-in-output" class="nav-link" data-scroll-target="#va-row-count-by-otype-in-output"><span class="header-section-number">1.5.1</span> Va: Row count by otype in output</a></li>
+  <li><a href="#vb-oc-msr-count" id="toc-vb-oc-msr-count" class="nav-link" data-scroll-target="#vb-oc-msr-count"><span class="header-section-number">1.5.2</span> Vb: OC MSR count</a></li>
+  <li><a href="#vc-oc-rock-facet-count-from-sample_facets_v2" id="toc-vc-oc-rock-facet-count-from-sample_facets_v2" class="nav-link" data-scroll-target="#vc-oc-rock-facet-count-from-sample_facets_v2"><span class="header-section-number">1.5.3</span> Vc: OC rock facet count (from sample_facets_v2)</a></li>
+  <li><a href="#vd-removed-murlo-pids-none-in-output" id="toc-vd-removed-murlo-pids-none-in-output" class="nav-link" data-scroll-target="#vd-removed-murlo-pids-none-in-output"><span class="header-section-number">1.5.4</span> Vd: Removed Murlo pids — NONE in output</a></li>
+  <li><a href="#ve-new-r2p24-murlo-style-pids-all-present" id="toc-ve-new-r2p24-murlo-style-pids-all-present" class="nav-link" data-scroll-target="#ve-new-r2p24-murlo-style-pids-all-present"><span class="header-section-number">1.5.5</span> Ve: New r2p24 Murlo-style pids — ALL present</a></li>
+  <li><a href="#vf-jordan-lithic-spot-checks-tall-al-ʿumayri-new-rock-records" id="toc-vf-jordan-lithic-spot-checks-tall-al-ʿumayri-new-rock-records" class="nav-link" data-scroll-target="#vf-jordan-lithic-spot-checks-tall-al-ʿumayri-new-rock-records"><span class="header-section-number">1.5.6</span> Vf: Jordan lithic spot-checks (Tall al-ʿUmayri, new rock records)</a></li>
+  <li><a href="#vg-earthsurface-concept" id="toc-vg-earthsurface-concept" class="nav-link" data-scroll-target="#vg-earthsurface-concept"><span class="header-section-number">1.5.7</span> Vg: earthsurface concept</a></li>
+  <li><a href="#vh-identifiedconcept-total" id="toc-vh-identifiedconcept-total" class="nav-link" data-scroll-target="#vh-identifiedconcept-total"><span class="header-section-number">1.5.8</span> Vh: IdentifiedConcept total</a></li>
+  <li><a href="#vi-stage-4-derived-files" id="toc-vi-stage-4-derived-files" class="nav-link" data-scroll-target="#vi-stage-4-derived-files"><span class="header-section-number">1.5.9</span> Vi: Stage 4 derived files</a></li>
+  <li><a href="#vj-stage-4-validator-all-25-checks-pass" id="toc-vj-stage-4-validator-all-25-checks-pass" class="nav-link" data-scroll-target="#vj-stage-4-validator-all-25-checks-pass"><span class="header-section-number">1.5.10</span> Vj: Stage 4 validator (ALL 25 CHECKS PASS)</a></li>
+  </ul></li>
+  <li><a href="#fixture-tests-20-passed" id="toc-fixture-tests-20-passed" class="nav-link" data-scroll-target="#fixture-tests-20-passed"><span class="header-section-number">1.6</span> Fixture tests (20 passed)</a></li>
+  <li><a href="#pipeline-runtime-summary" id="toc-pipeline-runtime-summary" class="nav-link" data-scroll-target="#pipeline-runtime-summary"><span class="header-section-number">1.7</span> Pipeline runtime summary</a></li>
+  <li><a href="#input-file-checksums" id="toc-input-file-checksums" class="nav-link" data-scroll-target="#input-file-checksums"><span class="header-section-number">1.8</span> Input file checksums</a></li>
+  <li><a href="#phase-3-bug-fixes-folded-into-202608-2026-06-12" id="toc-phase-3-bug-fixes-folded-into-202608-2026-06-12" class="nav-link" data-scroll-target="#phase-3-bug-fixes-folded-into-202608-2026-06-12"><span class="header-section-number">1.9</span> Phase 3 — Bug fixes folded into 202608 (2026-06-12)</a>
+  <ul class="collapse">
+  <li><a href="#fix-application" id="toc-fix-application" class="nav-link" data-scroll-target="#fix-application"><span class="header-section-number">1.9.1</span> Fix application</a></li>
+  <li><a href="#verification-query-outputs-all-run-2026-06-12" id="toc-verification-query-outputs-all-run-2026-06-12" class="nav-link" data-scroll-target="#verification-query-outputs-all-run-2026-06-12"><span class="header-section-number">1.9.2</span> Verification query outputs (all run 2026-06-12)</a>
+  <ul class="collapse">
+  <li><a href="#a.-cyprus-description-count" id="toc-a.-cyprus-description-count" class="nav-link" data-scroll-target="#a.-cyprus-description-count"><span class="header-section-number">1.9.2.1</span> a. Cyprus description count</a></li>
+  <li><a href="#b.-blank-facet-entry-count" id="toc-b.-blank-facet-entry-count" class="nav-link" data-scroll-target="#b.-blank-facet-entry-count"><span class="header-section-number">1.9.2.2</span> b. Blank facet entry count</a></li>
+  <li><a href="#c.-specimentype-label-lookup" id="toc-c.-specimentype-label-lookup" class="nav-link" data-scroll-target="#c.-specimentype-label-lookup"><span class="header-section-number">1.9.2.3</span> c.&nbsp;specimentype label lookup</a></li>
+  <li><a href="#d.-total-validator-checks" id="toc-d.-total-validator-checks" class="nav-link" data-scroll-target="#d.-total-validator-checks"><span class="header-section-number">1.9.2.4</span> d.&nbsp;Total validator checks</a></li>
+  <li><a href="#e.-oc-msr-count-unchanged-by-description-enrichment" id="toc-e.-oc-msr-count-unchanged-by-description-enrichment" class="nav-link" data-scroll-target="#e.-oc-msr-count-unchanged-by-description-enrichment"><span class="header-section-number">1.9.2.5</span> e. OC MSR count (unchanged by description enrichment)</a></li>
+  <li><a href="#f.-rock-count-oc-only-unchanged-by-description-enrichment" id="toc-f.-rock-count-oc-only-unchanged-by-description-enrichment" class="nav-link" data-scroll-target="#f.-rock-count-oc-only-unchanged-by-description-enrichment"><span class="header-section-number">1.9.2.6</span> f.&nbsp;Rock count (OC only, unchanged by description enrichment)</a></li>
+  </ul></li>
+  <li><a href="#fixture-tests" id="toc-fixture-tests" class="nav-link" data-scroll-target="#fixture-tests"><span class="header-section-number">1.9.3</span> Fixture tests</a></li>
+  <li><a href="#updated-output-manifest" id="toc-updated-output-manifest" class="nav-link" data-scroll-target="#updated-output-manifest"><span class="header-section-number">1.9.4</span> Updated output manifest</a></li>
+  </ul></li>
+  <li><a href="#phase-4-codex-blocker-fixes-2026-06-13" id="toc-phase-4-codex-blocker-fixes-2026-06-13" class="nav-link" data-scroll-target="#phase-4-codex-blocker-fixes-2026-06-13"><span class="header-section-number">1.10</span> Phase 4 — Codex Blocker Fixes (2026-06-13)</a>
+  <ul class="collapse">
+  <li><a href="#fixes-applied" id="toc-fixes-applied" class="nav-link" data-scroll-target="#fixes-applied"><span class="header-section-number">1.10.1</span> Fixes applied</a></li>
+  <li><a href="#b1-regression-test-confirmation" id="toc-b1-regression-test-confirmation" class="nav-link" data-scroll-target="#b1-regression-test-confirmation"><span class="header-section-number">1.10.2</span> B1 regression test confirmation</a></li>
+  <li><a href="#production-rebuild-execution-log" id="toc-production-rebuild-execution-log" class="nav-link" data-scroll-target="#production-rebuild-execution-log"><span class="header-section-number">1.10.3</span> Production rebuild execution log</a></li>
+  <li><a href="#verification-query-results-phase-4" id="toc-verification-query-results-phase-4" class="nav-link" data-scroll-target="#verification-query-results-phase-4"><span class="header-section-number">1.10.4</span> Verification query results (Phase 4)</a></li>
+  <li><a href="#fixture-tests-1" id="toc-fixture-tests-1" class="nav-link" data-scroll-target="#fixture-tests-1"><span class="header-section-number">1.10.5</span> Fixture tests</a></li>
+  </ul></li>
+  <li><a href="#phase-5-site-location-orphan-fix-2026-06-13" id="toc-phase-5-site-location-orphan-fix-2026-06-13" class="nav-link" data-scroll-target="#phase-5-site-location-orphan-fix-2026-06-13"><span class="header-section-number">1.11</span> Phase 5 — Site-Location Orphan Fix (2026-06-13)</a>
+  <ul class="collapse">
+  <li><a href="#defect-description" id="toc-defect-description" class="nav-link" data-scroll-target="#defect-description"><span class="header-section-number">1.11.1</span> Defect Description</a></li>
+  <li><a href="#fixes-applied-1" id="toc-fixes-applied-1" class="nav-link" data-scroll-target="#fixes-applied-1"><span class="header-section-number">1.11.2</span> Fixes Applied</a></li>
+  <li><a href="#production-rebuild-execution-log-1" id="toc-production-rebuild-execution-log-1" class="nav-link" data-scroll-target="#production-rebuild-execution-log-1"><span class="header-section-number">1.11.3</span> Production Rebuild Execution Log</a></li>
+  <li><a href="#new-orphan-breakdown-compare-to-phase-4" id="toc-new-orphan-breakdown-compare-to-phase-4" class="nav-link" data-scroll-target="#new-orphan-breakdown-compare-to-phase-4"><span class="header-section-number">1.11.4</span> New Orphan Breakdown (compare to Phase 4)</a></li>
+  <li><a href="#per-column-dangling-sweep-verbatim-from-script-output" id="toc-per-column-dangling-sweep-verbatim-from-script-output" class="nav-link" data-scroll-target="#per-column-dangling-sweep-verbatim-from-script-output"><span class="header-section-number">1.11.5</span> Per-Column Dangling Sweep (verbatim from script output)</a></li>
+  <li><a href="#verification-query-results-phase-5" id="toc-verification-query-results-phase-5" class="nav-link" data-scroll-target="#verification-query-results-phase-5"><span class="header-section-number">1.11.6</span> Verification Query Results (Phase 5)</a></li>
+  <li><a href="#fixture-tests-2" id="toc-fixture-tests-2" class="nav-link" data-scroll-target="#fixture-tests-2"><span class="header-section-number">1.11.7</span> Fixture Tests</a></li>
+  </ul></li>
+  <li><a href="#phase-6-fixpoint-orphan-silent-drop-guard-codex-round-2-blockers" id="toc-phase-6-fixpoint-orphan-silent-drop-guard-codex-round-2-blockers" class="nav-link" data-scroll-target="#phase-6-fixpoint-orphan-silent-drop-guard-codex-round-2-blockers"><span class="header-section-number">1.12</span> Phase 6 — Fixpoint Orphan + Silent-Drop Guard (Codex Round 2 blockers)</a>
+  <ul class="collapse">
+  <li><a href="#changes" id="toc-changes" class="nav-link" data-scroll-target="#changes"><span class="header-section-number">1.12.1</span> Changes</a></li>
+  <li><a href="#fixpoint-output-4-passes-real-data" id="toc-fixpoint-output-4-passes-real-data" class="nav-link" data-scroll-target="#fixpoint-output-4-passes-real-data"><span class="header-section-number">1.12.2</span> Fixpoint output (4 passes, real data)</a></li>
+  <li><a href="#per-column-dangling-sweep-in-script-gate-independent-verification" id="toc-per-column-dangling-sweep-in-script-gate-independent-verification" class="nav-link" data-scroll-target="#per-column-dangling-sweep-in-script-gate-independent-verification"><span class="header-section-number">1.12.3</span> Per-column dangling sweep (in-script gate + independent verification)</a></li>
+  <li><a href="#verification-numbers" id="toc-verification-numbers" class="nav-link" data-scroll-target="#verification-numbers"><span class="header-section-number">1.12.4</span> Verification numbers</a></li>
+  <li><a href="#row-count-delta-vs-phase-5" id="toc-row-count-delta-vs-phase-5" class="nav-link" data-scroll-target="#row-count-delta-vs-phase-5"><span class="header-section-number">1.12.5</span> Row count delta vs Phase 5</a></li>
+  <li><a href="#regression-tests" id="toc-regression-tests" class="nav-link" data-scroll-target="#regression-tests"><span class="header-section-number">1.12.6</span> Regression tests</a></li>
+  <li><a href="#fixture-tests-3" id="toc-fixture-tests-3" class="nav-link" data-scroll-target="#fixture-tests-3"><span class="header-section-number">1.12.7</span> Fixture Tests</a></li>
+  <li><a href="#p__keywords-note-open-item" id="toc-p__keywords-note-open-item" class="nav-link" data-scroll-target="#p__keywords-note-open-item"><span class="header-section-number">1.12.8</span> p__keywords note (open item)</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/SYNC_RESULTS.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="sync_results.md" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> SYNC_RESULTS.md</h1>
+<p>Actual verification query outputs from the #272 Phase 2 production sync.</p>
+<p><em>Run 2026-06-12. All numbers are real — from executed DuckDB queries against local parquet files.</em></p>
+<hr>
+<section id="environment" class="level2" data-number="1.1">
+<h2 data-number="1.1" data-anchor-id="environment"><span class="header-section-number">1.1</span> Environment</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Python</td>
+<td><code>~/.pyenv/versions/myenv/bin/python</code> (3.13.11)</td>
+</tr>
+<tr class="even">
+<td>DuckDB</td>
+<td>1.4.4</td>
+</tr>
+<tr class="odd">
+<td>Base wide (src)</td>
+<td><code>~/Data/iSample/pqg_refining/isamples_202606_wide.parquet</code> (292 MB)</td>
+</tr>
+<tr class="even">
+<td>Eric’s OC wide</td>
+<td><code>~/Data/iSample/pqg_refining/oc_isamples_pqg_wide_2026-06-09.parquet</code> (288 MB)</td>
+</tr>
+<tr class="odd">
+<td>Output wide</td>
+<td><code>/tmp/ingest_202608/isamples_202608_wide.parquet</code> (~302 MB)</td>
+</tr>
+<tr class="even">
+<td>Script</td>
+<td><code>scripts/ingest_oc_records.py</code> (production version with D3 removal)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="gap-characterization-against-202606-base" class="level2" data-number="1.2">
+<h2 data-number="1.2" data-anchor-id="gap-characterization-against-202606-base"><span class="header-section-number">1.2</span> Gap characterization against 202606 base</h2>
+<section id="q1-oc-msr-count-in-202606-wide" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" data-anchor-id="q1-oc-msr-count-in-202606-wide"><span class="header-section-number">1.2.1</span> Q1: OC MSR count in 202606 wide</h3>
+<pre><code>SELECT COUNT(*) FROM ... WHERE otype='MaterialSampleRecord' AND n='OPENCONTEXT'
+Result: 1,064,831</code></pre>
+</section>
+<section id="q2-oc-msr-count-in-erics-wide" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" data-anchor-id="q2-oc-msr-count-in-erics-wide"><span class="header-section-number">1.2.2</span> Q2: OC MSR count in Eric’s wide</h3>
+<pre><code>SELECT COUNT(*) FROM ... WHERE otype='MaterialSampleRecord'
+Result: 1,110,791</code></pre>
+</section>
+<section id="q3-new-pids-erics-202606" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" data-anchor-id="q3-new-pids-erics-202606"><span class="header-section-number">1.2.3</span> Q3: New pids (Eric’s &nbsp;202606)</h3>
+<pre><code>Result: 67,187</code></pre>
+</section>
+<section id="q4-stale-pids-202606-erics-d3-removed" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" data-anchor-id="q4-stale-pids-202606-erics-d3-removed"><span class="header-section-number">1.2.4</span> Q4: Stale pids (202606 &nbsp;Eric’s) — D3: REMOVED</h3>
+<pre><code>Result: 21,227</code></pre>
+</section>
+<section id="q5-expected-oc-msr-after-sync" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" data-anchor-id="q5-expected-oc-msr-after-sync"><span class="header-section-number">1.2.5</span> Q5: Expected OC MSR after sync</h3>
+<pre><code>1,064,831 - 21,227 + 67,187 = 1,110,791</code></pre>
+<p>(Matches Eric’s total exactly — true sync.)</p>
+</section>
+<section id="q6-total-rows-in-202606-wide" class="level3" data-number="1.2.6">
+<h3 data-number="1.2.6" data-anchor-id="q6-total-rows-in-202606-wide"><span class="header-section-number">1.2.6</span> Q6: Total rows in 202606 wide</h3>
+<pre><code>Result: 20,729,359</code></pre>
+<p>(One more than 202604’s 20,729,358 — the extra row is <code>otheranthropogenicmaterial</code> concept minted by Phase 1.)</p>
+</section>
+<section id="q7-max-row_id-in-202606" class="level3" data-number="1.2.7">
+<h3 data-number="1.2.7" data-anchor-id="q7-max-row_id-in-202606"><span class="header-section-number">1.2.7</span> Q7: max row_id in 202606</h3>
+<pre><code>Result: 20,729,359</code></pre>
+</section>
+<section id="q8-rock-count-in-202606-oc-msrs" class="level3" data-number="1.2.8">
+<h3 data-number="1.2.8" data-anchor-id="q8-rock-count-in-202606-oc-msrs"><span class="header-section-number">1.2.8</span> Q8: Rock count in 202606 (OC MSRs)</h3>
+<pre><code>Result: 30,272</code></pre>
+</section>
+<section id="q9-identifiedconcept-count-in-202606" class="level3" data-number="1.2.9">
+<h3 data-number="1.2.9" data-anchor-id="q9-identifiedconcept-count-in-202606"><span class="header-section-number">1.2.9</span> Q9: IdentifiedConcept count in 202606</h3>
+<pre><code>Result: 55,894</code></pre>
+</section>
+<section id="q10-earthsurface-in-202606" class="level3" data-number="1.2.10">
+<h3 data-number="1.2.10" data-anchor-id="q10-earthsurface-in-202606"><span class="header-section-number">1.2.10</span> Q10: earthsurface in 202606</h3>
+<pre><code>Result: 0 (not yet present — must be minted)</code></pre>
+<hr>
+</section>
+</section>
+<section id="orphan-analysis-d3-removal-subgraph" class="level2" data-number="1.3">
+<h2 data-number="1.3" data-anchor-id="orphan-analysis-d3-removal-subgraph"><span class="header-section-number">1.3</span> Orphan analysis (D3 removal subgraph)</h2>
+<p>For the 21,227 removed MSR pids, orphan entities:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Entity type</th>
+<th>Count</th>
+<th>Decision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MaterialSampleRecord</td>
+<td>21,227</td>
+<td>REMOVED</td>
+</tr>
+<tr class="even">
+<td>SamplingEvent (orphan — only in removed MSRs)</td>
+<td>21,227</td>
+<td>REMOVED</td>
+</tr>
+<tr class="odd">
+<td>GeospatialCoordLocation (orphan — via orphan SEs)</td>
+<td>21,227</td>
+<td>REMOVED</td>
+</tr>
+<tr class="even">
+<td>SamplingSite (orphan — via orphan SEs)</td>
+<td>928</td>
+<td>REMOVED</td>
+</tr>
+<tr class="odd">
+<td>Agent (orphan)</td>
+<td>0</td>
+<td>N/A (none)</td>
+</tr>
+<tr class="even">
+<td><strong>Total rows removed</strong></td>
+<td><strong>64,609</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Shared SamplingEvent rows (referenced by both removed + surviving MSRs): 0.</p>
+<hr>
+</section>
+<section id="production-run-execution-log" class="level2" data-number="1.4">
+<h2 data-number="1.4" data-anchor-id="production-run-execution-log"><span class="header-section-number">1.4</span> Production run execution log</h2>
+<pre><code>[   0.1s] schema checks passed
+[   0.2s] stale pids to remove: 21,227
+[  14.1s] orphan subgraph: msr=21,227 se=21,227 geo=21,227 site=928 total=64,609
+[  14.1s] rows_to_remove: 64,609 (matches orphan arithmetic)
+[  14.1s] new pids: 67,187
+[  14.1s] extracting entity subgraph for new pids...
+[  14.5s] subgraph: msr=67,187 se=67,187 geo=11,399 site=6,514 agent=24
+[  14.5s] src max_row_id=20,729,359
+[  14.6s] id_map: 152,311 entries, new row_id range 20729360 to 20,881,670, collisions=0
+[  14.6s] minting 1 new IdentifiedConcept rows: ['https://w3id.org/isample/vocabulary/sampledfeature/1.0/earthsurface']
+[  14.6s] minted_concepts=1
+[  14.7s] coords: 67,187 pids with coords, 0 duplicate-coord pids
+[  14.7s] remapping p__ arrays for new MSR rows...
+[  15.3s] p__ remapping tables built
+[  15.3s] running pre-write trust checks...
+[  15.4s] trust checks passed
+[  15.4s] expected output rows: 20,729,359 src - 64,609 removed + 152,311 new entities + 1 concepts = 20,817,062
+[  15.4s] writing output...
+[  22.4s] wrote /tmp/ingest_202608/isamples_202608_wide.parquet
+[  22.6s] post-write: rows=20,817,062  dup_rowids=0  dup_pids=0  oc_msrs=1,110,791  stale_remain=0  n_check=PASS
+[  23.1s] manifest -&gt; /tmp/ingest_202608/isamples_202608_wide.parquet.manifest.json
+[  23.1s] done</code></pre>
+<p><strong>Total ingest time: ~23s.</strong></p>
+<hr>
+</section>
+<section id="post-write-verification-queries-all-run-against-202608-wide-derived-files" class="level2" data-number="1.5">
+<h2 data-number="1.5" data-anchor-id="post-write-verification-queries-all-run-against-202608-wide-derived-files"><span class="header-section-number">1.5</span> Post-write verification queries (all run against 202608 wide + derived files)</h2>
+<section id="va-row-count-by-otype-in-output" class="level3" data-number="1.5.1">
+<h3 data-number="1.5.1" data-anchor-id="va-row-count-by-otype-in-output"><span class="header-section-number">1.5.1</span> Va: Row count by otype in output</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>otype</th>
+<th>Count</th>
+<th>Delta vs 202606</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MaterialSampleRecord</td>
+<td>6,726,892</td>
+<td>+67,187 new − 21,227 removed = +45,960</td>
+</tr>
+<tr class="even">
+<td>SamplingEvent</td>
+<td>6,400,131</td>
+<td>+67,187 new − 21,227 orphan = +45,960</td>
+</tr>
+<tr class="odd">
+<td>GeospatialCoordLocation</td>
+<td>5,970,454</td>
+<td>+11,399 new − 21,227 orphan = −9,828</td>
+</tr>
+<tr class="even">
+<td>MaterialSampleCuration</td>
+<td>720,254</td>
+<td>unchanged</td>
+</tr>
+<tr class="odd">
+<td>SampleRelation</td>
+<td>501,579</td>
+<td>unchanged</td>
+</tr>
+<tr class="even">
+<td>SamplingSite</td>
+<td>391,746</td>
+<td>+6,514 new − 928 orphan = +5,586</td>
+</tr>
+<tr class="odd">
+<td>IdentifiedConcept</td>
+<td>55,895</td>
+<td>+1 (earthsurface minted)</td>
+</tr>
+<tr class="even">
+<td>Agent</td>
+<td>50,111</td>
+<td>+24 new, 0 orphan</td>
+</tr>
+<tr class="odd">
+<td><strong>Total</strong></td>
+<td><strong>20,817,062</strong></td>
+<td><strong>expected</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="vb-oc-msr-count" class="level3" data-number="1.5.2">
+<h3 data-number="1.5.2" data-anchor-id="vb-oc-msr-count"><span class="header-section-number">1.5.2</span> Vb: OC MSR count</h3>
+<pre><code>n=OPENCONTEXT: 1,110,791   (expected: 1,110,791) ✓</code></pre>
+</section>
+<section id="vc-oc-rock-facet-count-from-sample_facets_v2" class="level3" data-number="1.5.3">
+<h3 data-number="1.5.3" data-anchor-id="vc-oc-rock-facet-count-from-sample_facets_v2"><span class="header-section-number">1.5.3</span> Vc: OC rock facet count (from sample_facets_v2)</h3>
+<pre><code>OC rock count: 37,953
+Arithmetic: 30,272 (202606) - 85 (removed rocks) + 7,766 (new rocks) = 37,953 ✓</code></pre>
+</section>
+<section id="vd-removed-murlo-pids-none-in-output" class="level3" data-number="1.5.4">
+<h3 data-number="1.5.4" data-anchor-id="vd-removed-murlo-pids-none-in-output"><span class="header-section-number">1.5.4</span> Vd: Removed Murlo pids — NONE in output</h3>
+<pre><code>Stale pids remaining in output: 0 (expected: 0) ✓</code></pre>
+</section>
+<section id="ve-new-r2p24-murlo-style-pids-all-present" class="level3" data-number="1.5.5">
+<h3 data-number="1.5.5" data-anchor-id="ve-new-r2p24-murlo-style-pids-all-present"><span class="header-section-number">1.5.5</span> Ve: New r2p24 Murlo-style pids — ALL present</h3>
+<pre><code>r2p24 pids in Eric's wide: 15,409
+r2p24 pids in output:      15,409 ✓</code></pre>
+<p>(814 of the 15,409 r2p24 pids are newly added; the remainder were already in the 202606 wide from earlier Murlo work.)</p>
+</section>
+<section id="vf-jordan-lithic-spot-checks-tall-al-ʿumayri-new-rock-records" class="level3" data-number="1.5.6">
+<h3 data-number="1.5.6" data-anchor-id="vf-jordan-lithic-spot-checks-tall-al-ʿumayri-new-rock-records"><span class="header-section-number">1.5.6</span> Vf: Jordan lithic spot-checks (Tall al-ʿUmayri, new rock records)</h3>
+<pre><code>ark:/28722/k27m0sf3s  lat=31.867088  lon=35.889977 ✓
+ark:/28722/k27w6wk0d  lat=31.868178  lon=35.888423 ✓
+ark:/28722/k2gq7df90  lat=31.868287  lon=35.888424 ✓</code></pre>
+<p>Jordan lithic new pids (lat 31–32.5, lon 35–36.5): 7,925.</p>
+</section>
+<section id="vg-earthsurface-concept" class="level3" data-number="1.5.7">
+<h3 data-number="1.5.7" data-anchor-id="vg-earthsurface-concept"><span class="header-section-number">1.5.7</span> Vg: earthsurface concept</h3>
+<pre><code>IdentifiedConcept rows with pid containing 'earthsurface': 1 (expected: 1) ✓</code></pre>
+</section>
+<section id="vh-identifiedconcept-total" class="level3" data-number="1.5.8">
+<h3 data-number="1.5.8" data-anchor-id="vh-identifiedconcept-total"><span class="header-section-number">1.5.8</span> Vh: IdentifiedConcept total</h3>
+<pre><code>55,895  (202606 had 55,894, +1 for earthsurface) ✓</code></pre>
+</section>
+<section id="vi-stage-4-derived-files" class="level3" data-number="1.5.9">
+<h3 data-number="1.5.9" data-anchor-id="vi-stage-4-derived-files"><span class="header-section-number">1.5.9</span> Vi: Stage 4 derived files</h3>
+<pre><code>build_frontend_derived.py:
+  samp=6,726,892  samp_geo=6,026,242  duplicate_pids=0  duplicate_concept_row_ids=0
+  sample_facets_v2 ✓  facet_summaries ✓  facet_cross_filter ✓
+  samples_map_lite ✓  h3_summary_res{4,6,8} ✓
+  Total time: ~6s</code></pre>
+</section>
+<section id="vj-stage-4-validator-all-25-checks-pass" class="level3" data-number="1.5.10">
+<h3 data-number="1.5.10" data-anchor-id="vj-stage-4-validator-all-25-checks-pass"><span class="header-section-number">1.5.10</span> Vj: Stage 4 validator (ALL 25 CHECKS PASS)</h3>
+<pre><code>validate_frontend_derived.py --dir /tmp/ingest_202608/ --tag isamples_202608 --wide ...
+
+ALL CHECKS PASS (25/25)
+
+Selected checks:
+  material root absent              PASS
+  sentinel check                    PASS (otheranthropogenicmaterial — post-#272 value)
+  facets pid unique                 PASS
+  map_lite pid unique               PASS
+  facets.pid == map_lite.pid        PASS (0 pids differ)
+  facet_summaries algebraic         PASS
+  cross_filter algebraic            PASS
+  cross_filter baseline == summaries PASS
+  h3 res4/6/8 sums match map_lite  PASS (6,026,242 each)
+  facets schema contract            PASS
+  facets non-empty                  PASS (6,026,242 rows)
+  facets == fresh build from --wide PASS
+  map_lite == fresh build from --wide PASS
+  h3 discrete == fresh build (res4/6/8) PASS
+  h3 centers within 1e-5 (res4/6/8) PASS
+  manifest sha256                   PASS</code></pre>
+<hr>
+</section>
+</section>
+<section id="fixture-tests-20-passed" class="level2" data-number="1.6">
+<h2 data-number="1.6" data-anchor-id="fixture-tests-20-passed"><span class="header-section-number">1.6</span> Fixture tests (20 passed)</h2>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+
+20/20 passed in 4.47s</code></pre>
+<p>Tests cover: new pid ingestion, stale pid removal, orphan subgraph removal, non-OC row survival, geometry denormalization, n=‘OPENCONTEXT’ assignment, p__ array remapping, concept minting, SamplingSite ingestion, row count arithmetic, no duplicate row_ids, no duplicate MSR pids, determinism, dry-run, hard-fail on duplicate OC pids, hard-fail on collision, removal scope, id collision avoidance, overwrite guard.</p>
+<hr>
+</section>
+<section id="pipeline-runtime-summary" class="level2" data-number="1.7">
+<h2 data-number="1.7" data-anchor-id="pipeline-runtime-summary"><span class="header-section-number">1.7</span> Pipeline runtime summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Time</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Download 202606 wide</td>
+<td>~25s</td>
+<td>292 MB from R2</td>
+</tr>
+<tr class="even">
+<td><code>ingest_oc_records.py</code> (dry-run)</td>
+<td>~15s</td>
+<td>Analysis + trust checks (includes orphan analysis)</td>
+</tr>
+<tr class="odd">
+<td><code>ingest_oc_records.py</code> (full)</td>
+<td>~23s</td>
+<td>Write 20.8M-row parquet</td>
+</tr>
+<tr class="even">
+<td><code>build_frontend_derived.py</code></td>
+<td>~6s</td>
+<td>All 6 derived files, no wide_h3</td>
+</tr>
+<tr class="odd">
+<td><code>validate_frontend_derived.py</code> (full, incl.&nbsp;–wide)</td>
+<td>varies</td>
+<td>25 checks</td>
+</tr>
+<tr class="even">
+<td><strong>Total</strong></td>
+<td><strong>~60s</strong></td>
+<td>Full pipeline on 202606 base</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="input-file-checksums" class="level2" data-number="1.8">
+<h2 data-number="1.8" data-anchor-id="input-file-checksums"><span class="header-section-number">1.8</span> Input file checksums</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>sha256</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>isamples_202606_wide.parquet</td>
+<td>57c01f922c52bac2c6a28abd504f38161f83c140a7149036b3d8e725be8aa3b1</td>
+</tr>
+<tr class="even">
+<td>oc_isamples_pqg_wide_2026-06-09.parquet</td>
+<td>60d629279bb5702e50599eb5f49efa64d493545247886660e6cd31a44e21a8e9</td>
+</tr>
+<tr class="odd">
+<td>isamples_202608_wide.parquet (pre-Phase 3)</td>
+<td>8a5c0a0470c71c517a31494fc285f304ecf78cc602594f7278c65500a68a48eb</td>
+</tr>
+<tr class="even">
+<td>isamples_202608_wide.parquet (post-Phase 3, final)</td>
+<td>3d3dbd05b9c607de3eed413b2da95aaee5232ebfd435593042316e6512065e59</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="phase-3-bug-fixes-folded-into-202608-2026-06-12" class="level2" data-number="1.9">
+<h2 data-number="1.9" data-anchor-id="phase-3-bug-fixes-folded-into-202608-2026-06-12"><span class="header-section-number">1.9</span> Phase 3 — Bug fixes folded into 202608 (2026-06-12)</h2>
+<p><em>Three bugs from triage report /tmp/triage-2026-06-12/FINDINGS.md folded in.</em></p>
+<section id="fix-application" class="level3" data-number="1.9.1">
+<h3 data-number="1.9.1" data-anchor-id="fix-application"><span class="header-section-number">1.9.1</span> Fix application</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fix</th>
+<th>Script modified</th>
+<th>Trust gate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>#277 description enrichment</td>
+<td><code>scripts/ingest_oc_records.py</code> (Phase J added)</td>
+<td>Cyprus OC MSR count</td>
+</tr>
+<tr class="even">
+<td>#283a empty-string facet filter</td>
+<td><code>scripts/build_frontend_derived.py</code></td>
+<td>Blank facet_value count</td>
+</tr>
+<tr class="odd">
+<td>#283b specimentype/1.0 labels</td>
+<td><code>scripts/build_vocab_labels.py</code></td>
+<td>specimentype URIs in vocab_labels</td>
+</tr>
+</tbody>
+</table>
+<p>Description enrichment was applied to the already-written 202608 wide (post-sync, pre-derived rebuild) using a UNION ALL approach: OC MSR rows (1.1M) joined with Eric’s wide for descriptions, all other rows passed through unchanged. Total write time: ~2s.</p>
+</section>
+<section id="verification-query-outputs-all-run-2026-06-12" class="level3" data-number="1.9.2">
+<h3 data-number="1.9.2" data-anchor-id="verification-query-outputs-all-run-2026-06-12"><span class="header-section-number">1.9.2</span> Verification query outputs (all run 2026-06-12)</h3>
+<section id="a.-cyprus-description-count" class="level4" data-number="1.9.2.1">
+<h4 data-number="1.9.2.1" data-anchor-id="a.-cyprus-description-count"><span class="header-section-number">1.9.2.1</span> a. Cyprus description count</h4>
+<pre><code>SELECT COUNT(*) FROM isamples_202608_wide WHERE otype='MaterialSampleRecord' AND n='OPENCONTEXT' AND description ILIKE '%Cyprus%'
+Result: 69,230   (was 0 before fix; matches Eric's OC-specific wide exactly)</code></pre>
+</section>
+<section id="b.-blank-facet-entry-count" class="level4" data-number="1.9.2.2">
+<h4 data-number="1.9.2.2" data-anchor-id="b.-blank-facet-entry-count"><span class="header-section-number">1.9.2.2</span> b. Blank facet entry count</h4>
+<pre><code>SELECT COUNT(*) FROM isamples_202608_facet_summaries WHERE facet_value = ''
+Result: 0   (was 586 before fix — 586 GEOME records with empty-string concept URI)</code></pre>
+</section>
+<section id="c.-specimentype-label-lookup" class="level4" data-number="1.9.2.3">
+<h4 data-number="1.9.2.3" data-anchor-id="c.-specimentype-label-lookup"><span class="header-section-number">1.9.2.3</span> c.&nbsp;specimentype label lookup</h4>
+<pre><code>SELECT uri, pref_label, lang FROM vocab_labels WHERE uri LIKE '%specimentype%'
+Result:
+  ('specimentype/1.0/othersolidobject', 'Other solid object', 'en')
+  ('specimentype/1.0/physicalspecimen', 'Material sample',    'en')
+  (Both rows present with correct labels)</code></pre>
+</section>
+<section id="d.-total-validator-checks" class="level4" data-number="1.9.2.4">
+<h4 data-number="1.9.2.4" data-anchor-id="d.-total-validator-checks"><span class="header-section-number">1.9.2.4</span> d.&nbsp;Total validator checks</h4>
+<pre><code>validate_frontend_derived.py --dir /tmp/ingest_202608/ --tag isamples_202608 --wide ...
+Result: ALL CHECKS PASS (26/26)
+  (25 original checks + 1 new: "facet_summaries no blank values (#283a)")</code></pre>
+</section>
+<section id="e.-oc-msr-count-unchanged-by-description-enrichment" class="level4" data-number="1.9.2.5">
+<h4 data-number="1.9.2.5" data-anchor-id="e.-oc-msr-count-unchanged-by-description-enrichment"><span class="header-section-number">1.9.2.5</span> e. OC MSR count (unchanged by description enrichment)</h4>
+<pre><code>SELECT COUNT(*) FROM isamples_202608_wide WHERE otype='MaterialSampleRecord' AND n='OPENCONTEXT'
+Result: 1,110,791   (unchanged from Phase 2 sync)</code></pre>
+</section>
+<section id="f.-rock-count-oc-only-unchanged-by-description-enrichment" class="level4" data-number="1.9.2.6">
+<h4 data-number="1.9.2.6" data-anchor-id="f.-rock-count-oc-only-unchanged-by-description-enrichment"><span class="header-section-number">1.9.2.6</span> f.&nbsp;Rock count (OC only, unchanged by description enrichment)</h4>
+<pre><code>SELECT COUNT(*) FROM isamples_202608_sample_facets_v2 WHERE material LIKE '%/rock' AND source='OPENCONTEXT'
+Result: 37,953   (unchanged from Phase 2 sync)</code></pre>
+</section>
+</section>
+<section id="fixture-tests" class="level3" data-number="1.9.3">
+<h3 data-number="1.9.3" data-anchor-id="fixture-tests"><span class="header-section-number">1.9.3</span> Fixture tests</h3>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+28/28 passed in 5.28s
+
+New tests added (8 new):
+  Fix #277: test_oc_description_enriched_from_eric_wide
+            test_non_oc_description_unchanged_by_enrichment
+            test_oc_msr_count_unchanged_by_enrichment
+  Fix #283a: test_empty_string_facet_values_filtered_from_summaries
+             test_empty_string_facet_values_filtered_from_cross_filter
+  Fix #283b: test_specimentype_othersolidobject_in_vocab_labels
+             test_specimentype_physicalspecimen_in_vocab_labels
+             test_specimentype_labels_have_lang_en</code></pre>
+</section>
+<section id="updated-output-manifest" class="level3" data-number="1.9.4">
+<h3 data-number="1.9.4" data-anchor-id="updated-output-manifest"><span class="header-section-number">1.9.4</span> Updated output manifest</h3>
+<pre><code>/tmp/ingest_202608/isamples_202608_wide.parquet.manifest.json
+  output.bytes:  300,665,838  (was 300,427,562 — enriched descriptions are longer)
+  output.sha256: 3d3dbd05b9c607de3eed413b2da95aaee5232ebfd435593042316e6512065e59
+  phase3_fixes:  [#277, #283a, #283b] documented in manifest</code></pre>
+<hr>
+</section>
+</section>
+<section id="phase-4-codex-blocker-fixes-2026-06-13" class="level2" data-number="1.10">
+<h2 data-number="1.10" data-anchor-id="phase-4-codex-blocker-fixes-2026-06-13"><span class="header-section-number">1.10</span> Phase 4 — Codex Blocker Fixes (2026-06-13)</h2>
+<p><em>Rebuild from scratch with all blocker + nit fixes. Output at /tmp/ingest_202608_v4/.</em></p>
+<section id="fixes-applied" class="level3" data-number="1.10.1">
+<h3 data-number="1.10.1" data-anchor-id="fixes-applied"><span class="header-section-number">1.10.1</span> Fixes applied</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fix</th>
+<th>File</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Blocker 1 (B1): cross-source orphan guard</td>
+<td><code>scripts/ingest_oc_records.py</code> lines ~213-216</td>
+<td>Removed <code>n='OPENCONTEXT'</code> from <code>surviving_se_refs</code>; now covers all surviving MSRs</td>
+</tr>
+<tr class="even">
+<td>Blocker 2A (B2A): Agent extraction from p__responsibility</td>
+<td><code>scripts/ingest_oc_records.py</code> lines ~372-375</td>
+<td>Added <code>UNION</code> to extract agents from <code>p__responsibility</code> as well as <code>p__registrant</code></td>
+</tr>
+<tr class="odd">
+<td>Blocker 2B (B2B): Full p__* dangling-ref trust gate</td>
+<td><code>scripts/ingest_oc_records.py</code> post-write section</td>
+<td>New HARD FAIL gate checking all 10 p__* ref columns (BIGINT[] + INTEGER[]) on new rows</td>
+</tr>
+<tr class="even">
+<td>Blocker 3 (B3): Deterministic Phase J output order</td>
+<td><code>scripts/ingest_oc_records.py</code> Phase J</td>
+<td>Added <code>ORDER BY row_id</code> to Phase J UNION ALL before COPY TO PARQUET</td>
+</tr>
+<tr class="odd">
+<td>Nit A: Whitespace-only facet filter</td>
+<td><code>scripts/build_frontend_derived.py</code>, <code>validate_frontend_derived.py</code></td>
+<td><code>NULLIF(TRIM({d}), '') IS NOT NULL</code> replaces <code>{d} &lt;&gt; ''</code>; validator uses <code>TRIM()</code> check</td>
+</tr>
+<tr class="even">
+<td>Nit B: Cyprus count hard trust gate</td>
+<td><code>scripts/ingest_oc_records.py</code> Phase J trust gate</td>
+<td>Now raises RuntimeError if cyprus_count &lt; 69,000 at production scale</td>
+</tr>
+<tr class="odd">
+<td>Nit C: B1 regression test</td>
+<td><code>tests/test_ingest_oc_records.py</code></td>
+<td>Added <code>test_cross_source_shared_entity_not_orphaned</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="b1-regression-test-confirmation" class="level3" data-number="1.10.2">
+<h3 data-number="1.10.2" data-anchor-id="b1-regression-test-confirmation"><span class="header-section-number">1.10.2</span> B1 regression test confirmation</h3>
+<ul>
+<li>OLD code (with <code>n='OPENCONTEXT'</code> filter): <code>test_cross_source_shared_entity_not_orphaned</code> FAILS (se-shared deleted as false orphan)</li>
+<li>NEW code (all-source surviving refs): <code>test_cross_source_shared_entity_not_orphaned</code> PASSES</li>
+</ul>
+</section>
+<section id="production-rebuild-execution-log" class="level3" data-number="1.10.3">
+<h3 data-number="1.10.3" data-anchor-id="production-rebuild-execution-log"><span class="header-section-number">1.10.3</span> Production rebuild execution log</h3>
+<pre><code>[   0.0s] schema checks passed
+[   0.2s] stale pids to remove: 21,227
+[  14.4s] orphan subgraph: msr=21,227 se=21,227 geo=21,227 site=928 total=64,609
+[  14.4s] rows_to_remove: 64,609 (matches orphan arithmetic)
+[  14.4s] new pids: 67,187
+[  14.4s] extracting entity subgraph for new pids...
+[  14.9s] subgraph: msr=67,187 se=67,187 geo=11,399 site=6,514 agent=24
+[  14.9s] src max_row_id=20,729,359
+[  15.0s] id_map: 152,311 entries, new row_id range 20729360 to 20,881,670, collisions=0
+[  15.0s] minting 1 new IdentifiedConcept rows: ['https://w3id.org/isample/vocabulary/sampledfeature/1.0/earthsurface']
+[  15.0s] minted_concepts=1
+[  15.1s] coords: 67,187 pids with coords, 0 duplicate-coord pids
+[  15.1s] remapping p__ arrays for new MSR rows...
+[  15.7s] p__ remapping tables built
+[  15.7s] running pre-write trust checks...
+[  15.7s] trust checks passed
+[  15.7s] expected output rows: 20,729,359 src - 64,609 removed + 152,311 new entities + 1 concepts = 20,817,062
+[  15.7s] writing output...
+[  23.7s] wrote /tmp/ingest_202608_v4/isamples_202608_wide.parquet
+[  24.1s] post-write: rows=20,817,062  dup_rowids=0  dup_pids=0  oc_msrs=1,110,791  stale_remain=0  n_check=PASS
+[  24.1s] running full dangling-ref trust gate on all p__* reference columns...
+[  38.9s] full dangling-ref trust gate: PASS (0 dangling refs across 10 p__* columns)
+[  38.9s] description enrichment (#277): copying OC descriptions from Eric's wide…
+[  42.7s] description enrichment trust gate: Cyprus OC MSR count = 69,230 (expect ≈ 69,230)
+[  42.7s] description enrichment complete
+[  43.3s] manifest -&gt; /tmp/ingest_202608_v4/isamples_202608_wide.parquet.manifest.json
+[  43.3s] done</code></pre>
+</section>
+<section id="verification-query-results-phase-4" class="level3" data-number="1.10.4">
+<h3 data-number="1.10.4" data-anchor-id="verification-query-results-phase-4"><span class="header-section-number">1.10.4</span> Verification query results (Phase 4)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Result</th>
+<th>Expected</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>a. Zero dangling refs (all 10 p__* cols, ALL rows)</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>b. OC MSR count</td>
+<td>1,110,791</td>
+<td>1,110,791</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>c.&nbsp;Rock count (OC MSRs)</td>
+<td>37,953</td>
+<td>37,953</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>d.&nbsp;Cyprus description count</td>
+<td>69,230</td>
+<td>≥69,230</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>e. Blank facet entries</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>f.&nbsp;Whitespace-only facet entries</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>g. Removed Murlo pids in output</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>h. New r2p24 pids</td>
+<td>15,409</td>
+<td>15,409</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>i. Validator checks</td>
+<td>26/26 PASS</td>
+<td>≥26</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>j. specimentype labels</td>
+<td>2 entries</td>
+<td>2</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>k. Total output rows</td>
+<td>20,817,062</td>
+<td>20,817,062</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fixture-tests-1" class="level3" data-number="1.10.5">
+<h3 data-number="1.10.5" data-anchor-id="fixture-tests-1"><span class="header-section-number">1.10.5</span> Fixture tests</h3>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+29/29 passed in 11.12s
+
+New test (Phase 4):
+  test_cross_source_shared_entity_not_orphaned  PASS</code></pre>
+<hr>
+</section>
+</section>
+<section id="phase-5-site-location-orphan-fix-2026-06-13" class="level2" data-number="1.11">
+<h2 data-number="1.11" data-anchor-id="phase-5-site-location-orphan-fix-2026-06-13"><span class="header-section-number">1.11</span> Phase 5 — Site-Location Orphan Fix (2026-06-13)</h2>
+<section id="defect-description" class="level3" data-number="1.11.1">
+<h3 data-number="1.11.1" data-anchor-id="defect-description"><span class="header-section-number">1.11.1</span> Defect Description</h3>
+<p>The Phase 4 build (commit 4dbf342) contained 4,606 dangling <code>p__site_location</code> references. The Phase 4 dangling-ref gate (B2B) only checked NEW rows; surviving src rows that pointed to deleted Geos were not verified.</p>
+<p><strong>Root cause</strong>: Orphan-Geo determination only considered SamplingEvents’ <code>p__sample_location</code> path. 4,606 GeospatialCoordLocation rows were ALSO referenced by surviving SamplingSites via <code>p__site_location</code>. The Murlo removal orphaned those Geos via the SE path and deleted them — leaving the surviving Sites’ <code>p__site_location</code> dangling.</p>
+<p><strong>Evidence</strong>: - All 4,606 affected sites are pre-existing base sites (row_id &lt; 20,729,359) - 202606 base had ZERO such dangling refs - The sync introduced them by deleting Geos referenced by both orphan SEs AND surviving Sites</p>
+</section>
+<section id="fixes-applied-1" class="level3" data-number="1.11.2">
+<h3 data-number="1.11.2" data-anchor-id="fixes-applied-1"><span class="header-section-number">1.11.2</span> Fixes Applied</h3>
+<p><strong>Fix 1 — General orphan formulation</strong> (<code>scripts/ingest_oc_records.py</code>, orphan analysis section): - Reordered computation: orphan SamplingSites computed BEFORE orphan Geos - <code>surviving_geo_refs</code> now includes Geos referenced by non-orphan SamplingSites via <code>p__site_location</code> (UNION with Geos from non-orphan SEs via <code>p__sample_location</code>) - A Geo is now marked orphan only if unreferenced by BOTH surviving SEs and surviving Sites</p>
+<p><strong>Fix 2 — Mandatory all-rows dangling-ref gate</strong> (<code>scripts/ingest_oc_records.py</code>, post-write): - Replaced the “new rows only” B2B gate with a gate that scans ALL rows (surviving + new) across ALL 12 p__* columns - Prints per-column dangling count; raises <code>RuntimeError</code> if total &gt; 0 (build aborted, manifest not emitted) - Catches exactly the defect that B2B missed: dangling refs in OLD surviving rows</p>
+<p><strong>Regression test</strong> (<code>tests/test_ingest_oc_records.py</code>): - Added <code>test_site_location_geo_not_orphaned</code> - Scenario: OC MSR removed; orphan SE references Geo via p__sample_location; surviving SESAR SE references same Site via p__sampling_site; Site references same Geo via p__site_location - Confirmed FAILS on old code (Geo deleted), PASSES on fixed code (Geo retained)</p>
+</section>
+<section id="production-rebuild-execution-log-1" class="level3" data-number="1.11.3">
+<h3 data-number="1.11.3" data-anchor-id="production-rebuild-execution-log-1"><span class="header-section-number">1.11.3</span> Production Rebuild Execution Log</h3>
+<pre><code>[   0.0s] schema checks passed
+[   0.2s] stale pids to remove: 21,227
+[  16.3s] orphan subgraph: msr=21,227 se=21,227 geo=16,621 site=928 total=60,003
+[  16.4s] rows_to_remove: 60,003 (matches orphan arithmetic)
+[  16.4s] new pids: 67,187
+[  16.4s] extracting entity subgraph for new pids...
+[  16.8s] subgraph: msr=67,187 se=67,187 geo=11,399 site=6,514 agent=24
+[  16.8s] src max_row_id=20,729,359
+[  16.8s] id_map: 152,311 entries, new row_id range 20729360 to 20,881,670, collisions=0
+[  16.9s] minting 1 new IdentifiedConcept rows: ['https://w3id.org/isample/vocabulary/sampledfeature/1.0/earthsurface']
+[  16.9s] minted_concepts=1
+[  17.0s] coords: 67,187 pids with coords, 0 duplicate-coord pids
+[  17.0s] remapping p__ arrays for new MSR rows...
+[  17.6s] p__ remapping tables built
+[  17.6s] running pre-write trust checks...
+[  17.7s] trust checks passed
+[  17.7s] expected output rows: 20,729,359 src - 60,003 removed + 152,311 new entities + 1 concepts = 20,821,668
+[  17.7s] writing output...
+[  22.8s] wrote /tmp/ingest_202608/isamples_202608_wide.parquet
+[  23.1s] post-write: rows=20,821,668  dup_rowids=0  dup_pids=0  oc_msrs=1,110,791  stale_remain=0  n_check=PASS
+[  23.1s] running mandatory dangling-ref gate on ALL rows, ALL p__* columns...
+  p__curation: 0 dangling refs
+  p__has_context_category: 0 dangling refs
+  p__has_material_category: 0 dangling refs
+  p__has_sample_object_type: 0 dangling refs
+  p__keywords: 0 dangling refs
+  p__produced_by: 0 dangling refs
+  p__registrant: 0 dangling refs
+  p__related_resource: 0 dangling refs
+  p__responsibility: 0 dangling refs
+  p__sample_location: 0 dangling refs
+  p__sampling_site: 0 dangling refs
+  p__site_location: 0 dangling refs
+[  25.8s] Dangling ref check: PASS (0 dangling across 12 columns)
+[  25.8s] description enrichment (#277): copying OC descriptions from Eric's wide…
+[  29.1s] description enrichment trust gate: Cyprus OC MSR count = 69,230 (expect ≈ 69,230)
+[  29.1s] description enrichment complete: replaced /tmp/ingest_202608/isamples_202608_wide.parquet
+[  29.7s] manifest -&gt; /tmp/ingest_202608/isamples_202608_wide.parquet.manifest.json
+[  29.7s] done</code></pre>
+</section>
+<section id="new-orphan-breakdown-compare-to-phase-4" class="level3" data-number="1.11.4">
+<h3 data-number="1.11.4" data-anchor-id="new-orphan-breakdown-compare-to-phase-4"><span class="header-section-number">1.11.4</span> New Orphan Breakdown (compare to Phase 4)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entity type</th>
+<th>Phase 4</th>
+<th>Phase 5</th>
+<th>Delta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MaterialSampleRecord removed</td>
+<td>21,227</td>
+<td>21,227</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>SamplingEvent orphaned</td>
+<td>21,227</td>
+<td>21,227</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>GeospatialCoordLocation orphaned</td>
+<td>21,227</td>
+<td>16,621</td>
+<td><strong>-4,606</strong> (the fix)</td>
+</tr>
+<tr class="even">
+<td>SamplingSite orphaned</td>
+<td>928</td>
+<td>928</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td><strong>Total rows removed</strong></td>
+<td><strong>64,609</strong></td>
+<td><strong>60,003</strong></td>
+<td><strong>-4,606</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The 4,606 Geos that were wrongly deleted in Phase 4 are now correctly retained. Total output rows increased by 4,606: 20,817,062 → 20,821,668.</p>
+</section>
+<section id="per-column-dangling-sweep-verbatim-from-script-output" class="level3" data-number="1.11.5">
+<h3 data-number="1.11.5" data-anchor-id="per-column-dangling-sweep-verbatim-from-script-output"><span class="header-section-number">1.11.5</span> Per-Column Dangling Sweep (verbatim from script output)</h3>
+<pre><code>  p__curation: 0 dangling refs
+  p__has_context_category: 0 dangling refs
+  p__has_material_category: 0 dangling refs
+  p__has_sample_object_type: 0 dangling refs
+  p__keywords: 0 dangling refs
+  p__produced_by: 0 dangling refs
+  p__registrant: 0 dangling refs
+  p__related_resource: 0 dangling refs
+  p__responsibility: 0 dangling refs
+  p__sample_location: 0 dangling refs
+  p__sampling_site: 0 dangling refs
+  p__site_location: 0 dangling refs
+Dangling ref check: PASS (0 dangling across 12 columns)</code></pre>
+</section>
+<section id="verification-query-results-phase-5" class="level3" data-number="1.11.6">
+<h3 data-number="1.11.6" data-anchor-id="verification-query-results-phase-5"><span class="header-section-number">1.11.6</span> Verification Query Results (Phase 5)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Result</th>
+<th>Expected</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>b. Independent p__site_location dangling check</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>c.&nbsp;OC MSR count</td>
+<td>1,110,791</td>
+<td>1,110,791</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>d.&nbsp;Rock count (OC, from facets, material LIKE ‘%/rock’)</td>
+<td>37,953</td>
+<td>37,953</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>e. Cyprus description count</td>
+<td>69,230</td>
+<td>≥69,230</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>f.&nbsp;Blank facet entries (facet_summaries.facet_value=’’)</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>g. Whitespace-only facet entries</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>h. Removed Murlo pids in output</td>
+<td>0</td>
+<td>0</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>i. New r2p24 pids in output</td>
+<td>15,409</td>
+<td>15,409</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>j. Validator checks</td>
+<td>26/26 PASS</td>
+<td>≥26</td>
+<td>✓</td>
+</tr>
+<tr class="even">
+<td>k. specimentype labels</td>
+<td>2</td>
+<td>2</td>
+<td>✓</td>
+</tr>
+<tr class="odd">
+<td>l. Total output rows</td>
+<td>20,821,668</td>
+<td>~20,817,062+4,606</td>
+<td>✓</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fixture-tests-2" class="level3" data-number="1.11.7">
+<h3 data-number="1.11.7" data-anchor-id="fixture-tests-2"><span class="header-section-number">1.11.7</span> Fixture Tests</h3>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+30/30 passed in ~10s
+
+New test (Phase 5):
+  test_site_location_geo_not_orphaned  PASS
+  (Confirmed FAILS on old code: Geo 20 deleted; PASSES on fixed code: Geo 20 retained)</code></pre>
+<hr>
+</section>
+</section>
+<section id="phase-6-fixpoint-orphan-silent-drop-guard-codex-round-2-blockers" class="level2" data-number="1.12">
+<h2 data-number="1.12" data-anchor-id="phase-6-fixpoint-orphan-silent-drop-guard-codex-round-2-blockers"><span class="header-section-number">1.12</span> Phase 6 — Fixpoint Orphan + Silent-Drop Guard (Codex Round 2 blockers)</h2>
+<p><em>Run 2026-06-13. Fixes two Codex-identified issues: true general fixpoint orphan removal (Fix A) and silent-drop guard for new-row ref remapping (Fix B).</em></p>
+<section id="changes" class="level3" data-number="1.12.1">
+<h3 data-number="1.12.1" data-anchor-id="changes"><span class="header-section-number">1.12.1</span> Changes</h3>
+<p><strong>Fix A — Fixpoint general orphan removal</strong> (<code>scripts/ingest_oc_records.py</code> lines ~198–316): Replaced all hand-enumerated path-specific orphan tables (orphan_se_refs, orphan_geo_refs, orphan_site_refs, etc.) with a true fixpoint algorithm: 1. remove_set := 21,227 stale MSR row_ids 2. Repeat until stable: compute survivor_refs = all row_ids referenced by any surviving row (NOT in remove_set) through ALL 12 p__* columns; add to remove_set any non-MSR non-IdentifiedConcept candidate row not in survivor_refs 3. Converges in 4 passes on real data</p>
+<p><strong>Fix B — Silent-drop guard</strong> (<code>scripts/ingest_oc_records.py</code> lines ~733–770): Added pre-write check: for each structural/concept p__* column on new rows, assert remapped array length == source array length. Any inner-join miss raises RuntimeError. <code>p__keywords</code> excluded (best-effort URI lookup, documented).</p>
+<p><strong>IdentifiedConcept exclusion from orphan removal</strong>: fixpoint excludes <code>IdentifiedConcept</code> rows (vocabulary rows are shared across all sources, must never be auto-deleted).</p>
+</section>
+<section id="fixpoint-output-4-passes-real-data" class="level3" data-number="1.12.2">
+<h3 data-number="1.12.2" data-anchor-id="fixpoint-output-4-passes-real-data"><span class="header-section-number">1.12.2</span> Fixpoint output (4 passes, real data)</h3>
+<pre><code>[   0.7s] fixpoint pass 1: 21227 new orphans   ← orphan SEs
+[   1.4s] fixpoint pass 2: 16625 new orphans   ← orphan Geos (via orphan SEs)
+[   2.2s] fixpoint pass 3: 928 new orphans     ← orphan SamplingSites
+[   2.9s] fixpoint pass 4: 0 new orphans       ← converged
+[   2.9s] fixpoint done in 4 passes: rows_to_remove=60,007
+orphan subgraph by otype: {
+  'Agent': 4,                          ← NEWLY removed (were over-retained in Phase 5)
+  'GeospatialCoordLocation': 16621,    ← 16621 (not 21227 — 4606 correctly retained for surviving Sites)
+  'MaterialSampleRecord': 21227,
+  'SamplingEvent': 21227,
+  'SamplingSite': 928
+}</code></pre>
+</section>
+<section id="per-column-dangling-sweep-in-script-gate-independent-verification" class="level3" data-number="1.12.3">
+<h3 data-number="1.12.3" data-anchor-id="per-column-dangling-sweep-in-script-gate-independent-verification"><span class="header-section-number">1.12.3</span> Per-column dangling sweep (in-script gate + independent verification)</h3>
+<pre><code>  p__curation: 0 dangling refs
+  p__has_context_category: 0 dangling refs
+  p__has_material_category: 0 dangling refs
+  p__has_sample_object_type: 0 dangling refs
+  p__keywords: 0 dangling refs
+  p__produced_by: 0 dangling refs
+  p__registrant: 0 dangling refs
+  p__related_resource: 0 dangling refs
+  p__responsibility: 0 dangling refs
+  p__sample_location: 0 dangling refs
+  p__sampling_site: 0 dangling refs
+  p__site_location: 0 dangling refs
+  TOTAL: 0 dangling refs  PASS</code></pre>
+</section>
+<section id="verification-numbers" class="level3" data-number="1.12.4">
+<h3 data-number="1.12.4" data-anchor-id="verification-numbers"><span class="header-section-number">1.12.4</span> Verification numbers</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Result</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>p__site_location dangling (independent)</td>
+<td><strong>0</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="even">
+<td>OC MSR count</td>
+<td><strong>1,110,791</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="odd">
+<td>OC rock count (source=OPENCONTEXT, material=rock URI)</td>
+<td><strong>37,953</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="even">
+<td>Cyprus description count</td>
+<td><strong>69,230</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="odd">
+<td>Blank/whitespace facet entries</td>
+<td><strong>0</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="even">
+<td>Removed Murlo pids in output</td>
+<td><strong>0</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="odd">
+<td>New r2p24 pids</td>
+<td><strong>15,409</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="even">
+<td>Validator</td>
+<td><strong>26/26 PASS</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="odd">
+<td>specimentype labels in vocab_labels</td>
+<td><strong>2</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="even">
+<td><strong>Total output rows</strong></td>
+<td><strong>20,821,664</strong></td>
+<td>PASS</td>
+</tr>
+<tr class="odd">
+<td>Over-retention (orphan Agents)</td>
+<td><strong>0</strong> (4 Agents now correctly removed)</td>
+<td>PASS</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="row-count-delta-vs-phase-5" class="level3" data-number="1.12.5">
+<h3 data-number="1.12.5" data-anchor-id="row-count-delta-vs-phase-5"><span class="header-section-number">1.12.5</span> Row count delta vs Phase 5</h3>
+<p>Phase 5: 20,821,668 → Phase 6: 20,821,664 (−4)</p>
+<p>The 4 missing rows are the 4 Agent orphans that Phase 5’s path-specific logic incorrectly retained (they were never in the hand-enumerated path: SE→Agent isn’t a p__sampling_site/sample_location path). The fixpoint correctly identifies them as unreferenced by any surviving row.</p>
+</section>
+<section id="regression-tests" class="level3" data-number="1.12.6">
+<h3 data-number="1.12.6" data-anchor-id="regression-tests"><span class="header-section-number">1.12.6</span> Regression tests</h3>
+<p>Two new tests added to <code>tests/test_ingest_oc_records.py</code>:</p>
+<ol type="1">
+<li><code>test_orphan_geo_via_site_only_removed</code>: removed OC MSR → orphan SE (no p__sample_location) → orphan SamplingSite → Geo only via p__site_location. Geo must be REMOVED.
+<ul>
+<li><strong>FAILS on old code</strong> (Phase 5): Geo not in orphan_se_geo_refs (SE has empty p__sample_location), orphan_se_site_refs → Site is orphan but orphan_site_ids-based exclusion didn’t cover the site-only Geo path correctly.</li>
+<li><strong>PASSES on fixed code</strong> (fixpoint): survivor_refs has no ref to Geo (no surviving row points to it) → removed.</li>
+</ul></li>
+<li><code>test_unresolved_new_ref_hard_fails</code>: new OC SE with p__sampling_site=[999], no Site 999 in Eric’s wide. Must RAISE, not emit NULL.
+<ul>
+<li><strong>FAILS on old code</strong> (Phase 4 + Phase 5): inner join silently drops the ref; script exits 0 with NULL p__sampling_site.</li>
+<li><strong>PASSES on fixed code</strong> (Fix B guard): _check_remap_length detects len(source)=1 != len(remapped)=0 → RuntimeError, no output written.</li>
+</ul></li>
+</ol>
+</section>
+<section id="fixture-tests-3" class="level3" data-number="1.12.7">
+<h3 data-number="1.12.7" data-anchor-id="fixture-tests-3"><span class="header-section-number">1.12.7</span> Fixture Tests</h3>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+32/32 passed in 9.20s
+
+New tests (Phase 6):
+  test_orphan_geo_via_site_only_removed  PASS  (FAILS on old Phase 5 code: Geo retained when it should be removed)
+  test_unresolved_new_ref_hard_fails     PASS  (FAILS on old code: exits 0 with NULL ref silently)</code></pre>
+</section>
+<section id="p__keywords-note-open-item" class="level3" data-number="1.12.8">
+<h3 data-number="1.12.8" data-anchor-id="p__keywords-note-open-item"><span class="header-section-number">1.12.8</span> p__keywords note (open item)</h3>
+<p>The silent-drop guard correctly fires on p__keywords during the real build (67,183 rows with dropped keyword refs). This is the pre-existing best-effort behavior documented in the script header. <code>p__keywords</code> is excluded from the strict length check. A full keyword concept audit before R2 promotion is recommended.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Copyright 2020-2026, iSamples Project. Based on work under National Science Foundation (NSF) Grant Numbers <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004839">2004839</a>, <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004562">2004562</a>, <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004642">2004642</a>, and <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004815">2004815</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/SYNC_RESULTS.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the <a href="https://nsf.gov/">NSF</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

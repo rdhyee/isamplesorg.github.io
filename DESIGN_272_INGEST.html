@@ -1,0 +1,1510 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>design_272_ingest – iSamples</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./assets/isamplesfavicon.ico" rel="icon">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-46c1e64c2409ffa41d8278daa552b940.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./assets/isampleslogopetal.png" alt="" class="navbar-logo light-content">
+    <img src="./assets/isampleslogopetal.png" alt="" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">iSamples</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./explorer.html"> 
+<span class="menu-text">Interactive Explorer</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-to-use" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">How to Use</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-to-use">    
+        <li>
+    <a class="dropdown-item" href="./how-to-use.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/zenodo_isamples_analysis.html">
+ <span class="dropdown-text">Deep-Dive Analysis</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-about" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">About</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-about">    
+        <li>
+    <a class="dropdown-item" href="./about.html">
+ <span class="dropdown-text">Objectives</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html#team">
+ <span class="dropdown-text">PIs and Contributors</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html#photo-gallery">
+ <span class="dropdown-text">Photo Gallery</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./about.html#background-history">
+ <span class="dropdown-text">Background &amp; History</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-architecture--vocabularies" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Architecture &amp; Vocabularies</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-architecture--vocabularies">    
+        <li>
+    <a class="dropdown-item" href="./design/index.html">
+ <span class="dropdown-text">Overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./design/requirements.html">
+ <span class="dropdown-text">Requirements</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://isamples.org/metadata/">
+ <span class="dropdown-text">Metadata Model</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./models/index.html">
+ <span class="dropdown-text">Vocabularies</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/narrow_vs_wide_performance.html">
+ <span class="dropdown-text">Technical: Narrow vs Wide</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./tutorials/why_h3.html">
+ <span class="dropdown-text">Technical: Why H3?</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-research--resources" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Research &amp; Resources</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-research--resources">    
+        <li>
+    <a class="dropdown-item" href="./pubs.html">
+ <span class="dropdown-text">Publications &amp; Conferences</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./pubs.html#zenodo-community">
+ <span class="dropdown-text">Zenodo Community</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./pubs.html#github-repositories">
+ <span class="dropdown-text">Github Repositories</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/isamplesorg"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://isamples.slack.com/"> <i class="bi bi-slack" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#design_272_ingest.md" id="toc-design_272_ingest.md" class="nav-link active" data-scroll-target="#design_272_ingest.md"><span class="header-section-number">1</span> DESIGN_272_INGEST.md</a>
+  <ul>
+  <li><a href="#background-and-context" id="toc-background-and-context" class="nav-link" data-scroll-target="#background-and-context"><span class="header-section-number">1.1</span> 1. Background and context</a>
+  <ul class="collapse">
+  <li><a href="#key-files" id="toc-key-files" class="nav-link" data-scroll-target="#key-files"><span class="header-section-number">1.1.1</span> Key files</a></li>
+  </ul></li>
+  <li><a href="#gap-characterization-all-from-executed-queries" id="toc-gap-characterization-all-from-executed-queries" class="nav-link" data-scroll-target="#gap-characterization-all-from-executed-queries"><span class="header-section-number">1.2</span> 2. Gap characterization (all from executed queries)</a>
+  <ul class="collapse">
+  <li><a href="#record-counts" id="toc-record-counts" class="nav-link" data-scroll-target="#record-counts"><span class="header-section-number">1.2.1</span> 2.1 Record counts</a></li>
+  <li><a href="#material-type-breakdown-of-new-records" id="toc-material-type-breakdown-of-new-records" class="nav-link" data-scroll-target="#material-type-breakdown-of-new-records"><span class="header-section-number">1.2.2</span> 2.2 Material type breakdown of new records</a></li>
+  <li><a href="#geographic-coverage" id="toc-geographic-coverage" class="nav-link" data-scroll-target="#geographic-coverage"><span class="header-section-number">1.2.3</span> 2.3 Geographic coverage</a></li>
+  <li><a href="#new-entity-subgraph" id="toc-new-entity-subgraph" class="nav-link" data-scroll-target="#new-entity-subgraph"><span class="header-section-number">1.2.4</span> 2.4 New entity subgraph</a></li>
+  <li><a href="#identifiedconcept-inventory" id="toc-identifiedconcept-inventory" class="nav-link" data-scroll-target="#identifiedconcept-inventory"><span class="header-section-number">1.2.5</span> 2.5 IdentifiedConcept inventory</a></li>
+  <li><a href="#schema-drift-between-our-wide-and-erics-wide" id="toc-schema-drift-between-our-wide-and-erics-wide" class="nav-link" data-scroll-target="#schema-drift-between-our-wide-and-erics-wide"><span class="header-section-number">1.2.6</span> 2.6 Schema drift between our wide and Eric’s wide</a></li>
+  </ul></li>
+  <li><a href="#row-id-allocation-design" id="toc-row-id-allocation-design" class="nav-link" data-scroll-target="#row-id-allocation-design"><span class="header-section-number">1.3</span> 3. Row-id allocation design</a>
+  <ul class="collapse">
+  <li><a href="#constraint" id="toc-constraint" class="nav-link" data-scroll-target="#constraint"><span class="header-section-number">1.3.1</span> 3.1 Constraint</a></li>
+  <li><a href="#strategy-dense-rank-starting-at-max_src-1" id="toc-strategy-dense-rank-starting-at-max_src-1" class="nav-link" data-scroll-target="#strategy-dense-rank-starting-at-max_src-1"><span class="header-section-number">1.3.2</span> 3.2 Strategy: dense rank starting at <code>max_src + 1</code></a></li>
+  <li><a href="#p__-array-rewriting" id="toc-p__-array-rewriting" class="nav-link" data-scroll-target="#p__-array-rewriting"><span class="header-section-number">1.3.3</span> 3.3 p__ array rewriting</a></li>
+  </ul></li>
+  <li><a href="#pipeline-design-make-ingest-272" id="toc-pipeline-design-make-ingest-272" class="nav-link" data-scroll-target="#pipeline-design-make-ingest-272"><span class="header-section-number">1.4</span> 4. Pipeline design: <code>make ingest-272</code></a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.4.1</span> 4.1 Overview</a></li>
+  <li><a href="#tag-convention" id="toc-tag-convention" class="nav-link" data-scroll-target="#tag-convention"><span class="header-section-number">1.4.2</span> 4.2 Tag convention</a></li>
+  <li><a href="#p__-array-remapping-in-detail" id="toc-p__-array-remapping-in-detail" class="nav-link" data-scroll-target="#p__-array-remapping-in-detail"><span class="header-section-number">1.4.3</span> 4.3 p__ array remapping in detail</a></li>
+  <li><a href="#geometry-denormalization" id="toc-geometry-denormalization" class="nav-link" data-scroll-target="#geometry-denormalization"><span class="header-section-number">1.4.4</span> 4.4 Geometry denormalization</a></li>
+  <li><a href="#hard-fail-invariants-trust-gate" id="toc-hard-fail-invariants-trust-gate" class="nav-link" data-scroll-target="#hard-fail-invariants-trust-gate"><span class="header-section-number">1.4.5</span> 4.5 Hard-fail invariants (trust gate)</a></li>
+  <li><a href="#makefile-target" id="toc-makefile-target" class="nav-link" data-scroll-target="#makefile-target"><span class="header-section-number">1.4.6</span> 4.6 Makefile target</a></li>
+  </ul></li>
+  <li><a href="#schema-mapping-erics-wide-columns-our-wide-columns" id="toc-schema-mapping-erics-wide-columns-our-wide-columns" class="nav-link" data-scroll-target="#schema-mapping-erics-wide-columns-our-wide-columns"><span class="header-section-number">1.5</span> 5. Schema mapping: Eric’s wide columns → our wide columns</a></li>
+  <li><a href="#validation-design" id="toc-validation-design" class="nav-link" data-scroll-target="#validation-design"><span class="header-section-number">1.6</span> 6. Validation design</a></li>
+  <li><a href="#orphan-analysis-actuals-from-202606-base" id="toc-orphan-analysis-actuals-from-202606-base" class="nav-link" data-scroll-target="#orphan-analysis-actuals-from-202606-base"><span class="header-section-number">1.7</span> 3.5 Orphan analysis (actuals from 202606 base)</a></li>
+  <li><a href="#decisions-all-resolved-2026-06-12" id="toc-decisions-all-resolved-2026-06-12" class="nav-link" data-scroll-target="#decisions-all-resolved-2026-06-12"><span class="header-section-number">1.8</span> 7. Decisions (all resolved 2026-06-12)</a></li>
+  <li><a href="#gap-resolution-as-of-2026-06-12-implementation" id="toc-gap-resolution-as-of-2026-06-12-implementation" class="nav-link" data-scroll-target="#gap-resolution-as-of-2026-06-12-implementation"><span class="header-section-number">1.9</span> 8. Gap resolution (as of 2026-06-12 implementation)</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">1.10</span> 9. Summary</a></li>
+  <li><a href="#phase-3-bug-fixes-folded-into-202608-2026-06-12" id="toc-phase-3-bug-fixes-folded-into-202608-2026-06-12" class="nav-link" data-scroll-target="#phase-3-bug-fixes-folded-into-202608-2026-06-12"><span class="header-section-number">1.11</span> 10. Phase 3 — Bug fixes folded into 202608 (2026-06-12)</a>
+  <ul class="collapse">
+  <li><a href="#fix-a-277-oc-description-enrichment" id="toc-fix-a-277-oc-description-enrichment" class="nav-link" data-scroll-target="#fix-a-277-oc-description-enrichment"><span class="header-section-number">1.11.1</span> Fix A — #277: OC description enrichment</a></li>
+  <li><a href="#fix-b-283a-empty-string-facet-filter" id="toc-fix-b-283a-empty-string-facet-filter" class="nav-link" data-scroll-target="#fix-b-283a-empty-string-facet-filter"><span class="header-section-number">1.11.2</span> Fix B — #283a: Empty-string facet filter</a></li>
+  <li><a href="#fix-c-283b-deprecated-specimentype1.0-label-mappings" id="toc-fix-c-283b-deprecated-specimentype1.0-label-mappings" class="nav-link" data-scroll-target="#fix-c-283b-deprecated-specimentype1.0-label-mappings"><span class="header-section-number">1.11.3</span> Fix C — #283b: Deprecated specimentype/1.0 label mappings</a></li>
+  <li><a href="#fixture-tests-added-teststest_ingest_oc_records.py" id="toc-fixture-tests-added-teststest_ingest_oc_records.py" class="nav-link" data-scroll-target="#fixture-tests-added-teststest_ingest_oc_records.py"><span class="header-section-number">1.11.4</span> Fixture tests added (tests/test_ingest_oc_records.py)</a></li>
+  </ul></li>
+  <li><a href="#phase-4-codex-blocker-fixes-2026-06-13" id="toc-phase-4-codex-blocker-fixes-2026-06-13" class="nav-link" data-scroll-target="#phase-4-codex-blocker-fixes-2026-06-13"><span class="header-section-number">1.12</span> Phase 4 — Codex Blocker Fixes (2026-06-13)</a>
+  <ul class="collapse">
+  <li><a href="#blocker-1-cross-source-orphan-protection" id="toc-blocker-1-cross-source-orphan-protection" class="nav-link" data-scroll-target="#blocker-1-cross-source-orphan-protection"><span class="header-section-number">1.12.1</span> Blocker 1: Cross-source orphan protection</a></li>
+  <li><a href="#blocker-2-incomplete-reference-extraction-trust-gate" id="toc-blocker-2-incomplete-reference-extraction-trust-gate" class="nav-link" data-scroll-target="#blocker-2-incomplete-reference-extraction-trust-gate"><span class="header-section-number">1.12.2</span> Blocker 2: Incomplete reference extraction + trust gate</a></li>
+  <li><a href="#blocker-3-non-deterministic-output-order-phase-j" id="toc-blocker-3-non-deterministic-output-order-phase-j" class="nav-link" data-scroll-target="#blocker-3-non-deterministic-output-order-phase-j"><span class="header-section-number">1.12.3</span> Blocker 3: Non-deterministic output order (Phase J)</a></li>
+  <li><a href="#nit-a-whitespace-only-facet-values" id="toc-nit-a-whitespace-only-facet-values" class="nav-link" data-scroll-target="#nit-a-whitespace-only-facet-values"><span class="header-section-number">1.12.4</span> Nit A: Whitespace-only facet values</a></li>
+  <li><a href="#nit-b-cyprus-enrichment-as-hard-trust-gate" id="toc-nit-b-cyprus-enrichment-as-hard-trust-gate" class="nav-link" data-scroll-target="#nit-b-cyprus-enrichment-as-hard-trust-gate"><span class="header-section-number">1.12.5</span> Nit B: Cyprus enrichment as hard trust gate</a></li>
+  <li><a href="#nit-c-b1-regression-test" id="toc-nit-c-b1-regression-test" class="nav-link" data-scroll-target="#nit-c-b1-regression-test"><span class="header-section-number">1.12.6</span> Nit C: B1 regression test</a></li>
+  <li><a href="#fixture-tests-29-total-after-phase-4" id="toc-fixture-tests-29-total-after-phase-4" class="nav-link" data-scroll-target="#fixture-tests-29-total-after-phase-4"><span class="header-section-number">1.12.7</span> Fixture tests (29 total after Phase 4)</a></li>
+  </ul></li>
+  <li><a href="#phase-5-site-location-orphan-fix-2026-06-13" id="toc-phase-5-site-location-orphan-fix-2026-06-13" class="nav-link" data-scroll-target="#phase-5-site-location-orphan-fix-2026-06-13"><span class="header-section-number">1.13</span> Phase 5 — Site-Location Orphan Fix (2026-06-13)</a>
+  <ul class="collapse">
+  <li><a href="#general-orphan-formulation" id="toc-general-orphan-formulation" class="nav-link" data-scroll-target="#general-orphan-formulation"><span class="header-section-number">1.13.1</span> General Orphan Formulation</a></li>
+  <li><a href="#mandatory-in-script-dangling-ref-gate" id="toc-mandatory-in-script-dangling-ref-gate" class="nav-link" data-scroll-target="#mandatory-in-script-dangling-ref-gate"><span class="header-section-number">1.13.2</span> Mandatory In-Script Dangling-Ref Gate</a></li>
+  <li><a href="#regression-test" id="toc-regression-test" class="nav-link" data-scroll-target="#regression-test"><span class="header-section-number">1.13.3</span> Regression Test</a></li>
+  <li><a href="#fixture-tests-30-total-after-phase-5" id="toc-fixture-tests-30-total-after-phase-5" class="nav-link" data-scroll-target="#fixture-tests-30-total-after-phase-5"><span class="header-section-number">1.13.4</span> Fixture tests (30 total after Phase 5)</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/DESIGN_272_INGEST.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+
+
+
+
+<section id="design_272_ingest.md" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> DESIGN_272_INGEST.md</h1>
+<p>Design document for ingesting 67,187 new OpenContext records into the iSamples derived-data pipeline (GitHub issue #272, follow-up phase).</p>
+<p><em>All numbers in this document are from executed DuckDB queries against local files. See SPIKE_RESULTS.md for raw output.</em></p>
+<p><em>Prepared by rbotyee (Claude Code spike), 2026-06-12. Decisions resolved 2026-06-12 (see Section 7). See SYNC_RESULTS.md for actual run output.</em></p>
+<hr>
+<section id="background-and-context" class="level2" data-number="1.1">
+<h2 data-number="1.1" data-anchor-id="background-and-context"><span class="header-section-number">1.1</span> 1. Background and context</h2>
+<p>Issue #272 Phase 1 (PR #275, merged and live) overlaid corrected material/object-type concept mappings from Eric’s fresh OC PQG onto the 1,043,604 OC pids already in the unified wide. That phase deliberately skipped new-record ingestion: <strong>67,187 OC records present in Eric’s 2026-06-09 wide are absent from the production <code>isamples_202606_wide.parquet</code>.</strong></p>
+<p>This document designs Phase 2: ingest those 67,187 records.</p>
+<section id="key-files" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" data-anchor-id="key-files"><span class="header-section-number">1.1.1</span> Key files</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Production base wide (Phase 1 output)</td>
+<td><code>https://data.isamples.org/isamples_202606_wide.parquet</code></td>
+</tr>
+<tr class="even">
+<td>Eric’s fresh OC wide</td>
+<td><code>~/Data/iSample/pqg_refining/oc_isamples_pqg_wide_2026-06-09.parquet</code></td>
+</tr>
+<tr class="odd">
+<td>Pre-Phase-1 wide (local copy)</td>
+<td><code>~/Data/iSample/pqg_refining/isamples_202604_wide.parquet</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote class="blockquote">
+<p><strong>Note:</strong> The spike ran against the 202604 wide (locally available) rather than 202606 (remote only). For the two dimensions that differ — row_id range and IdentifiedConcept inventory — the spike accounts for the 202606 delta explicitly.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="gap-characterization-all-from-executed-queries" class="level2" data-number="1.2">
+<h2 data-number="1.2" data-anchor-id="gap-characterization-all-from-executed-queries"><span class="header-section-number">1.2</span> 2. Gap characterization (all from executed queries)</h2>
+<section id="record-counts" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" data-anchor-id="record-counts"><span class="header-section-number">1.2.1</span> 2.1 Record counts</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Measure</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>OC MaterialSampleRecords in our 202604 wide</td>
+<td>1,064,831</td>
+</tr>
+<tr class="even">
+<td>OC MaterialSampleRecords in Eric’s fresh wide</td>
+<td>1,110,791</td>
+</tr>
+<tr class="odd">
+<td><strong>New pids (Eric’s &nbsp;ours)</strong></td>
+<td><strong>67,187</strong></td>
+</tr>
+<tr class="even">
+<td>Deleted pids (ours &nbsp;Eric’s, not in Eric’s at all)</td>
+<td>21,227</td>
+</tr>
+</tbody>
+</table>
+<p><strong>D3 DECISION (2026-06-12, RY):</strong> These 21,227 stale pids ARE REMOVED. OpenContext mass-updated Murlo project PIDs; old PIDs would duplicate the same physical samples. This is a TRUE SYNC: add new + remove stale in one operation. The orphaned subgraph entities (SamplingEvent, GeoCoordLoc, SamplingSite) linked ONLY by removed MSRs are also removed. Agents are NOT removed (0 orphan agents found). See Section 3.5 for orphan analysis results.</p>
+</section>
+<section id="material-type-breakdown-of-new-records" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" data-anchor-id="material-type-breakdown-of-new-records"><span class="header-section-number">1.2.2</span> 2.2 Material type breakdown of new records</h3>
+<p>First-non-root material per new MSR (Eric’s OC concept arrays):</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Material URI</th>
+<th>Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>material/1.0/biogenicnonorganicmaterial</code></td>
+<td>22,236</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/otheranthropogenicmaterial</code></td>
+<td>19,072</td>
+</tr>
+<tr class="odd">
+<td><code>material/1.0/organicmaterial</code></td>
+<td>10,315</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/rock</code></td>
+<td>7,766</td>
+</tr>
+<tr class="odd">
+<td>NULL (root-only, no specific concept)</td>
+<td>7,282</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/mineral</code></td>
+<td>466</td>
+</tr>
+<tr class="odd">
+<td><code>material/1.0/anthropogenicmetal</code></td>
+<td>48</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/mixedsoilsedimentrock</code></td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>The 7,766 rock records are the Tall al-ʿUmayri Jordan lithics flagged by Eric during staging inspection (7,903 labelled “Lithic ID: …”, of which 7,766 are rock-first-non-root).</p>
+</section>
+<section id="geographic-coverage" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" data-anchor-id="geographic-coverage"><span class="header-section-number">1.2.3</span> 2.3 Geographic coverage</h3>
+<p>All 67,187 new MSRs have <strong>no geometry blob and no latitude/longitude directly on the MSR row</strong> in Eric’s wide. However:</p>
+<ul>
+<li>67,187 / 67,187 (100%) have coordinates accessible via the graph: <code>MSR → p__produced_by → SamplingEvent → p__sample_location → GeospatialCoordLocation.{geometry, latitude, longitude}</code></li>
+<li>Coordinate range: lat −55.19 to 71.04, lon −164.0 to 159.9 (global coverage, not just Jordan)</li>
+<li>0 duplicates in the coord path (each MSR maps to exactly 1 coordinate row)</li>
+</ul>
+<p>The builder (<code>build_frontend_derived.py</code>) reads <code>geometry</code> from the wide’s MSR rows using <code>ST_X(geometry)</code>/<code>ST_Y(geometry)</code>. The ingestion step must <strong>denormalize</strong> the GeoCoordLoc geometry blob onto each new MSR row.</p>
+</section>
+<section id="new-entity-subgraph" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" data-anchor-id="new-entity-subgraph"><span class="header-section-number">1.2.4</span> 2.4 New entity subgraph</h3>
+<p>The 67,187 new MSRs bring a full entity subgraph that must be ingested together:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Entity type</th>
+<th>Count</th>
+<th>Already in our wide?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MaterialSampleRecord</td>
+<td>67,187</td>
+<td>0 (new pids)</td>
+</tr>
+<tr class="even">
+<td>SamplingEvent</td>
+<td>67,187</td>
+<td>0 (all new PIDs absent)</td>
+</tr>
+<tr class="odd">
+<td>GeospatialCoordLocation (from SE)</td>
+<td>10,316</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>GeospatialCoordLocation (from SamplingSite)</td>
+<td>6,514</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td><strong>Unique GeoCoordLoc total</strong></td>
+<td><strong>11,399</strong></td>
+<td><strong>0</strong></td>
+</tr>
+<tr class="even">
+<td>SamplingSite</td>
+<td>6,514</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td>Agent</td>
+<td>24</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td><strong>Total new entity rows</strong></td>
+<td><strong>~152,312</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>No entity (by PID) from the new subgraph already exists in the 202604 wide. The 202606 wide is identical in entity inventory (it only changed p__ columns on existing rows + minted 1 concept), so this holds for 202606 too.</p>
+</section>
+<section id="identifiedconcept-inventory" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" data-anchor-id="identifiedconcept-inventory"><span class="header-section-number">1.2.5</span> 2.5 IdentifiedConcept inventory</h3>
+<p>New MSRs reference 14 distinct concept row_ids in Eric’s wide. Of these:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Concept URI</th>
+<th>In 202604?</th>
+<th>In 202606?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>material/1.0/anthropogenicmetal</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/biogenicnonorganicmaterial</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="odd">
+<td><code>material/1.0/material</code> (root)</td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/mineral</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="odd">
+<td><code>material/1.0/mixedsoilsedimentrock</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/organicmaterial</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="odd">
+<td><code>material/1.0/otheranthropogenicmaterial</code></td>
+<td>NO</td>
+<td><strong>YES</strong> (minted by Phase 1)</td>
+</tr>
+<tr class="even">
+<td><code>material/1.0/rock</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="odd">
+<td><code>materialsampleobjecttype/1.0/artifact</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="even">
+<td><code>materialsampleobjecttype/1.0/biologicalmaterialsample</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="odd">
+<td><code>materialsampleobjecttype/1.0/materialsample</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="even">
+<td><code>materialsampleobjecttype/1.0/organismpart</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+<tr class="odd">
+<td><code>sampledfeature/1.0/earthsurface</code></td>
+<td>NO</td>
+<td>NO (need to mint)</td>
+</tr>
+<tr class="even">
+<td><code>sampledfeature/1.0/pasthumanoccupationsite</code></td>
+<td>YES</td>
+<td>YES</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusion:</strong> Using 202606 as the base, exactly <strong>1 new concept must be minted</strong>: <code>sampledfeature/1.0/earthsurface</code> (used by 3,924 of the new MSRs for <code>p__has_context_category</code>).</p>
+</section>
+<section id="schema-drift-between-our-wide-and-erics-wide" class="level3" data-number="1.2.6">
+<h3 data-number="1.2.6" data-anchor-id="schema-drift-between-our-wide-and-erics-wide"><span class="header-section-number">1.2.6</span> 2.6 Schema drift between our wide and Eric’s wide</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Dimension</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Columns in ours NOT in Eric’s</td>
+<td><code>p__curation</code> (INTEGER[]), <code>p__related_resource</code> (BIGINT[])</td>
+</tr>
+<tr class="even">
+<td>Columns in Eric’s NOT in ours</td>
+<td>none</td>
+</tr>
+<tr class="odd">
+<td>Type differences</td>
+<td><code>row_id</code>: ours=BIGINT, Eric’s=INTEGER; <code>p__has_*</code> arrays: ours=BIGINT[], Eric’s=INTEGER[]</td>
+</tr>
+<tr class="even">
+<td><code>n</code> (source) column</td>
+<td>Eric’s wide has NULL for all MSRs; ours uses ‘OPENCONTEXT’</td>
+</tr>
+</tbody>
+</table>
+<p>The two extra columns (<code>p__curation</code>, <code>p__related_resource</code>) are NULL for OC records in the existing wide (the frozen export never populated them for OC). New OC records will also have NULLs for these columns — that is the correct behavior.</p>
+<p>The <code>n</code> column mismatch is critical: <strong>ingested rows must have <code>n = 'OPENCONTEXT'</code> set explicitly</strong>.</p>
+<hr>
+</section>
+</section>
+<section id="row-id-allocation-design" class="level2" data-number="1.3">
+<h2 data-number="1.3" data-anchor-id="row-id-allocation-design"><span class="header-section-number">1.3</span> 3. Row-id allocation design</h2>
+<section id="constraint" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" data-anchor-id="constraint"><span class="header-section-number">1.3.1</span> 3.1 Constraint</h3>
+<p>Our wide has <code>row_id BIGINT</code> ranging 1–20,729,358. Eric’s wide has <code>row_id INTEGER</code> ranging 1–2,465,485. These ranges <strong>overlap</strong> — we cannot reuse Eric’s row_ids.</p>
+</section>
+<section id="strategy-dense-rank-starting-at-max_src-1" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" data-anchor-id="strategy-dense-rank-starting-at-max_src-1"><span class="header-section-number">1.3.2</span> 3.2 Strategy: dense rank starting at <code>max_src + 1</code></h3>
+<p>All new rows get row_ids assigned by dense rank starting at <code>max(src.row_id) + 1 = 20,729,359</code>. The rank ordering must be deterministic (by a stable sort key) to make the output reproducible. Proposed ordering: by <code>(otype, pid)</code> — otype first groups entity classes together, pid within each class is stable.</p>
+<p>Revised row count: - New rows: ~152,312 (plus concept minting: +1) - New row_id range: 20,729,359 to ~20,881,671</p>
+<p><strong>This leaves substantial headroom</strong> and avoids all collisions.</p>
+</section>
+<section id="p__-array-rewriting" class="level3" data-number="1.3.3">
+<h3 data-number="1.3.3" data-anchor-id="p__-array-rewriting"><span class="header-section-number">1.3.3</span> 3.3 p__ array rewriting</h3>
+<p>Eric’s wide stores <code>p__produced_by</code>, <code>p__sample_location</code>, etc. as INTEGER[] references into Eric’s row_id space. All these references must be <strong>remapped to the new row_ids</strong> in our id space. This requires:</p>
+<ol type="1">
+<li>Build a mapping table: Eric’s <code>row_id</code> → new <code>row_id</code> for every entity in the new subgraph.</li>
+<li>Apply the mapping to all p__ columns on new MSR rows.</li>
+</ol>
+<p><strong>This is the most complex step</strong> — see Section 4.3.</p>
+<hr>
+</section>
+</section>
+<section id="pipeline-design-make-ingest-272" class="level2" data-number="1.4">
+<h2 data-number="1.4" data-anchor-id="pipeline-design-make-ingest-272"><span class="header-section-number">1.4</span> 4. Pipeline design: <code>make ingest-272</code></h2>
+<section id="overview" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" data-anchor-id="overview"><span class="header-section-number">1.4.1</span> 4.1 Overview</h3>
+<pre><code>202606_wide.parquet  +  oc_isamples_pqg_wide_2026-06-09.parquet
+    │
+    ▼ scripts/ingest_oc_records.py
+    │   Phase A: Identify new pids (Eric's \ ours)
+    │   Phase B: Extract full entity subgraph for new pids
+    │   Phase C: Assign new row_ids (dense rank, deterministic)
+    │   Phase D: Remap p__ arrays from Eric's id space to our id space
+    │   Phase E: Denormalize coords (geometry BLOB) onto new MSR rows
+    │   Phase F: Set n='OPENCONTEXT' on new MSR rows
+    │   Phase G: Mint new IdentifiedConcept rows (earthsurface)
+    │   Phase H: Hard-fail checks (dup row_ids, dup pids, all refs resolved)
+    │   Phase I: Write  src_rows UNION ALL new_rows → isamples_202608_wide.parquet
+    │
+    ▼ scripts/validate_oc_concept_enrichment.py (reused for concept rows)
+    │   (or a new validate_ingest.py — see Section 6)
+    │
+    ▼ scripts/build_frontend_derived.py
+    │
+    ▼ scripts/validate_frontend_derived.py --wide isamples_202608_wide.parquet</code></pre>
+</section>
+<section id="tag-convention" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" data-anchor-id="tag-convention"><span class="header-section-number">1.4.2</span> 4.2 Tag convention</h3>
+<p>The output should be tagged <code>isamples_202608</code> (next month tag) to reflect the new data vintage. RY decision gate: confirm tag before publishing.</p>
+</section>
+<section id="p__-array-remapping-in-detail" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" data-anchor-id="p__-array-remapping-in-detail"><span class="header-section-number">1.4.3</span> 4.3 p__ array remapping in detail</h3>
+<p>This is the core correctness challenge. Each new entity row in Eric’s wide has a <code>row_id</code> in Eric’s space (1–2,465,485). Each p__ column on a new MSR row is an <code>INTEGER[]</code> of those Eric row_ids. After ingestion, those integers must refer to our new row_ids (20,729,359+).</p>
+<p>Algorithm:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- Step 1: collect all Eric row_ids that need remapping</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> TEMP <span class="kw">TABLE</span> eric_id_map <span class="kw">AS</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> eric_row_id,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>         max_src_row_id <span class="op">+</span> <span class="fu">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> otype, pid) <span class="kw">AS</span> our_row_id</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> all_new_entities;   <span class="co">-- new MSR + SE + Geo + Site + Agent + Concept</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">-- Step 2: remap p__ arrays on new MSR rows</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- Use list_transform or UNNEST+re-aggregate pattern</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>.,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">SELECT</span> <span class="kw">list</span>(m.our_row_id <span class="kw">ORDER</span> <span class="kw">BY</span> u.ord) </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>   <span class="kw">FROM</span> UNNEST(e.p__produced_by) <span class="kw">WITH</span> ORDINALITY <span class="kw">AS</span> u(rid, ord)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>   <span class="kw">JOIN</span> eric_id_map m <span class="kw">ON</span> m.eric_row_id <span class="op">=</span> u.rid) <span class="kw">AS</span> p__produced_by,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="op">..</span>.</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> new_msr_rows e</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p><strong>Warning:</strong> the UNNEST+correlated subquery approach must be avoided at 67K rows (we learned the MAP cross-join blowup lesson). Use the decorrelated pattern from <code>build_frontend_derived.py</code> (UNNEST WITH ORDINALITY + JOIN + arg_min/list-agg) or a pre-aggregated mapping table.</p>
+</blockquote>
+</section>
+<section id="geometry-denormalization" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" data-anchor-id="geometry-denormalization"><span class="header-section-number">1.4.4</span> 4.4 Geometry denormalization</h3>
+<p>The builder reads <code>geometry</code> from MSR rows. New MSR rows have no geometry. We must lift the geometry blob from the linked <code>GeospatialCoordLocation</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- In the new MSR rows:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- MSR.p__produced_by[1] -&gt; SamplingEvent.row_id</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- SamplingEvent.p__sample_location[1] -&gt; GeoCoordLoc.row_id</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- GeoCoordLoc.geometry -&gt; copy to MSR.geometry</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">-- GeoCoordLoc.latitude, .longitude -&gt; copy to MSR.latitude, .longitude</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> TEMP <span class="kw">TABLE</span> new_msr_coords <span class="kw">AS</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WITH</span> msr_se <span class="kw">AS</span> (</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">SELECT</span> m.pid, se.p__sample_location</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">FROM</span> new_msr_eric m, UNNEST(m.p__produced_by) <span class="kw">AS</span> u(se_rid)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">JOIN</span> new_se_eric se <span class="kw">ON</span> se.row_id <span class="op">=</span> u.se_rid</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> ms.pid, geo.geometry, geo.latitude, geo.longitude</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> msr_se ms, UNNEST(ms.p__sample_location) <span class="kw">AS</span> u(geo_rid)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">JOIN</span> new_geo_eric geo <span class="kw">ON</span> geo.row_id <span class="op">=</span> u.geo_rid;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Confirmed: 0 duplicate coord rows per pid; 67,187 / 67,187 (100%) have coords.</p>
+</section>
+<section id="hard-fail-invariants-trust-gate" class="level3" data-number="1.4.5">
+<h3 data-number="1.4.5" data-anchor-id="hard-fail-invariants-trust-gate"><span class="header-section-number">1.4.5</span> 4.5 Hard-fail invariants (trust gate)</h3>
+<p>The script must refuse to write if any of these hold:</p>
+<ol type="1">
+<li><strong>Duplicate new pids</strong>: any pid in new MSR rows already in src wide → wrong grain</li>
+<li><strong>Duplicate row_ids</strong>: any new row_id in the output overlaps an existing row_id</li>
+<li><strong>Unresolved p__ references</strong>: any p__ array element in any new row points to a row_id that doesn’t exist in the output</li>
+<li><strong>Missing n column</strong>: any new MSR row has <code>n IS NULL</code> (must be ‘OPENCONTEXT’)</li>
+<li><strong>Missing geometry on placed MSR</strong>: any new MSR with a coord path but null geometry in output</li>
+<li><strong>Row count</strong>: output must equal <code>src_rows + new_entity_rows + minted_concepts</code></li>
+</ol>
+</section>
+<section id="makefile-target" class="level3" data-number="1.4.6">
+<h3 data-number="1.4.6" data-anchor-id="makefile-target"><span class="header-section-number">1.4.6</span> 4.6 Makefile target</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode makefile code-with-copy"><code class="sourceCode makefile"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make ingest-272 TAG=isamples_202608</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dv">ingest-272:</span><span class="dt"> </span><span class="ch">$(</span><span class="dt">OC_WIDE</span><span class="ch">)</span><span class="dt"> </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="er">    </span><span class="ch">$(</span><span class="dt">PY</span><span class="ch">)</span> scripts/ingest_oc_records.py \</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-src </span><span class="ch">$(</span><span class="dt">ENRICHED</span><span class="ch">)</span><span class="fu"> \          </span><span class="co"># isamples_202606_wide.parquet</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-oc-wide </span><span class="ch">$(</span><span class="dt">OC_WIDE</span><span class="ch">)</span><span class="fu"> \       </span><span class="co"># oc_isamples_pqg_wide_2026-06-09.parquet</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="ch">-</span><span class="fu">-out </span><span class="ch">$(</span><span class="dt">OUTDIR</span><span class="ch">)</span><span class="fu">/</span><span class="ch">$(</span><span class="dt">TAG</span><span class="ch">)</span><span class="fu">_wide.parquet</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> derived DERIVED_WIDE=<span class="ch">$(</span><span class="dt">OUTDIR</span><span class="ch">)</span>/<span class="ch">$(</span><span class="dt">TAG</span><span class="ch">)</span>_wide.parquet TAG=<span class="ch">$(</span><span class="dt">TAG</span><span class="ch">)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="ch">$(</span><span class="dt">MAKE</span><span class="ch">)</span> validate TAG=<span class="ch">$(</span><span class="dt">TAG</span><span class="ch">)</span> SENTINEL_FLAG=</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<blockquote class="blockquote">
+<p><strong>RY decision gate:</strong> Should <code>ingest-272</code> stack on <code>all-272</code> (requiring 202606 wide as input) or should it operate independently against the R2 202606 URL? Stacking is cleaner but requires the local 202606 file.</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="schema-mapping-erics-wide-columns-our-wide-columns" class="level2" data-number="1.5">
+<h2 data-number="1.5" data-anchor-id="schema-mapping-erics-wide-columns-our-wide-columns"><span class="header-section-number">1.5</span> 5. Schema mapping: Eric’s wide columns → our wide columns</h2>
+<p>All 47 shared columns are taken directly from Eric’s wide with the following transformations:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>row_id</code></td>
+<td>Replaced by new id from <code>eric_id_map</code> (see §4.3)</td>
+</tr>
+<tr class="even">
+<td><code>n</code></td>
+<td>Set to <code>'OPENCONTEXT'</code> (Eric’s wide has NULL for all MSR rows)</td>
+</tr>
+<tr class="odd">
+<td><code>p__produced_by</code>, <code>p__sample_location</code>, <code>p__sampling_site</code>, <code>p__site_location</code>, <code>p__registrant</code></td>
+<td>Remapped via <code>eric_id_map</code> (INTEGER[] → BIGINT[])</td>
+</tr>
+<tr class="even">
+<td><code>p__has_material_category</code>, <code>p__has_sample_object_type</code>, <code>p__has_context_category</code></td>
+<td>Remapped via <code>eric_id_map</code> + <code>our_concept_map</code> (URI lookup for concepts)</td>
+</tr>
+<tr class="odd">
+<td><code>p__keywords</code></td>
+<td>Remapped if non-null (INTEGER[] → BIGINT[])</td>
+</tr>
+<tr class="even">
+<td><code>p__responsibility</code></td>
+<td>Remapped if non-null (INTEGER[] → BIGINT[])</td>
+</tr>
+<tr class="odd">
+<td><code>geometry</code></td>
+<td>Lifted from linked GeoCoordLoc row (WKB BLOB)</td>
+</tr>
+<tr class="even">
+<td><code>latitude</code>, <code>longitude</code></td>
+<td>Lifted from linked GeoCoordLoc row</td>
+</tr>
+<tr class="odd">
+<td><code>p__curation</code></td>
+<td>NULL (INTEGER[] — not in Eric’s wide, not applicable to OC)</td>
+</tr>
+<tr class="even">
+<td><code>p__related_resource</code></td>
+<td>NULL (BIGINT[] — not in Eric’s wide)</td>
+</tr>
+</tbody>
+</table>
+<p>No column present in Eric’s wide is dropped (47 columns in, 49 in ours = 47 + 2 nulled columns).</p>
+<hr>
+</section>
+<section id="validation-design" class="level2" data-number="1.6">
+<h2 data-number="1.6" data-anchor-id="validation-design"><span class="header-section-number">1.6</span> 6. Validation design</h2>
+<p>The existing <code>validate_frontend_derived.py</code> covers Stage 4 (derived files). We need an additional trust gate for the new Stage 3c (ingest):</p>
+<p><strong><code>scripts/validate_ingest.py</code></strong> (new, to be written with the impl): - Re-derive the new-pid set from inputs (Eric’s wide &nbsp;src wide) and assert the output contains exactly those pids - Assert row count: <code>output_rows == src_rows + new_entity_rows + minted_concepts</code> - Assert no duplicate row_ids in output - Assert all p__ references in new rows resolve to existing rows in output - Assert new MSR rows have <code>n = 'OPENCONTEXT'</code> - Assert geometry non-null for all new MSRs that had a coord path - Assert concept count: <code>output IdentifiedConcept count == src concept count + minted count</code></p>
+<p>The Stage 4 semantic gate (<code>validate_frontend_derived.py --wide</code>) should be run unchanged on the ingested wide — it doesn’t know about Phase 2 vs Phase 1, it just validates the derived files against the wide.</p>
+<hr>
+</section>
+<section id="orphan-analysis-actuals-from-202606-base" class="level2" data-number="1.7">
+<h2 data-number="1.7" data-anchor-id="orphan-analysis-actuals-from-202606-base"><span class="header-section-number">1.7</span> 3.5 Orphan analysis (actuals from 202606 base)</h2>
+<p>For the 21,227 removed MSR pids, orphan entities (referenced ONLY by removed MSRs):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Entity type</th>
+<th>Orphan count</th>
+<th>Policy</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MaterialSampleRecord</td>
+<td>21,227</td>
+<td>REMOVE (the removed pids themselves)</td>
+</tr>
+<tr class="even">
+<td>SamplingEvent</td>
+<td>21,227</td>
+<td>REMOVE (each removed MSR had exactly 1 orphan SE)</td>
+</tr>
+<tr class="odd">
+<td>GeospatialCoordLocation</td>
+<td>21,227</td>
+<td>REMOVE (each orphan SE had 1 orphan geo via p__sample_location)</td>
+</tr>
+<tr class="even">
+<td>SamplingSite</td>
+<td>928</td>
+<td>REMOVE (orphan sites via orphan SE p__sampling_site)</td>
+</tr>
+<tr class="odd">
+<td>Agent</td>
+<td>0</td>
+<td>KEEP (no orphan agents — all shared with surviving MSRs)</td>
+</tr>
+<tr class="even">
+<td><strong>Total rows removed</strong></td>
+<td><strong>64,609</strong></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>No SamplingSite geo refs (p__site_location) produced additional orphan geo rows (those 928 sites’ geo rows were shared with surviving entities or already counted).</p>
+<hr>
+</section>
+<section id="decisions-all-resolved-2026-06-12" class="level2" data-number="1.8">
+<h2 data-number="1.8" data-anchor-id="decisions-all-resolved-2026-06-12"><span class="header-section-number">1.8</span> 7. Decisions (all resolved 2026-06-12)</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Decision</th>
+<th><strong>Resolution</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>D1</td>
+<td><strong>Base wide for ingestion</strong></td>
+<td><strong>202606</strong> — downloaded from R2; sha256=57c01f922c52bac2c6a28abd504f38161f83c140a7149036b3d8e725be8aa3b1</td>
+</tr>
+<tr class="even">
+<td>D2</td>
+<td><strong>Output tag</strong></td>
+<td><strong>isamples_202608</strong></td>
+</tr>
+<tr class="odd">
+<td>D3</td>
+<td><strong>Stale pids policy</strong></td>
+<td><strong>REMOVE</strong> — TRUE SYNC. 21,227 stale OC pids removed + 43,382 orphan subgraph entities. Rationale: Murlo project mass-PID-update; old pids would duplicate physical samples.</td>
+</tr>
+<tr class="even">
+<td>D4</td>
+<td><strong>n column for non-MSR entities</strong></td>
+<td><strong>NULL</strong> — matches existing convention; only MSR rows get n=‘OPENCONTEXT’</td>
+</tr>
+<tr class="odd">
+<td>D5</td>
+<td>**p__curation / p__related_resource**</td>
+<td><strong>NULL</strong> — no source in Eric’s PQG; matches existing OC rows</td>
+</tr>
+<tr class="even">
+<td>D6</td>
+<td><strong>Staging vs production</strong></td>
+<td><strong>Stage first</strong> — output at /tmp/ingest_202608/; R2 publish human-gated</td>
+</tr>
+<tr class="odd">
+<td>D7</td>
+<td><strong>Eric notification</strong></td>
+<td>OC rock count after sync: <strong>37,953</strong> (30,272 - 85 removed rocks + 7,766 new rocks). Eric to verify.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="gap-resolution-as-of-2026-06-12-implementation" class="level2" data-number="1.9">
+<h2 data-number="1.9" data-anchor-id="gap-resolution-as-of-2026-06-12-implementation"><span class="header-section-number">1.9</span> 8. Gap resolution (as of 2026-06-12 implementation)</h2>
+<ol type="1">
+<li><p>✅ <strong>202606 round-trip</strong>: DONE. Production run used 202606 as base. Confirmed: 1 concept minted (earthsurface), not 2.</p></li>
+<li><p>✅ <strong>p__ array remapping correctness at scale</strong>: DONE. Full remapping executed; post-write trust checks + 25-check validator all pass.</p></li>
+<li><p><strong>SamplingSite deduplication</strong>: NOT resolved (acknowledged data-quality gap; not a correctness issue for ingestion).</p></li>
+<li><p>✅ <strong>Keywords entities</strong>: p__keywords concept resolution is included in the remap tables (remap_msr_kw). All keyword concept refs in new MSRs resolve via URI lookup against src IdentifiedConcept rows.</p></li>
+<li><p><strong>Agent deduplication</strong>: NOT resolved (acknowledged; 24 new agents are conceptually distinct by pid).</p></li>
+<li><p>✅ <strong>Geometry WKB encoding</strong>: Confirmed. Eric’s geo uses GEOMETRY type; ingest converts with ST_AsWKB()::BLOB. Coord round-trip accurate to 6 decimal places (validated by build + validator).</p></li>
+<li><p>✅ <strong>File sizes measured</strong>: 202608 wide is ~302MB (202606 was ~292MB, +3.4%). samp=6,726,892, samp_geo=6,026,242.</p></li>
+<li><p>✅ <strong>Fixture tests</strong>: <code>tests/test_ingest_oc_records.py</code> added with 20 tests covering all trust-gate invariants, remapping, removal, and determinism.</p></li>
+</ol>
+<hr>
+</section>
+<section id="summary" class="level2" data-number="1.10">
+<h2 data-number="1.10" data-anchor-id="summary"><span class="header-section-number">1.10</span> 9. Summary</h2>
+<p>The ingestion is well-understood and low-risk: - 67,187 new MSRs + ~85,125 supporting entities = ~152,312 new rows - All new entities are absent from the current wide (no pid collisions) - All coords accessible via graph path (100% coverage) - 1 new concept to mint (earthsurface, used by 3,924 new MSRs) - Primary complexity: row_id remapping from Eric’s space to ours - The Phase 1 overlay pattern (<code>enrich_wide_with_oc_concepts.py</code>) is the precedent for the write step - The full Stage 4 semantic gate runs unchanged on the output</p>
+<p>Estimated implementation effort: 1–2 sessions (script + tests + gate).</p>
+<hr>
+</section>
+<section id="phase-3-bug-fixes-folded-into-202608-2026-06-12" class="level2" data-number="1.11">
+<h2 data-number="1.11" data-anchor-id="phase-3-bug-fixes-folded-into-202608-2026-06-12"><span class="header-section-number">1.11</span> 10. Phase 3 — Bug fixes folded into 202608 (2026-06-12)</h2>
+<p>Three bugs discovered during triage are fixed before staging 202608. All fixes are folded into the 202608 rebuild so the published dataset is clean from the start.</p>
+<section id="fix-a-277-oc-description-enrichment" class="level3" data-number="1.11.1">
+<h3 data-number="1.11.1" data-anchor-id="fix-a-277-oc-description-enrichment"><span class="header-section-number">1.11.1</span> Fix A — #277: OC description enrichment</h3>
+<p><strong>Root cause</strong>: The 202608 (and previous 202606) combined wide stores OC sample <code>description</code> as terse Linked Data metadata (<code>'updated': 2023-10-05T04:45:54Z</code>) instead of the human-readable site-path strings (<code>Open Context published "Sample" from: Europe/Cyprus/PKAP Survey Area/...</code>) present in Eric’s OC PQG wide.</p>
+<p><strong>Impact</strong>: Text search for “Cyprus” returns 0 matches in the deployed explorer (expected ≈ 69,230).</p>
+<p><strong>Fix</strong>: Added <strong>Phase J</strong> to <code>scripts/ingest_oc_records.py</code>. After the sync write, the script reads the output wide, LEFT JOINs on <code>pid</code> with Eric’s OC wide for OC MSR rows only, overwrites <code>description</code> with Eric’s value if non-null, and atomically replaces the output. Non-OC rows and rows with NULL description in Eric’s wide are unchanged.</p>
+<p><strong>Trust gate</strong>: Cyprus OC MSR count after enrichment must be ≈ 69,230.</p>
+<p><strong>Schema note</strong>: <code>description</code> is a simple VARCHAR in both wides. Row counts are invariant.</p>
+</section>
+<section id="fix-b-283a-empty-string-facet-filter" class="level3" data-number="1.11.2">
+<h3 data-number="1.11.2" data-anchor-id="fix-b-283a-empty-string-facet-filter"><span class="header-section-number">1.11.2</span> Fix B — #283a: Empty-string facet filter</h3>
+<p><strong>Root cause</strong>: 586 GEOME records have an empty string (<code>''</code>) as their <code>context</code> (Sampled Feature) facet value because their <code>p__has_context_category</code> points to an <code>IdentifiedConcept</code> row with <code>pid = ''</code>. The facet-summary builder filtered <code>IS NOT NULL</code> but not empty strings, so <code>''</code> appeared as a blank selectable facet entry with count 586.</p>
+<p><strong>Fix</strong>: Changed the WHERE filter in <code>build_facet_summaries</code> and <code>build_facet_cross_filter</code> in <code>scripts/build_frontend_derived.py</code> from <code>IS NOT NULL</code> to <code>IS NOT NULL AND {d} &lt;&gt; ''</code>. Also updated the algebraic recompute in <code>scripts/validate_frontend_derived.py</code> to match, and added check 5b (<code>facet_summaries no blank values (#283a)</code>).</p>
+<p><strong>Trust gate</strong>: <code>SELECT COUNT(*) FROM facet_summaries WHERE facet_value = ''</code> must be 0.</p>
+</section>
+<section id="fix-c-283b-deprecated-specimentype1.0-label-mappings" class="level3" data-number="1.11.3">
+<h3 data-number="1.11.3" data-anchor-id="fix-c-283b-deprecated-specimentype1.0-label-mappings"><span class="header-section-number">1.11.3</span> Fix C — #283b: Deprecated specimentype/1.0 label mappings</h3>
+<p><strong>Root cause</strong>: 169 SESAR records use deprecated-namespace object_type URIs (<code>specimentype/1.0/othersolidobject</code>, <code>specimentype/1.0/physicalspecimen</code>) that are absent from <code>vocab_labels.parquet</code>. The explorer’s <code>prettyLabel()</code> falls back to displaying the raw URI path tail.</p>
+<p><strong>Fix</strong>: Added <code>MANUAL_LABEL_OVERRIDES</code> to <code>scripts/build_vocab_labels.py</code> — two hardcoded rows injected before the dedupe step. Rebuilt <code>vocab_labels.parquet</code> (now 539 rows, up from 537).</p>
+<p><strong>Trust gate</strong>: Both URIs present in <code>vocab_labels.parquet</code> with correct <code>pref_label</code> values.</p>
+</section>
+<section id="fixture-tests-added-teststest_ingest_oc_records.py" class="level3" data-number="1.11.4">
+<h3 data-number="1.11.4" data-anchor-id="fixture-tests-added-teststest_ingest_oc_records.py"><span class="header-section-number">1.11.4</span> Fixture tests added (tests/test_ingest_oc_records.py)</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Group</th>
+<th>Tests added</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fix #277</td>
+<td><code>test_oc_description_enriched_from_eric_wide</code>, <code>test_non_oc_description_unchanged_by_enrichment</code>, <code>test_oc_msr_count_unchanged_by_enrichment</code></td>
+</tr>
+<tr class="even">
+<td>Fix #283a</td>
+<td><code>test_empty_string_facet_values_filtered_from_summaries</code>, <code>test_empty_string_facet_values_filtered_from_cross_filter</code></td>
+</tr>
+<tr class="odd">
+<td>Fix #283b</td>
+<td><code>test_specimentype_othersolidobject_in_vocab_labels</code>, <code>test_specimentype_physicalspecimen_in_vocab_labels</code>, <code>test_specimentype_labels_have_lang_en</code></td>
+</tr>
+</tbody>
+</table>
+<p>All 28 tests pass (<code>pytest tests/test_ingest_oc_records.py -v</code>).</p>
+<hr>
+</section>
+</section>
+<section id="phase-4-codex-blocker-fixes-2026-06-13" class="level2" data-number="1.12">
+<h2 data-number="1.12" data-anchor-id="phase-4-codex-blocker-fixes-2026-06-13"><span class="header-section-number">1.12</span> Phase 4 — Codex Blocker Fixes (2026-06-13)</h2>
+<p>A Codex pre-merge review of the Phase 3 code found 3 latent bugs (blockers) and 4 nits. The STAGED DATA in /tmp/ingest_202608/ was verified correct (zero dangling refs), but the CODE contained landmines that would silently corrupt a future re-run. All bugs are fixed and the pipeline was rebuilt from scratch.</p>
+<section id="blocker-1-cross-source-orphan-protection" class="level3" data-number="1.12.1">
+<h3 data-number="1.12.1" data-anchor-id="blocker-1-cross-source-orphan-protection"><span class="header-section-number">1.12.1</span> Blocker 1: Cross-source orphan protection</h3>
+<p><strong>File</strong>: <code>scripts/ingest_oc_records.py</code>, lines ~213-216 (surviving_se_refs query)</p>
+<p><strong>Bug</strong>: The <code>surviving_se_refs</code>, <code>surviving_geo_refs</code>, and <code>surviving_site_refs</code> queries were filtered to <code>s.n='OPENCONTEXT'</code>, meaning a SamplingEvent/Geo/Site referenced by a surviving SESAR/GEOME/Smithsonian MSR was NOT protected and could be wrongly deleted as an orphan.</p>
+<p><strong>Fix</strong>: Removed the <code>n='OPENCONTEXT'</code> filter from <code>surviving_se_refs</code>. The surviving refs now come from ALL surviving MaterialSampleRecords regardless of source. The condition <code>NOT (s.n='OPENCONTEXT' AND s.pid IN removed_pids)</code> correctly covers both OC survivors and all non-OC MSRs.</p>
+<p><strong>Impact</strong>: In production, shared SEs/Geos/Sites (referenced by both OC and non-OC MSRs) would have been incorrectly deleted, creating dangling refs in SESAR/GEOME rows. The actual 202608 data was unaffected (the production run had 0 shared SEs between OC-removed and non-OC MSRs), but the latent bug was critical.</p>
+<p><strong>Regression test</strong>: <code>test_cross_source_shared_entity_not_orphaned</code> — confirmed FAILS on old code and PASSES on fixed code.</p>
+</section>
+<section id="blocker-2-incomplete-reference-extraction-trust-gate" class="level3" data-number="1.12.2">
+<h3 data-number="1.12.2" data-anchor-id="blocker-2-incomplete-reference-extraction-trust-gate"><span class="header-section-number">1.12.2</span> Blocker 2: Incomplete reference extraction + trust gate</h3>
+<p><strong>File</strong>: <code>scripts/ingest_oc_records.py</code></p>
+<p><strong>Bug A</strong> (line ~373): Agent extraction only queried <code>p__registrant</code>. Agents in <code>p__responsibility</code> were remapped into <code>eric_id_map</code> but their Agent entity rows were never extracted — meaning <code>p__responsibility</code> references on new MSR rows pointed to row_ids that didn’t exist in the output (dangling refs).</p>
+<p><strong>Fix A</strong>: Extended <code>agent_ids</code> UNION to also include <code>p__responsibility</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">UNION</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> u.agent_id <span class="kw">FROM</span> new_msr_eric, UNNEST(p__responsibility) <span class="kw">AS</span> u(agent_id)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Bug B</strong> (line ~648): The pre-write trust gate only checked <code>p__produced_by</code> and 3 concept dims. Other p__* columns (p__registrant, p__responsibility, p__sample_location, etc.) were not verified.</p>
+<p><strong>Fix B</strong>: Added a comprehensive post-write dangling-ref trust gate (B2B) that checks EVERY p__* array column (BIGINT[] and INTEGER[]) on new rows against the output row_id set. HARD FAIL (RuntimeError) if any dangling ref is found. Covers 10 columns total.</p>
+</section>
+<section id="blocker-3-non-deterministic-output-order-phase-j" class="level3" data-number="1.12.3">
+<h3 data-number="1.12.3" data-anchor-id="blocker-3-non-deterministic-output-order-phase-j"><span class="header-section-number">1.12.3</span> Blocker 3: Non-deterministic output order (Phase J)</h3>
+<p><strong>File</strong>: <code>scripts/ingest_oc_records.py</code>, Phase J UNION ALL (~line 966)</p>
+<p><strong>Bug</strong>: Phase J rewrites the output with a UNION ALL (OC MSR rows + non-OC rows) but lacked <code>ORDER BY row_id</code>. The initial Phase I write had <code>ORDER BY row_id</code>, but Phase J’s rewrite lost it — making sha256 non-reproducible across runs.</p>
+<p><strong>Fix</strong>: Added <code>ORDER BY row_id</code> to the Phase J COPY query before the final <code>TO ... PARQUET</code> write.</p>
+</section>
+<section id="nit-a-whitespace-only-facet-values" class="level3" data-number="1.12.4">
+<h3 data-number="1.12.4" data-anchor-id="nit-a-whitespace-only-facet-values"><span class="header-section-number">1.12.4</span> Nit A: Whitespace-only facet values</h3>
+<p><strong>Files</strong>: <code>scripts/build_frontend_derived.py</code>, <code>scripts/validate_frontend_derived.py</code></p>
+<p>Changed <code>{d} &lt;&gt; ''</code> to <code>NULLIF(TRIM({d}), '') IS NOT NULL</code> in both <code>build_facet_summaries</code> and <code>build_facet_cross_filter</code>. Updated validator check 5b to use <code>TRIM(facet_value) = ''</code> to catch whitespace-only values.</p>
+</section>
+<section id="nit-b-cyprus-enrichment-as-hard-trust-gate" class="level3" data-number="1.12.5">
+<h3 data-number="1.12.5" data-anchor-id="nit-b-cyprus-enrichment-as-hard-trust-gate"><span class="header-section-number">1.12.5</span> Nit B: Cyprus enrichment as hard trust gate</h3>
+<p><strong>File</strong>: <code>scripts/ingest_oc_records.py</code></p>
+<p>Changed the Cyprus description count from a log statement to a hard <code>RuntimeError</code> when <code>n_cyprus &lt; 69,000</code> (at production scale, i.e., when <code>out_oc_count &gt; 1,000,000</code>). Synthetic fixtures skip the gate to avoid false positives.</p>
+</section>
+<section id="nit-c-b1-regression-test" class="level3" data-number="1.12.6">
+<h3 data-number="1.12.6" data-anchor-id="nit-c-b1-regression-test"><span class="header-section-number">1.12.6</span> Nit C: B1 regression test</h3>
+<p><strong>File</strong>: <code>tests/test_ingest_oc_records.py</code></p>
+<p>Added <code>test_cross_source_shared_entity_not_orphaned</code>: synthetic fixture with OC MSR to-be-removed + SESAR MSR sharing SE/Site/Geo. Confirmed test FAILS on old code, PASSES on fixed code.</p>
+</section>
+<section id="fixture-tests-29-total-after-phase-4" class="level3" data-number="1.12.7">
+<h3 data-number="1.12.7" data-anchor-id="fixture-tests-29-total-after-phase-4"><span class="header-section-number">1.12.7</span> Fixture tests (29 total after Phase 4)</h3>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+29/29 passed in ~11s
+
+New test added (Phase 4):
+  Blocker 1: test_cross_source_shared_entity_not_orphaned</code></pre>
+<hr>
+</section>
+</section>
+<section id="phase-5-site-location-orphan-fix-2026-06-13" class="level2" data-number="1.13">
+<h2 data-number="1.13" data-anchor-id="phase-5-site-location-orphan-fix-2026-06-13"><span class="header-section-number">1.13</span> Phase 5 — Site-Location Orphan Fix (2026-06-13)</h2>
+<section id="general-orphan-formulation" class="level3" data-number="1.13.1">
+<h3 data-number="1.13.1" data-anchor-id="general-orphan-formulation"><span class="header-section-number">1.13.1</span> General Orphan Formulation</h3>
+<p>The Phase 4 dangling-ref gate (B2B) only checked NEW rows. Surviving src rows that pointed to deleted Geos were not checked. This left 4,606 dangling <code>p__site_location</code> refs in old SamplingSite rows.</p>
+<p>The correct orphan determination order is: 1. Compute <strong>orphan SEs</strong> (referenced only by removed MSRs) 2. Compute <strong>orphan SamplingSites</strong> (referenced only by orphan SEs, not surviving SEs) 3. Compute <strong>orphan Geos</strong>: referenced only by orphan SEs AND orphan SamplingSites — i.e., NOT by any surviving SE (via <code>p__sample_location</code>) AND NOT by any surviving SamplingSite (via <code>p__site_location</code>)</p>
+<p>Step 2 must complete before step 3 so that <code>surviving_geo_refs</code> correctly excludes Geos still held by surviving Sites.</p>
+</section>
+<section id="mandatory-in-script-dangling-ref-gate" class="level3" data-number="1.13.2">
+<h3 data-number="1.13.2" data-anchor-id="mandatory-in-script-dangling-ref-gate"><span class="header-section-number">1.13.2</span> Mandatory In-Script Dangling-Ref Gate</h3>
+<p>The post-write gate now scans ALL rows (surviving + new) across ALL p__* columns (both BIGINT[] and INTEGER[]). It: - Unnests each p__* column on the entire output - Left-joins against all output row_ids - Prints per-column count - Raises <code>RuntimeError</code> if any total &gt; 0 (manifest not emitted, build aborted)</p>
+<p>This gate catches both new-row mapping errors (covered by B2B) AND old-row dangling refs introduced by incorrect orphan deletion (the Phase 5 defect).</p>
+</section>
+<section id="regression-test" class="level3" data-number="1.13.3">
+<h3 data-number="1.13.3" data-anchor-id="regression-test"><span class="header-section-number">1.13.3</span> Regression Test</h3>
+<p><code>test_site_location_geo_not_orphaned</code> in <code>tests/test_ingest_oc_records.py</code>: - Scenario: OC SE references Geo via p__sample_location; surviving SESAR SE → same Site → same Geo via p__site_location - Asserts Geo survives, zero p__site_location dangling refs - Confirmed FAILS on old code (Phase 4 logic), PASSES on fixed code (Phase 5)</p>
+</section>
+<section id="fixture-tests-30-total-after-phase-5" class="level3" data-number="1.13.4">
+<h3 data-number="1.13.4" data-anchor-id="fixture-tests-30-total-after-phase-5"><span class="header-section-number">1.13.4</span> Fixture tests (30 total after Phase 5)</h3>
+<pre><code>pytest tests/test_ingest_oc_records.py -v
+30/30 passed in ~10s
+
+New test added (Phase 5):
+  test_site_location_geo_not_orphaned</code></pre>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© Copyright 2020-2026, iSamples Project. Based on work under National Science Foundation (NSF) Grant Numbers <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004839">2004839</a>, <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004562">2004562</a>, <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004642">2004642</a>, and <a href="https://nsf.gov/awardsearch/showAward?AWD_ID=2004815">2004815</a>.</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/DESIGN_272_INGEST.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="nav-footer-right">
+<p>Opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the <a href="https://nsf.gov/">NSF</a>.</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
