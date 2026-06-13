@@ -24,12 +24,14 @@ npx playwright test explorer-smoke
 ```
 
 The other `tests/playwright/*.spec.js` files are deeper, data-dependent
-explorer specs (facets, URL round-trip, heatmap, search counts, …). Run
-them the same way — drop the `explorer-smoke` filter to run everything —
-but expect them to exercise remote parquet loads from data.isamples.org
-(slower, network-sensitive). In CI they can be run manually via the
-`explorer-e2e` workflow's *Run workflow* button with a different spec
-filter.
+explorer specs (facets, URL round-trip, heatmap, search counts, …) plus
+the Cesium tutorial specs (`cesium-queries.spec.js`). Run a specific
+file the same way (`npx playwright test facet-viewport`); dropping the
+filter entirely runs **all** Playwright specs, explorer and tutorial
+alike. Expect the deeper specs to exercise remote parquet loads from
+data.isamples.org (slower, network-sensitive). In CI they can be run
+manually via the `explorer-e2e` workflow's *Run workflow* button with a
+different spec filter (empty filter = all specs).
 
 To test against a deployed site instead of a local render:
 

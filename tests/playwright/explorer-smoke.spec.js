@@ -65,15 +65,25 @@ test.describe('Explorer smoke gate (#249)', () => {
     await page?.context().close();
   });
 
+  // The page is shared across the serial tests, so an async error that
+  // fires AFTER the first test (late OJS cell crash, runtime regression
+  // surfacing during the canvas/sidebar/search checks) must still fail
+  // the gate — assert the accumulator after every test, draining it so
+  // each error is reported exactly once.
+  test.afterEach(() => {
+    const errs = pageErrors.splice(0);
+    expect(errs, `uncaught page errors:\n${errs.join('\n')}`).toEqual([]);
+  });
+
   test('explorer loads without uncaught JS errors', async () => {
     await expect(page).toHaveTitle(/Interactive Explorer/i, { timeout: 30000 });
     // The Cesium container is static HTML in explorer.qmd — if it is
     // missing, the render itself is broken (not just slow data).
     await expect(page.locator('#cesiumContainer')).toBeAttached({ timeout: 30000 });
     // Give the boot path a moment to surface an early uncaught exception
-    // (OJS cell crash, undefined symbol) without waiting on data.
+    // (OJS cell crash, undefined symbol) without waiting on data —
+    // afterEach below does the actual assertion for this and every test.
     await page.waitForTimeout(3000);
-    expect(pageErrors, `uncaught page errors:\n${pageErrors.join('\n')}`).toEqual([]);
   });
 
   test('map canvas appears with non-zero size', async () => {

@@ -133,10 +133,22 @@ jobs:
           done
           curl -sf -o /dev/null http://localhost:5860/explorer.html
 
+      # PR/push runs are pinned to the smoke set. Only workflow_dispatch
+      # honors spec_filter, and it is passed as ONE quoted argument so the
+      # input can never smuggle extra Playwright flags (e.g.
+      # --pass-with-no-tests, which would green-light a zero-test run).
+      # Empty spec_filter on dispatch = run ALL specs.
       - name: Run Playwright specs
         env:
-          SPEC_FILTER: ${{ github.event.inputs.spec_filter || 'explorer-smoke' }}
-        run: npx playwright test $SPEC_FILTER --reporter=list
+          SPEC_FILTER: ${{ github.event.inputs.spec_filter }}
+        run: |
+          if [ "${{ github.event_name }}" != "workflow_dispatch" ]; then
+            npx playwright test explorer-smoke --reporter=list
+          elif [ -n "$SPEC_FILTER" ]; then
+            npx playwright test "$SPEC_FILTER" --reporter=list
+          else
+            npx playwright test --reporter=list
+          fi
 
       - name: Upload Playwright artifacts
         if: failure()
