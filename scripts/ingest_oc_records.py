@@ -39,8 +39,6 @@ WHAT IT DOES (single DuckDB session, deterministic):
 WHAT IT DOES NOT DO (scope):
   - Does not re-run the Phase 1 concept overlay (already in src wide).
   - Does not populate p__curation / p__related_resource (OC doesn't have them).
-  - Does not ingest IdentifiedConcept rows for keywords beyond the p__has_* dims
-    (keywords concepts should be verified separately).
 
 HARD FAILURES (refuses to write):
   - duplicate pids among new MSRs (new pid set must be truly new)
@@ -466,7 +464,27 @@ def main():
     """).fetchone()[0]
     if n_collision:
         sys.exit(f"FATAL: {n_collision} proposed new row_ids collide with existing src row_ids")
-    log(f"id_map: {n_id_map:,} entries, new row_id range {max_src_row_id+1} to {new_max:,}, collisions={n_collision}", t0)
+    # FIX 2: verify our_row_id uniqueness within eric_id_map.
+    # DENSE_RANK() over (otype, pid) is unique when all (otype, pid) pairs are distinct.
+    # If a duplicate (otype, pid) pair sneaked through, two eric_row_ids would share
+    # the same our_row_id — silently producing colliding row_ids in the output.
+    n_dup_our_row_id = con.sql("""
+        SELECT COUNT(*) FROM (
+            SELECT our_row_id FROM eric_id_map
+            GROUP BY our_row_id HAVING COUNT(*) > 1
+        )
+    """).fetchone()[0]
+    if n_dup_our_row_id:
+        dup_examples = con.sql("""
+            SELECT our_row_id, COUNT(*) AS cnt FROM eric_id_map
+            GROUP BY our_row_id HAVING COUNT(*) > 1 ORDER BY cnt DESC LIMIT 5
+        """).fetchall()
+        sys.exit(
+            f"FATAL: {n_dup_our_row_id} duplicate our_row_id values in id_map "
+            f"(duplicate (otype,pid) pairs in new entity set). Examples: {dup_examples}"
+        )
+    log(f"id_map: {n_id_map:,} entries, new row_id range {max_src_row_id+1} to {new_max:,}, "
+        f"collisions={n_collision}, dup_our_row_ids={n_dup_our_row_id}", t0)
 
     # ---- Phase D: concept resolution for p__has_* dims ---------------------
     # OC concept row_ids (Eric's space) -> URI -> our row_id
@@ -481,7 +499,8 @@ def main():
       FROM {SRC} WHERE otype='IdentifiedConcept' GROUP BY pid;
     """)
 
-    # Find concepts referenced by new MSRs that are missing from src
+    # Find concepts referenced by new MSRs that are missing from src.
+    # Includes p__keywords so keyword IdentifiedConcept rows are minted if absent.
     con.execute(f"""
     CREATE TEMP TABLE new_concept_refs AS
       SELECT DISTINCT u.cid AS eric_cid
@@ -489,7 +508,9 @@ def main():
       UNION
       SELECT DISTINCT u.cid FROM new_msr_eric, UNNEST(p__has_sample_object_type) AS u(cid)
       UNION
-      SELECT DISTINCT u.cid FROM new_msr_eric, UNNEST(p__has_context_category) AS u(cid);
+      SELECT DISTINCT u.cid FROM new_msr_eric, UNNEST(p__has_context_category) AS u(cid)
+      UNION
+      SELECT DISTINCT u.cid FROM new_msr_eric, UNNEST(p__keywords) AS u(cid);
 
     CREATE TEMP TABLE new_concept_uris AS
       SELECT DISTINCT c.uri
@@ -697,7 +718,7 @@ def main():
     if n_unresolved_se:
         sys.exit(f"FATAL: {n_unresolved_se} p__produced_by references in new MSRs do not resolve")
 
-    # Check all concept references resolve (via URI)
+    # Check all concept references resolve (via URI) — includes p__keywords
     n_unresolved_concepts = con.sql("""
         WITH all_refs AS (
             SELECT m.pid, u.eric_rid FROM new_msr_eric m, UNNEST(m.p__has_material_category) AS u(eric_rid)
@@ -705,6 +726,8 @@ def main():
             SELECT m.pid, u.eric_rid FROM new_msr_eric m, UNNEST(m.p__has_sample_object_type) AS u(eric_rid)
             UNION ALL
             SELECT m.pid, u.eric_rid FROM new_msr_eric m, UNNEST(m.p__has_context_category) AS u(eric_rid)
+            UNION ALL
+            SELECT m.pid, u.eric_rid FROM new_msr_eric m, UNNEST(m.p__keywords) AS u(eric_rid)
         )
         SELECT COUNT(*) FROM all_refs r
         LEFT JOIN oc_concept_rows ocr ON ocr.eric_row_id = r.eric_rid
@@ -712,7 +735,7 @@ def main():
         WHERE cl.our_row_id IS NULL
     """).fetchone()[0]
     if n_unresolved_concepts:
-        sys.exit(f"FATAL: {n_unresolved_concepts} concept references in new MSRs do not resolve")
+        sys.exit(f"FATAL: {n_unresolved_concepts} concept references (including keywords) in new MSRs do not resolve")
 
     # Check that rows_to_remove doesn't contain any non-OC rows
     n_non_oc_removal = con.sql(f"""
@@ -755,21 +778,17 @@ def main():
     _check_remap_length("new_msr_eric", "pid", "p__produced_by",      "remap_msr_pb",   "remapped", "MSR.p__produced_by")
     _check_remap_length("new_msr_eric", "pid", "p__registrant",        "remap_msr_reg",  "remapped", "MSR.p__registrant")
     _check_remap_length("new_msr_eric", "pid", "p__responsibility",    "remap_msr_resp", "remapped", "MSR.p__responsibility")
-    # MSR concept refs (via URI lookup — different remap path)
+    # MSR concept refs (via URI lookup — p__has_* dims + p__keywords)
     _check_remap_length("new_msr_eric", "pid", "p__has_material_category",    "remap_msr_mat", "remapped", "MSR.p__has_material_category")
     _check_remap_length("new_msr_eric", "pid", "p__has_sample_object_type",   "remap_msr_obj", "remapped", "MSR.p__has_sample_object_type")
     _check_remap_length("new_msr_eric", "pid", "p__has_context_category",     "remap_msr_ctx", "remapped", "MSR.p__has_context_category")
-    # NOTE: p__keywords is intentionally EXCLUDED from the strict length check.
-    # keywords use best-effort URI lookup against the src concept map; concepts
-    # present in Eric's wide but absent from src are silently dropped (not extracted).
-    # This is documented in the script header ("WHAT IT DOES NOT DO").
-    # A separate audit of keyword concept coverage should be run before R2 promotion.
+    _check_remap_length("new_msr_eric", "pid", "p__keywords",                 "remap_msr_kw",  "remapped", "MSR.p__keywords")
     # SE structural refs
     _check_remap_length("new_se_eric",   "pid", "p__sample_location",  "remap_se_sl",    "remapped", "SE.p__sample_location")
     _check_remap_length("new_se_eric",   "pid", "p__sampling_site",    "remap_se_ss",    "remapped", "SE.p__sampling_site")
     # SamplingSite structural refs
     _check_remap_length("new_site_eric", "pid", "p__site_location",    "remap_site_sl",  "remapped", "Site.p__site_location")
-    log("silent-drop guard: all structural + concept remapped arrays length-verified (PASS; p__keywords excluded — best-effort)", t0)
+    log("silent-drop guard: all structural + concept remapped arrays length-verified (PASS)", t0)
 
     log("trust checks passed", t0)
 

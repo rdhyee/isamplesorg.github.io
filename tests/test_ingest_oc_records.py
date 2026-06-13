@@ -216,7 +216,7 @@ def build_oc_wide(path, *, msr_rows, concept_rows, se_rows, geo_rows,
             f"{_arr(m.get('p__produced_by'))}, "
             f"NULL::INTEGER[], NULL::INTEGER[], NULL::INTEGER[], "
             f"{_arr(m.get('p__registrant'))}, "
-            f"NULL::INTEGER[], NULL::INTEGER[], "
+            f"{_arr(m.get('p__keywords'))}, NULL::INTEGER[], "
             f"NULL::VARCHAR, NULL::VARCHAR, NULL::VARCHAR"
         )
 
@@ -1384,3 +1384,143 @@ def test_unresolved_new_ref_hard_fails(tmp_path):
     assert not os.path.exists(out), (
         "Output file must NOT be written when the silent-drop guard fires"
     )
+
+
+# ============================================================================
+# Fix 1 (Round 7) — p__keywords concepts fully extracted and preserved
+# ============================================================================
+
+# Keyword concept IDs in Eric's space (INTEGER)
+OC_KW1_CONCEPT_ID = 950   # keyword concept already in src
+OC_KW2_CONCEPT_ID = 951   # keyword concept NOT in src — must be minted
+
+KW1_URI = "https://w3id.org/isample/keyword/1.0/existing_keyword"
+KW2_URI = "https://w3id.org/isample/keyword/1.0/new_keyword"  # absent from src → minted
+
+# src concept ID for the existing keyword (BIGINT)
+SRC_KW1_CONCEPT_ID = 10
+
+
+def test_new_msr_keywords_preserved(tmp_path):
+    """New OC MSR with p__keywords pointing to concept(s) — at least one NOT in src
+    (forcing a mint) — must have all keyword refs preserved in output:
+      - output p__keywords array length == source array length
+      - all targets resolve to IdentifiedConcept rows in output
+      - zero dangling keyword refs in output
+
+    This test MUST FAIL on old HEAD (where keywords were silently dropped because
+    keyword concept URIs were not collected in new_concept_refs and thus not minted,
+    causing the remap_msr_kw inner join to produce no matches → remap length 0 vs
+    source length 2 → silent-drop guard fires → FATAL).
+
+    After FIX 1: keywords are included in new_concept_refs; missing keyword concepts
+    are minted; the full-length remap is verified by the silent-drop guard; all refs
+    are valid in output.
+    """
+    src = str(tmp_path / "src_kw.parquet")
+    oc  = str(tmp_path / "oc_kw.parquet")
+    out = str(tmp_path / "out_kw.parquet")
+
+    # ---- src wide: has existing keyword concept (KW1), NOT KW2 ----
+    src_concepts = list(SRC_CONCEPT_ROWS) + [(SRC_KW1_CONCEPT_ID, KW1_URI)]
+
+    build_src_wide(
+        src,
+        msr_rows=[
+            # Stale OC MSR (to ensure removal path is exercised)
+            {
+                "row_id": 1000, "pid": "pid_stale", "n": "OPENCONTEXT",
+                "p__produced_by": [103],
+                "p__has_material_category": [SRC_ROCK_CONCEPT_ID],
+                "latitude": 60.0, "longitude": 20.0,
+            },
+        ],
+        concept_rows=src_concepts,
+        se_rows=[(103, "se-stale", [203], None)],
+        geo_rows=[(203, "geo-stale", 60.0, 20.0)],
+    )
+
+    # ---- OC wide: new MSR with p__keywords=[OC_KW1_CONCEPT_ID, OC_KW2_CONCEPT_ID]
+    # KW1 is already in src (must be looked up by URI, not minted)
+    # KW2 is NOT in src (must be minted as a new IdentifiedConcept row)
+    oc_concepts = list(OC_CONCEPT_ROWS) + [
+        (OC_KW1_CONCEPT_ID, KW1_URI, "Existing Keyword"),
+        (OC_KW2_CONCEPT_ID, KW2_URI, "New Keyword"),
+    ]
+
+    build_oc_wide(
+        oc,
+        msr_rows=[
+            {
+                "row_id": 1, "pid": "pid_kw",
+                "p__produced_by": [101],
+                "p__has_material_category": [OC_ROCK_CONCEPT_ID],
+                "p__keywords": [OC_KW1_CONCEPT_ID, OC_KW2_CONCEPT_ID],
+            },
+        ],
+        concept_rows=oc_concepts,
+        se_rows=[(101, "se-kw", [201], None)],
+        geo_rows=[(201, "geo-kw", 45.0, 10.0)],
+    )
+
+    r = run_ingest(src, oc, out)
+    assert r.returncode == 0, (
+        f"ingest failed:\nSTDERR: {r.stderr}\nSTDOUT: {r.stdout}"
+    )
+
+    con = duckdb.connect()
+
+    # 1. New OC MSR must be present with n='OPENCONTEXT'
+    kw_msr = con.sql(
+        f"SELECT p__keywords FROM read_parquet('{out}') "
+        f"WHERE pid='pid_kw' AND otype='MaterialSampleRecord'"
+    ).fetchone()
+    assert kw_msr is not None, "pid_kw MSR missing from output"
+    kw_refs = kw_msr[0]
+    assert kw_refs is not None, "p__keywords is NULL in output (should be a 2-element array)"
+    assert len(kw_refs) == 2, (
+        f"p__keywords length mismatch: expected 2, got {len(kw_refs)}. "
+        f"Array: {kw_refs}"
+    )
+
+    # 2. Both keyword targets must resolve to IdentifiedConcept rows in output
+    for ref_id in kw_refs:
+        resolved = con.sql(
+            f"SELECT pid, otype FROM read_parquet('{out}') WHERE row_id = {ref_id}"
+        ).fetchone()
+        assert resolved is not None, (
+            f"Keyword ref row_id={ref_id} not found in output (dangling ref!)"
+        )
+        assert resolved[1] == "IdentifiedConcept", (
+            f"Keyword ref row_id={ref_id} resolves to otype={resolved[1]!r}, "
+            f"expected 'IdentifiedConcept'"
+        )
+
+    # 3. Verify both URIs are resolvable in output IdentifiedConcept rows
+    kw1_out = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') "
+        f"WHERE otype='IdentifiedConcept' AND pid='{KW1_URI}'"
+    ).fetchone()[0]
+    assert kw1_out == 1, f"KW1 concept ({KW1_URI}) missing from output"
+
+    kw2_out = con.sql(
+        f"SELECT COUNT(*) FROM read_parquet('{out}') "
+        f"WHERE otype='IdentifiedConcept' AND pid='{KW2_URI}'"
+    ).fetchone()[0]
+    assert kw2_out == 1, f"KW2 concept ({KW2_URI}) not minted in output (should have been minted)"
+
+    # 4. Zero dangling p__keywords refs in output
+    dangling = con.sql(f"""
+        WITH all_row_ids AS (SELECT row_id FROM read_parquet('{out}')),
+        kw_refs AS (
+            SELECT unnest(p__keywords) AS ref_id
+            FROM read_parquet('{out}')
+            WHERE p__keywords IS NOT NULL AND len(p__keywords) > 0
+        )
+        SELECT COUNT(*) FROM kw_refs
+        LEFT JOIN all_row_ids ON kw_refs.ref_id = all_row_ids.row_id
+        WHERE all_row_ids.row_id IS NULL
+    """).fetchone()[0]
+    assert dangling == 0, f"p__keywords: {dangling} dangling refs in output (expected 0)"
+
+    con.close()
