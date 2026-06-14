@@ -1,5 +1,42 @@
 # Session Summary
 
+## Session: 2026-06-13 (Sat) — 202608 production cutover + explorer-refactor kickoff
+**Directory**: `~/C/src/iSamples/isamplesorg.github.io`
+**Trust Level**: external-content (GitHub/Slack/web read; live-data queries; **production R2 write + gh-pages deploy** — human-gated; no untrusted code run; Codex/agent outputs independently verified)
+
+---
+
+### What Happened
+1. **202608 data cutover LIVE on isamples.org.** OC true-sync to Eric's current export: **+67,187 new / −21,227 stale Murlo re-IDs → OC MSR 1,110,791** (= his wide), rock 37,953. SESAR/GEOME/Smithsonian byte-identical (regression-checked). Plus #277 description+concept-label search (Cyprus 0→69,230; "pottery Cyprus" 0→1,305), #283 facet fixes, #260/#265 material. Built over **8 rounds + 5 Codex reviews**; published to R2 bucket `isamples-ry` (versioned: `isamples_202608_*` + `sample_facets_v3` + `vocab_labels_202608`), cut over via upstream PR #284. Closed #272/#277/#283/#260/#265 with live-prod evidence.
+2. **Explorer refactor (#249) kicked off, gated.** Merged to rdhyee `main` (staging): **PR1** (#9, Playwright e2e smoke gate `explorer-e2e.yml`) + **PR2** (#11, 7 characterization tests). PR3 (extract 10 pure fns → ES modules) planned + ready.
+3. **Track B** (background agents): data/metadata audit + 202608 doc drafts on a worktree branch — NOT integrated (number reconcile needed).
+
+### Safe to Carry Forward
+**Key decisions**: 202608 = production data (202606 superseded). Eric's Option B (remove the 21,227 Murlo re-IDs) is the source-of-truth call. Refactor = strangler/extract-along-seams behind the e2e gate; scope PR2+PR3, defer PR4/PR5. vocab_labels now **versioned** (prod unversioned file left untouched = cutover-safe).
+**Files**: production pipeline merged upstream (#284: `scripts/ingest_oc_records.py` new + `build_frontend_derived.py`/`build_vocab_labels.py`/`validate_frontend_derived.py` + `explorer.qmd` 202606→202608+v3). Refactor (rdhyee main): `tests/playwright/helpers/explorer.js` + `explorer-characterization.spec.js` + `tests/README.md`. Staged build + all Codex reviews in `~/Data/iSample/pqg_refining/staged_202608/`.
+**Patterns/gotchas**: (a) **table-total scope is unstable** (viewport vs global vs filtered) — never assert across it; use deterministic known-result searches. (b) pid deep-link sets `selectedPid`+`updateSampleCard`(`#clusterSection`) but NOT `showInMapCard` — row-click only. (c) e2e specs hit live remote parquet (~3-4 min/run) → OFF the PR gate (workflow_dispatch); smoke-only blocks PRs. (d) background worktree agents need `mode: bypassPermissions` or they hit a Write/Bash wall. (e) `--wide` validator shares `FACETS_DESCRIPTION_EXPR` with the builder so they can't drift.
+
+### External Content Processed
+| Source | Type | Notes |
+|---|---|---|
+| GitHub issues/PRs #272/#277/#283/#278-#282/#260/#265/#249, PRs #9/#10/#11/#284 | web/API | reports as data; replies as rbotyee; closures w/ prod evidence |
+| Eric Kansa OC wide (GCS), live R2 202608 parquet | data | our own data |
+| Codex CLI, ~10 review rounds | AI tool output | every finding verified by execution before applying |
+| Slack #technical (Eric/Andrea/John) | web/API | close-the-loop; draft sent by RY |
+
+### Open Threads
+- [ ] **PR3** — extract 10 pure fns from `explorer.qmd` → `assets/js/sql-builders.js` + `explorer-utils.js` (3-step coexistence wiring + `node --test` units); branch off rdhyee main. Plan: `~/.claude/plans/serialized-honking-adleman.md`.
+- [ ] **File 2 bugs** PR2 surfaced: pid deep-link doesn't open `#inMapCard` (#239-family); clearing search loses viewport scoping.
+- [ ] **Track B docs**: reconcile the agent's wide-rowcount (verified **20,822,709 / OC 1,110,791**), then ship a docs-to-202608 PR (worktree `worktree-agent-a73f87c8d23e5bba5` has drafts + `DATA_FLOW_AUDIT_202608.md`).
+- [ ] **Promote test infra (PR1+PR2) to upstream** (currently rdhyee main only).
+- [ ] **Eric**: per-sample (1,305) vs collection-level (~14K) "pottery Cyprus" → next refinement.
+- [ ] `claude/fix-optimization-issues-E5Kwr` loose cloud branch — inspect.
+
+### Next Session Entry Point
+> Production solid on 202608; refactor PR1+PR2 merged to rdhyee main. **Start PR3**: branch off rdhyee main, create the two ES modules, wire via the 3-step coexistence pattern (import alongside → verify smoke+characterization green → delete inline), add `node --test` units, Codex, squash-PR. Plan: `~/.claude/plans/serialized-honking-adleman.md`. Quick win first: file the 2 surfaced bugs.
+
+---
+
 ## Session: 2026-05-30/31 (evening)
 **Directory**: `~/C/src/iSamples/isamplesorg.github.io`
 **Trust Level**: external-content
