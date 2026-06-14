@@ -16,8 +16,8 @@
  * every data-dependent assertion; NEVER fixed waitForTimeout.
  *
  * Behavior map:
- *   (a+) search "pottery" -> __searchFilter active AND table total shrinks vs baseline
- *   (a-) clear search     -> __searchFilter.active === false AND table total restored
+ *   (a+) search (known single result) -> __searchFilter active AND table total == 1
+ *   (a-) clear search     -> __searchFilter.active === false AND filter removed (total > 1)
  *   (b)  material facet   -> table total strictly decreases (parsed ints), aria-busy settles false
  *   (c)  heatmap          -> see heatmap-overlay.spec.js (comment only, no test)
  *   (d1) ?search= URL     -> __searchFilter restored AND #tableMeta shows the match summary
