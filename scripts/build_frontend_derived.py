@@ -279,7 +279,10 @@ def build_concept_membership(con, wide, vocab_labels, t0):
         UNION ALL
         SELECT c.descendant, t.parent_uri AS ancestor, c.distance + 1
         FROM clo c JOIN concept_tree t ON t.uri = c.ancestor
-        WHERE t.parent_uri IS NOT NULL
+        -- Cycle guard (Codex r2): the SKOS projection is acyclic today, but cap
+        -- depth so a future bad vocab (a broader cycle) can't recurse forever.
+        -- 64 >> any real concept depth (live max is 3).
+        WHERE t.parent_uri IS NOT NULL AND c.distance < 64
       )
       SELECT DISTINCT descendant, ancestor, distance FROM clo;
     """)

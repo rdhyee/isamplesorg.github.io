@@ -310,6 +310,12 @@ def main():
               f"{dims_present} dims present (want material/context/object_type)")
         # CROSS-FILE ALGEBRA: material root membership == facets_v2 non-root material
         # (both = located samples carrying ≥1 non-root material concept).
+        # NOTE (Codex r2): this equality holds under the current-data invariant
+        # "0 material concepts excluded from the hierarchy" (every located
+        # material concept resolves to the material tree). If a future vintage
+        # introduces a material concept absent from the SKOS tree, facets_v2 would
+        # still count it flat while the hierarchy excludes it, and this check would
+        # (correctly) fail — revisit the equality then.
         mat_root = scalar(f"SELECT count FROM {T} WHERE facet_type='material' AND parent_uri IS NULL")
         fv2_mat = scalar(f"SELECT COUNT(*) FROM {F} WHERE material IS NOT NULL")
         check("tree: material root == facets_v2 non-root material count",
