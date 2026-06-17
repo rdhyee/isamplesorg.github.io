@@ -578,15 +578,17 @@ format:
     .facet-row.zero { opacity: 0.4; }
     .facet-row.zero:hover { opacity: 0.65; }
     .facet-count.recomputing { opacity: 0.55; font-style: italic; }
-    /* #281/#282 Material tree (preview) */
-    .facet-treeroot { font-weight: 600; font-size: 12px; padding: 2px 0; color: #444; }
-    .facet-treelabel { display: inline; }
-    .facet-children { margin-left: 14px; }
+    /* #281/#282 Material tree (preview) — compact rows */
+    .filter-body .facet-treeroot { font-weight: 600; font-size: 12px; line-height: 1.5; padding: 0 0 2px; color: #444; }
+    .filter-body .facet-treenode { font-size: 12px; line-height: 1.5; }
+    /* override .filter-body label{display:block;padding:2px 0} so caret+label+count
+       sit on one tight line with no extra per-row padding */
+    .filter-body .facet-treenode .facet-treelabel { display: inline; padding: 0; cursor: pointer; }
+    .facet-children { margin-left: 13px; }
     .facet-children.collapsed { display: none; }
-    .facet-caret { cursor: pointer; display: inline-block; width: 1em; color: #888; user-select: none; }
+    .facet-caret { cursor: pointer; display: inline-block; width: 12px; color: #888; user-select: none; font-size: 10px; }
     .facet-caret:hover { color: #1565c0; }
-    .facet-caret-spacer { display: inline-block; width: 1em; }
-    .facet-treenode { font-size: 12px; }
+    .facet-caret-spacer { display: inline-block; width: 12px; }
 </style>
 ```
 
