@@ -68,4 +68,101 @@ test.describe('Material facet tree (#281/#282 preview)', () => {
     });
     expect(total).toBeGreaterThan(0);
   });
+
+  // Known 202608 subtree/union totals — deterministic for this dataset, so polling
+  // to the exact value also guarantees the filter has applied (no stale-pager read).
+  const EARTHMATERIAL_TOTAL = 4091133;        // earthmaterial subtree
+  const MINERAL_OR_SOIL_TOTAL = 333253;       // mineral ∪ soil (peers)
+
+  test('polish: checking a parent inherits its children (checked+disabled); peers go OR with an indeterminate parent', async ({ page }) => {
+    const toggle = (sub, val) => page.evaluate(({ sub, val }) => {
+      const cb = document.querySelector(`#materialFilterBody input[value*="${sub}"]`);
+      cb.checked = val; cb.dispatchEvent(new Event('change', { bubbles: true }));
+    }, { sub, val });
+    const total = async () => page.evaluate(() => {
+      const m = (document.getElementById('tablePageInfo')?.textContent || '').match(/of ([\d,]+)\)/);
+      return m ? parseInt(m[1].replace(/,/g, ''), 10) : null;
+    });
+    await page.goto(`/explorer.html?facets=tree${DATA}${WORLD}`);
+    await page.waitForFunction(
+      () => document.querySelectorAll('#materialFilterBody .facet-treenode').length > 0,
+      null, { timeout: 90000 });
+
+    // Check the "earthmaterial" parent → a child ("mineral") becomes inherited
+    // (checked + disabled), and the table filters to the whole subtree.
+    await toggle('/earthmaterial', true);
+    const child = await page.evaluate(() => {
+      const cb = document.querySelector('#materialFilterBody input[value*="/mineral"]');
+      return { checked: cb.checked, disabled: cb.disabled };
+    });
+    expect(child).toEqual({ checked: true, disabled: true });
+    await expect.poll(total, { timeout: 60000, intervals: [500, 1000, 2000] }).toBe(EARTHMATERIAL_TOTAL);
+
+    // Uncheck the parent; check two PEERS (mineral + soil) → the parent shows the
+    // indeterminate "–" state, and the table is their OR/union (smaller than the parent).
+    await toggle('/earthmaterial', false);
+    await toggle('/mineral', true);
+    await toggle('/soil', true);
+    const parentState = await page.evaluate(() => {
+      const cb = document.querySelector('#materialFilterBody input[value*="/earthmaterial"]');
+      return { checked: cb.checked, indeterminate: cb.indeterminate };
+    });
+    expect(parentState).toEqual({ checked: false, indeterminate: true });
+    await expect.poll(total, { timeout: 60000, intervals: [500, 1000, 2000] }).toBe(MINERAL_OR_SOIL_TOTAL);
+    expect(MINERAL_OR_SOIL_TOTAL).toBeLessThan(EARTHMATERIAL_TOTAL);
+  });
+
+  test('URL round-trip: a parent selection serializes the minimal node and restores inherited state', async ({ page }) => {
+    const EARTHMATERIAL = 'https://w3id.org/isample/vocabulary/material/1.0/earthmaterial';
+    // Select earthmaterial, then assert the URL carries ONLY that node (minimal — no
+    // expanded descendants like /mineral).
+    await page.goto(`/explorer.html?facets=tree${DATA}${WORLD}`);
+    await page.waitForFunction(() => document.querySelectorAll('#materialFilterBody .facet-treenode').length > 0, null, { timeout: 90000 });
+    await page.evaluate(() => {
+      const cb = document.querySelector('#materialFilterBody input[value*="/earthmaterial"]');
+      cb.checked = true; cb.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await expect.poll(async () => {
+      const p = new URLSearchParams(new URL(await page.evaluate(() => location.href)).search);
+      return p.get('material');
+    }, { timeout: 30000, intervals: [250, 500, 1000] }).toBe(EARTHMATERIAL);
+    const url = await page.evaluate(() => location.href);
+    expect(url).not.toContain('mineral');  // descendants are NOT expanded into the URL
+
+    // Reload that URL fresh → earthmaterial restored as selected, and a child shows
+    // the inherited (checked + disabled) state.
+    await page.goto(url.includes('data_base') ? url : `${url}${DATA.replace('&', url.includes('?') ? '&' : '?')}`);
+    await page.waitForFunction(() => document.querySelectorAll('#materialFilterBody .facet-treenode').length > 0, null, { timeout: 90000 });
+    const restored = await page.evaluate(() => {
+      const par = document.querySelector('#materialFilterBody input[value*="/earthmaterial"]');
+      const kid = document.querySelector('#materialFilterBody input[value*="/mineral"]');
+      return { parentChecked: par.checked, kidChecked: kid.checked, kidDisabled: kid.disabled };
+    });
+    expect(restored).toEqual({ parentChecked: true, kidChecked: true, kidDisabled: true });
+  });
+
+  test('graceful fallback: if the tree data 404s, Material renders flat and still filters', async ({ page }) => {
+    // Deploy-safety (Codex r2/r3): with ?facets=tree but the hierarchy files
+    // missing, renderMaterialTreeFacet() catches and renders the flat list, and
+    // materialTreeActive() is false everywhere → selection/filtering use the flat
+    // facets_v3 path (NOT the missing membership file).
+    await page.route('**/*facet_tree_summaries*', route => route.fulfill({ status: 404, body: '' }));
+    await page.goto(`/explorer.html?facets=tree${DATA}${WORLD}`);
+    await page.waitForFunction(
+      () => document.querySelectorAll('#materialFilterBody .facet-row[data-facet="material"]').length > 0,
+      null, { timeout: 90000 });
+    const treenodes = await page.evaluate(() => document.querySelectorAll('#materialFilterBody .facet-treenode').length);
+    expect(treenodes).toBe(0);  // fell back to flat
+    // a flat material selection still filters the table (uses facets_v3, no membership)
+    await page.evaluate(() => {
+      const cb = document.querySelector('#materialFilterBody input[type="checkbox"]');
+      cb.checked = true; cb.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    await page.waitForFunction(() => /of [\d,]+\)/.test(document.getElementById('tablePageInfo')?.textContent || ''), null, { timeout: 60000 });
+    const total = await page.evaluate(() => {
+      const m = (document.getElementById('tablePageInfo')?.textContent || '').match(/of ([\d,]+)\)/);
+      return m ? parseInt(m[1].replace(/,/g, ''), 10) : null;
+    });
+    expect(total).toBeGreaterThan(0);
+  });
 });
