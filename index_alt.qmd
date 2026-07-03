@@ -9,14 +9,14 @@ toc: false
 ::: {layout-ncol=4 layout-valign="center"}
 
 [![](assets/IGSN_10.58052_DIA0000YL.png){width="7%"
-group="my-group"}](https://doi.org/10.58052/DIA0000YL "Diamond, collected 2019-06-11, Brazil")
+group="my-group"}](https://n2t.net/IGSN:DIA000004 "Mineral sample, Mirny diamond mine, Russia — collected 2014-03-07")
 
-[![](assets/IGSN_10.58052_IEGIL000C.png){width="7%" group="my-group"}](https://doi.org/10.58052/IEGIL000C "Fossil coral, from 10000 BCE, Cayman Islands")
+[![](assets/IGSN_10.58052_IEGIL000C.png){width="7%" group="my-group"}](https://n2t.net/IGSN:IEGIL000C "Rock/mineral sample \"18LCI-5\" — collected 2018-06-13")
 
-[![](assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png){width="10%" group="my-group"}](https://n2t.net/ark:65665/337856f1a655e4ad78b1ef10a16dfb6e3 "Paracirrhites arcatus, collected 2006-03-10, French Polynesia")
+[![](assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png){width="10%" group="my-group"}](https://n2t.net/ark:/21547/CXs2MParis0001 "Paracirrhites arcatus, French Polynesia — collected 2006-03-10")
 
 [![](assets/ark_28722_r2p24_vdm_19600211.png){width="10%"
-group="my-group"}](https://n2t.net/ark:28722/r2p24/vdm_19600211 "Red-figure askoi, produced late-4th to early-3rd century BCE, Murlo, Italy")
+group="my-group"}](https://n2t.net/ark:/28722/r2p24/vdm_19600211 "Archaeological object \"VdM 19600211,\" Vescovado di Murlo, Italy")
 
 :::
 

@@ -21,15 +21,17 @@ page-layout: full
 
 ::: {layout-ncol=4 layout-valign="center"}
 
-[![](assets/IGSN_10.58052_DIA0000YL.png){group="showcase" fig-alt="Diamond sample"}](https://doi.org/10.58052/DIA0000YL "Diamond, collected 2019-06-11, Brazil")
+[![](assets/IGSN_10.58052_DIA0000YL.png){group="showcase" fig-alt="Mineral sample from the Mirny diamond mine"}](https://n2t.net/IGSN:DIA000004 "Mineral sample, Mirny diamond mine, Russia — collected 2014-03-07")
 
-[![](assets/IGSN_10.58052_IEGIL000C.png){group="showcase" fig-alt="Fossil coral sample"}](https://doi.org/10.58052/IEGIL000C "Fossil coral, from 10000 BCE, Cayman Islands")
+[![](assets/IGSN_10.58052_IEGIL000C.png){group="showcase" fig-alt="Rock/mineral sample"}](https://n2t.net/IGSN:IEGIL000C "Rock/mineral sample \"18LCI-5\" — collected 2018-06-13")
 
-[![](assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png){group="showcase" fig-alt="Fish specimen"}](https://n2t.net/ark:65665/337856f1a655e4ad78b1ef10a16dfb6e3 "Paracirrhites arcatus, collected 2006-03-10, French Polynesia")
+[![](assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png){group="showcase" fig-alt="Fish specimen"}](https://n2t.net/ark:/21547/CXs2MParis0001 "Paracirrhites arcatus, French Polynesia — collected 2006-03-10")
 
-[![](assets/ark_28722_r2p24_vdm_19600211.png){group="showcase" fig-alt="Red-figure askoi"}](https://n2t.net/ark:28722/r2p24/vdm_19600211 "Red-figure askoi, late-4th to early-3rd century BCE, Murlo, Italy")
+[![](assets/ark_28722_r2p24_vdm_19600211.png){group="showcase" fig-alt="Archaeological object from Murlo, Italy"}](https://n2t.net/ark:/28722/r2p24/vdm_19600211 "Archaeological object \"VdM 19600211,\" Vescovado di Murlo, Italy")
 
 :::
+
+*Photos above are curator-selected illustrations, not photographs of the specific specimens (source repositories don't yet supply images for most samples) — but every sample below the image now links to its real, citable record in the collection. Click through to confirm.*
 
 ::: {.callout-tip collapse="true"}
 ## What is iSamples?
