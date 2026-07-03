@@ -27,11 +27,11 @@ page-layout: full
 
 [![](assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png){group="showcase" fig-alt="Fish specimen"}](https://n2t.net/ark:/21547/CXs2MParis0001 "Paracirrhites arcatus, French Polynesia — collected 2006-03-10")
 
-[![](assets/ark_28722_r2p24_vdm_19600211.png){group="showcase" fig-alt="Archaeological object from Murlo, Italy"}](https://n2t.net/ark:/28722/r2p24/vdm_19600211 "Archaeological object \"VdM 19600211,\" Vescovado di Murlo, Italy")
+[![](https://storage.googleapis.com/opencontext-media/poggio-civitate/2025-media/thumbs/vdm-19600211-11-8-45.jpg){group="showcase" fig-alt="Photo of archaeological object VdM 19600211, Vescovado di Murlo, Italy"}](https://n2t.net/ark:/28722/r2p24/vdm_19600211 "Archaeological object \"VdM 19600211,\" Vescovado di Murlo, Italy — real photo, via OpenContext")
 
 :::
 
-*These four photos are stock illustrations, not photos of the actual samples — none of our four source collections (SESAR, OpenContext, GEOME, Smithsonian) supply real photos yet. Each photo IS linked to a real, citable record in the collection — click through to see it.*
+*Every photo above IS linked to a real, citable record in the collection — click through to see it. The archaeological object (4th photo) is a real photo of that exact sample, supplied by OpenContext. The other three are stock illustrations, not photos of the actual samples — SESAR and GEOME (the diamond, coral, and fish sources) don't supply real photos yet.*
 
 ::: {.callout-tip collapse="true"}
 ## What is iSamples?

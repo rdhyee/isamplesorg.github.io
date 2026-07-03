@@ -15,8 +15,8 @@ group="my-group"}](https://n2t.net/IGSN:DIA000004 "Mineral sample, Mirny diamond
 
 [![](assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png){width="10%" group="my-group"}](https://n2t.net/ark:/21547/CXs2MParis0001 "Paracirrhites arcatus, French Polynesia — collected 2006-03-10")
 
-[![](assets/ark_28722_r2p24_vdm_19600211.png){width="10%"
-group="my-group"}](https://n2t.net/ark:/28722/r2p24/vdm_19600211 "Archaeological object \"VdM 19600211,\" Vescovado di Murlo, Italy")
+[![](https://storage.googleapis.com/opencontext-media/poggio-civitate/2025-media/thumbs/vdm-19600211-11-8-45.jpg){width="10%"
+group="my-group"}](https://n2t.net/ark:/28722/r2p24/vdm_19600211 "Archaeological object \"VdM 19600211,\" Vescovado di Murlo, Italy — real photo, via OpenContext")
 
 :::
 
