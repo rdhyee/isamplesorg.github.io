@@ -25,8 +25,121 @@
       "ark:/28722/k2000hx98",
       "ark:/28722/k2000hx8s"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k21v5sq5s",
+      "ark:/28722/k25h7t46m",
+      "ark:/28722/k22r44723",
+      "ark:/28722/k26h4v17b",
+      "ark:/28722/k2000f98w",
+      "ark:/28722/k23r1543t",
+      "ark:/28722/k27h1vx56",
+      "ark:/28722/k20z7g69r",
+      "ark:/28722/k24q86121",
+      "ark:/28722/k21z4h390"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k22r44723": {
+        "label": "Pottery KPX# 1010",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k23r1543t": {
+        "label": "Pottery KPX# 1018",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k21z4h390": {
+        "label": "Pottery KPX# 1342",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k2000hx98": {
+        "label": "Pottery 81.9741",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k24q86121": {
+        "label": "Pottery KPX# 1335",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k2000hz1v": {
+        "label": "Pottery 81.9315",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k2000hz2b": {
+        "label": "Pottery 81.948",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k25h7t46m": {
+        "label": "Pottery KPX# 1003",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k21v5sq5s": {
+        "label": "Pottery KPX# 1002",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k20z7g69r": {
+        "label": "Pottery KPX# 1334",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k27h1vx56": {
+        "label": "Pottery KPX# 1019",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k2000hz3t": {
+        "label": "Pottery 79.1889",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k2000hz49": {
+        "label": "Pottery 79.1464",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k2000f98w": {
+        "label": "Pottery KPX# 1017",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k2000hz68": {
+        "label": "Pottery 77.3371",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k2000hz5s": {
+        "label": "Pottery 79.1042",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k26h4v17b": {
+        "label": "Pottery KPX# 1011",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k2000hz0c": {
+        "label": "Pottery 81.9548",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k2000hz7r": {
+        "label": "Pottery 77.0108",
+        "source": "OPENCONTEXT",
+        "place": null
+      },
+      "ark:/28722/k2000hx8s": {
+        "label": "Pottery 81.9967",
+        "source": "OPENCONTEXT",
+        "place": null
+      }
+    }
   },
   "single-rare": {
     "term": "basalt",
@@ -54,8 +167,117 @@
       "IGSN:MGD000BTM",
       "IGSN:MGD000BTN"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "IGSN:MGD0009H1",
+      "IGSN:MGD0009GC",
+      "IGSN:MGD0009GE",
+      "IGSN:MGD0009H8",
+      "IGSN:MGD00091X",
+      "IGSN:MGD00092P",
+      "IGSN:MGD00092N",
+      "IGSN:MGD00091Y",
+      "IGSN:MGD00092O",
+      "IGSN:MGD000305"
+    ],
+    "notes": "",
+    "display": {
+      "IGSN:MGD000305": {
+        "label": "basalt-1b",
+        "source": "SESAR",
+        "place": "['EPR:9N:EastWall', Not Applicable]"
+      },
+      "IGSN:MGD000BSZ": {
+        "label": "4368-Basalt-2",
+        "source": "SESAR",
+        "place": "['EPR:9N:V', Not Applicable]"
+      },
+      "IGSN:MGD0009H1": {},
+      "IGSN:MGD00092N": {
+        "label": "basalt-133",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD000BTL": {
+        "label": "4369-Basalt-4",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD0009GC": {
+        "label": "4440-basalt",
+        "source": "SESAR",
+        "place": "['JdF:Endeavour:MEF:Hulk']"
+      },
+      "IGSN:MGD000BRO": {
+        "label": "4366-Basalt-1",
+        "source": "SESAR",
+        "place": "['EPR:9N:P', Not Applicable]"
+      },
+      "IGSN:MGD00091Y": {
+        "label": "basalt-163",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD000BRP": {
+        "label": "4366-Basalt-2",
+        "source": "SESAR",
+        "place": "['EPR:9N:P', Not Applicable]"
+      },
+      "IGSN:MGD00092O": {
+        "label": "basalt-173",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD000BTM": {
+        "label": "4369-Basalt-5",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD000BSY": {
+        "label": "4368-Basalt-1",
+        "source": "SESAR",
+        "place": "['EPR:9N:V', Not Applicable]"
+      },
+      "IGSN:MGD0009GE": {
+        "label": "4441-basalt",
+        "source": "SESAR",
+        "place": "['JdF:Endeavour:MEF:Dante']"
+      },
+      "IGSN:MGD000BTK": {
+        "label": "4369-Basalt-3",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD000BTJ": {
+        "label": "4369-Basalt-2",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD000BTI": {
+        "label": "4369-Basalt-1",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD00091X": {
+        "label": "basalt-1",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD00092P": {
+        "label": "basalt-11",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      },
+      "IGSN:MGD0009H8": {
+        "label": "4517-basalt",
+        "source": "SESAR",
+        "place": "['JdF:Endeavour:MEF:Hulk']"
+      },
+      "IGSN:MGD000BTN": {
+        "label": "4369-Basalt-6",
+        "source": "SESAR",
+        "place": "['EPR:9N:Tica', Not Applicable]"
+      }
+    }
   },
   "multi-term": {
     "term": "pottery Cyprus",
@@ -83,8 +305,81 @@
       "ark:/28722/k20c59p9b",
       "ark:/28722/k20g41316"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k2p27782m",
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316",
+      "ark:/28722/k20p1dv9d"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k2p27782m": {
+        "label": "Sample Sample Tab. 2: 50",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, 'Cyprus, west end', Europe]"
+      },
+      "ark:/28722/k2057wx39": {
+        "label": "Sample Sample Tab. 3: 1053",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20k2qh14": {
+        "label": "Sample Sample Tab. 2: 68",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Zoopiyi]"
+      },
+      "ark:/28722/k20c59p9b": {
+        "label": "Sample Sample Tab. 3: 1084",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      },
+      "ark:/28722/k2086mb12": {
+        "label": "Sample Sample Tab. 2: 6",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, 'Vadili, near by']"
+      },
+      "ark:/28722/k20c59q3w": {
+        "label": "Sample Sample Tab. 2: 37",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Terra]"
+      },
+      "ark:/28722/k21267f13": {
+        "label": "Sample Sample Tab. 3: 1030",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20p1dw3z": {
+        "label": "Sample Sample Tab. 2: 99",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Gecitkale road intersection]"
+      },
+      "ark:/28722/k20p1dv9d": {
+        "label": "Sample Sample Tab. 3: 1146",
+        "source": "OPENCONTEXT",
+        "place": "[Amathus, Cyprus, Europe]"
+      },
+      "ark:/28722/k20296j1v": {
+        "label": "Sample Sample Tab. 3: 1022",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20c59q2d": {
+        "label": "Sample Sample Tab. 3: 101",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      },
+      "ark:/28722/k20g41316": {
+        "label": "Sample Sample Tab. 3: 1115",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      }
+    }
   },
   "stopword-heavy": {
     "term": "pottery from Cyprus",
@@ -112,8 +407,81 @@
       "ark:/28722/k20c59p9b",
       "ark:/28722/k20g41316"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k2p27782m",
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316",
+      "ark:/28722/k20p1dv9d"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k2p27782m": {
+        "label": "Sample Sample Tab. 2: 50",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, 'Cyprus, west end', Europe]"
+      },
+      "ark:/28722/k2057wx39": {
+        "label": "Sample Sample Tab. 3: 1053",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20k2qh14": {
+        "label": "Sample Sample Tab. 2: 68",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Zoopiyi]"
+      },
+      "ark:/28722/k20c59p9b": {
+        "label": "Sample Sample Tab. 3: 1084",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      },
+      "ark:/28722/k2086mb12": {
+        "label": "Sample Sample Tab. 2: 6",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, 'Vadili, near by']"
+      },
+      "ark:/28722/k20c59q3w": {
+        "label": "Sample Sample Tab. 2: 37",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Terra]"
+      },
+      "ark:/28722/k21267f13": {
+        "label": "Sample Sample Tab. 3: 1030",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20p1dw3z": {
+        "label": "Sample Sample Tab. 2: 99",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Gecitkale road intersection]"
+      },
+      "ark:/28722/k20p1dv9d": {
+        "label": "Sample Sample Tab. 3: 1146",
+        "source": "OPENCONTEXT",
+        "place": "[Amathus, Cyprus, Europe]"
+      },
+      "ark:/28722/k20296j1v": {
+        "label": "Sample Sample Tab. 3: 1022",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20c59q2d": {
+        "label": "Sample Sample Tab. 3: 101",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      },
+      "ark:/28722/k20g41316": {
+        "label": "Sample Sample Tab. 3: 1115",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      }
+    }
   },
   "duplicate-term": {
     "term": "pottery pottery cyprus",
@@ -141,8 +509,81 @@
       "ark:/28722/k20c59p9b",
       "ark:/28722/k20g41316"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k2p27782m",
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316",
+      "ark:/28722/k20p1dv9d"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k2p27782m": {
+        "label": "Sample Sample Tab. 2: 50",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, 'Cyprus, west end', Europe]"
+      },
+      "ark:/28722/k2057wx39": {
+        "label": "Sample Sample Tab. 3: 1053",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20k2qh14": {
+        "label": "Sample Sample Tab. 2: 68",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Zoopiyi]"
+      },
+      "ark:/28722/k20c59p9b": {
+        "label": "Sample Sample Tab. 3: 1084",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      },
+      "ark:/28722/k2086mb12": {
+        "label": "Sample Sample Tab. 2: 6",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, 'Vadili, near by']"
+      },
+      "ark:/28722/k20c59q3w": {
+        "label": "Sample Sample Tab. 2: 37",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Terra]"
+      },
+      "ark:/28722/k21267f13": {
+        "label": "Sample Sample Tab. 3: 1030",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20p1dw3z": {
+        "label": "Sample Sample Tab. 2: 99",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Gecitkale road intersection]"
+      },
+      "ark:/28722/k20p1dv9d": {
+        "label": "Sample Sample Tab. 3: 1146",
+        "source": "OPENCONTEXT",
+        "place": "[Amathus, Cyprus, Europe]"
+      },
+      "ark:/28722/k20296j1v": {
+        "label": "Sample Sample Tab. 3: 1022",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Europe, Marion]"
+      },
+      "ark:/28722/k20c59q2d": {
+        "label": "Sample Sample Tab. 3: 101",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      },
+      "ark:/28722/k20g41316": {
+        "label": "Sample Sample Tab. 3: 1115",
+        "source": "OPENCONTEXT",
+        "place": "[Cyprus, Enkomi, Europe]"
+      }
+    }
   },
   "concept-ceramic": {
     "term": "ceramic",
@@ -170,8 +611,121 @@
       "ark:/28722/k20293q7r",
       "ark:/28722/k2000db3h"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/r2p24/bf_t104_2025_6_c",
+      "ark:/28722/r2p24/bf_t111_2025_1_c",
+      "ark:/28722/r2p24/bf_t111_2025_2_c",
+      "ark:/28722/r2p24/bf_t111_2025_3_c",
+      "ark:/28722/r2p24/bf_t111_2025_4_c",
+      "ark:/28722/r2p24/bf_t111_2025_5_c",
+      "ark:/28722/r2p24/bf_t111_2025_6_c",
+      "ark:/28722/r2p24/bf_t111_2025_7_c",
+      "ark:/28722/r2p24/bf_t111_2025_8_c",
+      "ark:/28722/r2p24/bf_t112_2025_1_c"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k2086hg9g": {
+        "label": "Bulk Ceramic Parts-S1629-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S1629, SU Group 11, Turkey]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_7_c": {
+        "label": "bf Ceramic T111-2025-7(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/k2057t384": {
+        "label": "Bulk Ceramic Parts-S1057-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S1057, SU Group 15, Turkey]"
+      },
+      "ark:/28722/r2p24/bf_t104_2025_6_c": {
+        "label": "bf Ceramic T104-2025-6(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/k20293q68": {
+        "label": "Bulk Ceramic Parts-S1155-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S1155, SU Group 17, Turkey]"
+      },
+      "ark:/28722/k20c56w5v": {
+        "label": "Bulk Ceramic Parts-S2258-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S2258, SU Group 12, Turkey]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_2_c": {
+        "label": "bf Ceramic T111-2025-2(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/k2086hh12": {
+        "label": "Bulk Ceramic Parts-S0362",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S0362, 'SU Group (None)', Turkey]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_6_c": {
+        "label": "bf Ceramic T111-2025-6(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/r2p24/bf_t112_2025_1_c": {
+        "label": "bf Ceramic T112-2025-1(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_1_c": {
+        "label": "bf Ceramic T111-2025-1(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/k2000db3h": {
+        "label": "Bulk Ceramic Parts-S2812-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S2812, SU Group 1, Turkey]"
+      },
+      "ark:/28722/k2057t39m": {
+        "label": "Bulk Ceramic Parts-S1684-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S1684, SU Group 5, Turkey]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_3_c": {
+        "label": "bf Ceramic T111-2025-3(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_8_c": {
+        "label": "bf Ceramic T111-2025-8(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/k2000db21": {
+        "label": "Bulk Ceramic Parts-S1740-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S1740, SU Group 5, Turkey]"
+      },
+      "ark:/28722/k2086hh0k": {
+        "label": "Bulk Ceramic Parts-S2306-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S2306, SU Group 16, Turkey]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_4_c": {
+        "label": "bf Ceramic T111-2025-4(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/r2p24/bf_t111_2025_5_c": {
+        "label": "bf Ceramic T111-2025-5(C)",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Europe/Italy]"
+      },
+      "ark:/28722/k20293q7r": {
+        "label": "Bulk Ceramic Parts-S2523-01",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Avkat Survey Area, S2523, SU Group 12, Turkey]"
+      }
+    }
   },
   "concept-bone": {
     "term": "bone",
@@ -199,8 +753,91 @@
       "IGSN:CDR0002MG",
       "IGSN:CDR0002MH"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k22n51g5s",
+      "ark:/28722/k26d5r882",
+      "ark:/28722/k2xp6x43k",
+      "ark:/28722/k2xw49v0d",
+      "ark:/28722/k26d5r990",
+      "ark:/28722/k27p8wc0d",
+      "ark:/28722/k28g92p3k",
+      "ark:/28722/k2k93n86g",
+      "ark:/28722/k2794n065",
+      "ark:/28722/k2kp8ft7b"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k2xw49v0d": {
+        "label": "Animal Bone Bone 6796",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Bone 6794, Level IVb, Turkey, Ulucak]"
+      },
+      "ark:/28722/k2k93n86g": {
+        "label": "Bone 1292",
+        "source": "OPENCONTEXT",
+        "place": "[Americas, Americas/Ecuador]"
+      },
+      "ark:/28722/k26d5r990": {
+        "label": "Animal Bone Bone 6800",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Bone 6230, Level Ivc, Turkey, Ulucak]"
+      },
+      "IGSN:CDR0002ME": {
+        "label": "GREEN-BONE10-1A",
+        "source": "SESAR",
+        "place": "[Bone Lake, Liverpool Land]"
+      },
+      "ark:/28722/k2kp8ft7b": {
+        "label": "Bone 1747",
+        "source": "OPENCONTEXT",
+        "place": "[Americas, Americas/Ecuador]"
+      },
+      "ark:/28722/k2794n065": {
+        "label": "Bone 142",
+        "source": "OPENCONTEXT",
+        "place": "[Americas, Americas/Ecuador]"
+      },
+      "IGSN:CDR0002MF": {
+        "label": "GREEN-BONE10-1B",
+        "source": "SESAR",
+        "place": "[Bone Lake, Liverpool Land]"
+      },
+      "IGSN:CDR0002MH": {
+        "label": "GREEN-BONE10-2B",
+        "source": "SESAR",
+        "place": "[Bone Lake, Liverpool Land]"
+      },
+      "ark:/28722/k22n51g5s": {
+        "label": "Animal Bone Bone 6801",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Bone 6794, Bone 6796, Bone 6797, Level IVb, Turkey, Ulucak]"
+      },
+      "ark:/28722/k2xp6x43k": {
+        "label": "Animal Bone Bone 12883",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Bone 8087, Level VIa, Turkey, Ulucak]"
+      },
+      "ark:/28722/k28g92p3k": {
+        "label": "Bone 114",
+        "source": "OPENCONTEXT",
+        "place": "[Americas, Americas/Ecuador]"
+      },
+      "ark:/28722/k27p8wc0d": {
+        "label": "Animal Bone Bone 6802",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Bone 4678, Level VIa, Turkey, Ulucak]"
+      },
+      "ark:/28722/k26d5r882": {
+        "label": "Animal Bone Bone 6797",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Bone 6794, Bone 6796, Level IVb, Turkey, Ulucak]"
+      },
+      "IGSN:CDR0002MG": {
+        "label": "GREEN-BONE10-2A",
+        "source": "SESAR",
+        "place": "[Bone Lake, Liverpool Land]"
+      }
+    }
   },
   "concept-mammal": {
     "term": "mammal",
@@ -228,11 +865,124 @@
       "ark:/65665/338b9303e-1453-4e5e-a4af-63172015e6a0",
       "ark:/65665/32361e75d-ff29-44de-90c2-4b2a10ec4467"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k2086j53z",
+      "ark:/28722/k2057ts1q",
+      "ark:/28722/k2000f06w",
+      "ark:/28722/k20294d0r",
+      "ark:/28722/k2086j54f",
+      "ark:/28722/k2000f000",
+      "ark:/28722/k20294d17",
+      "ark:/28722/k2057ts45",
+      "ark:/28722/k2000f09b",
+      "ark:/28722/k20294d2q"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k2057ts45": {
+        "label": "Animal Bone 1457-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Künzing-Unternberg]"
+      },
+      "ark:/28722/k2000f000": {
+        "label": "Animal Bone 135-Bone",
+        "source": "OPENCONTEXT",
+        "place": "[Denmark, Europe, Holmegaard I]"
+      },
+      "ark:/28722/k2000f09b": {
+        "label": "Animal Bone 1475-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Riekofen]"
+      },
+      "ark:/28722/k20294d2q": {
+        "label": "Animal Bone 1545-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Straubing-Lerchenhaid]"
+      },
+      "ark:/65665/320a0e018-1da1-4628-b2ac-84a9e5fe31da": {
+        "label": "Aiptasia pulchella AN1BU66",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/28722/k2057ts1q": {
+        "label": "Animal Bone 1029-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Griesstetten]"
+      },
+      "ark:/65665/32361e75d-ff29-44de-90c2-4b2a10ec4467": {
+        "label": "Glossodoris rufomarginata AN2CK95",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/28722/k20294d17": {
+        "label": "Animal Bone 1361-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Hüde I]"
+      },
+      "ark:/65665/3841a0543-26ee-4cdd-ad7f-9bece0f45596": {
+        "label": "AN2CI77",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/28722/k20294d0r": {
+        "label": "Animal Bone 1144-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Griesstetten]"
+      },
+      "ark:/28722/k2000f06w": {
+        "label": "Animal Bone 1046-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Griesstetten]"
+      },
+      "ark:/65665/30695c7d8-28ba-4720-a124-ac6a52115aa3": {
+        "label": "AN2CO07",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/65665/3120cd628-c625-495d-bb64-dccdf71ea689": {
+        "label": "Aiptasia pulchella AN1BV97",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/65665/39d1ba6fe-df4e-49e0-a257-8021633148f5": {
+        "label": "Actinopyga varians AN2CJ96",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/65665/35162ec57-ac46-4269-9e1e-c19118eafa35": {
+        "label": "Actinopyga varians AN2CJ95",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/65665/338b9303e-1453-4e5e-a4af-63172015e6a0": {
+        "label": "Clytia sp. AO2MZ30",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/65665/30bc575f8-1bbc-4d27-8c28-a4d12ca077c5": {
+        "label": "AN2CI76",
+        "source": "SMITHSONIAN",
+        "place": "['Coconut Island, mammal pens', Hawaii, Honolulu County, North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii, Honolulu County', United States]"
+      },
+      "ark:/28722/k2086j54f": {
+        "label": "Animal Bone 1231-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Europe, Germany, Hildesheim-Bavenstedt]"
+      },
+      "ark:/28722/k2086j53z": {
+        "label": "Animal Bone 1012-Bonelit",
+        "source": "OPENCONTEXT",
+        "place": "[Ehrenstein, Europe, Germany]"
+      },
+      "ark:/65665/3ba9335b1-6fec-489d-b4ae-bcece555d8f8": {
+        "label": "AJ0MW13",
+        "source": "SMITHSONIAN",
+        "place": "[Hawaii, 'Kaneohe Bay, Coconut Island, fouling mammal pens', North Pacific Ocean, 'North Pacific Ocean, Kaneohe Bay', 'North Pacific Ocean, Kaneohe Bay, United States, Hawaii', United States]"
+      }
+    }
   },
   "diacritic": {
-    "term": "\u00c7atalh\u00f6y\u00fck",
+    "term": "Çatalhöyük",
     "substrate_top10": [
       "ark:/28722/r2p3k14c/oxa_14695",
       "ark:/28722/r2p3k14c/oxa_14696",
@@ -257,22 +1007,137 @@
       "ark:/28722/k20000825",
       "ark:/28722/k2000085m"
     ],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/r2p3k14c/oxa_14695",
+      "ark:/28722/r2p3k14c/oxa_14696",
+      "ark:/28722/r2p3k14c/oxa_14697",
+      "ark:/28722/r2p3k14c/oxa_14778",
+      "ark:/28722/r2p3k14c/oxa_14779",
+      "ark:/28722/r2p3k14c/oxa_14780",
+      "ark:/28722/r2p3k14c/oxa_14781",
+      "ark:/28722/r2p3k14c/aa_18104",
+      "ark:/28722/r2p3k14c/aa_18105",
+      "ark:/28722/r2p3k14c/aa_19344"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/r2p3k14c/aa_19344": {
+        "label": "Radiocarbon Sample AA-19344",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound East, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/k2000085m": {
+        "label": "Animal Bone 18343.F103",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 18343, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14780": {
+        "label": "Radiocarbon Sample OXA-14780",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14696": {
+        "label": "Radiocarbon Sample OXA-14696",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/aa_18104": {
+        "label": "Radiocarbon Sample AA-18104",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound East, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/k2000087k": {
+        "label": "Animal Bone 15340.F9",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 15340, Çatalhöyük]"
+      },
+      "ark:/28722/k20000863": {
+        "label": "Animal Bone 15160.F48",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 15160, Çatalhöyük]"
+      },
+      "ark:/28722/k2000069n": {
+        "label": "Animal Bone 15174.F13",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 15174, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14779": {
+        "label": "Radiocarbon Sample OXA-14779",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14695": {
+        "label": "Radiocarbon Sample OXA-14695",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/k20000717": {
+        "label": "Animal Bone 16896.F700",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 16896, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14781": {
+        "label": "Radiocarbon Sample OXA-14781",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/aa_18105": {
+        "label": "Radiocarbon Sample AA-18105",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound East, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/k20000685": {
+        "label": "Animal Bone 15343.F20",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 15343, Çatalhöyük]"
+      },
+      "ark:/28722/k20000825": {
+        "label": "Animal Bone 18328.F380",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 18328, Çatalhöyük]"
+      },
+      "ark:/28722/k2000081p": {
+        "label": "Animal Bone 16896.F388",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 16896, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14778": {
+        "label": "Radiocarbon Sample OXA-14778",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/r2p3k14c/oxa_14697": {
+        "label": "Radiocarbon Sample OXA-14697",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Turkey, Çatalhöyük]"
+      },
+      "ark:/28722/k20000806": {
+        "label": "Animal Bone 16896.F833",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 16896, Çatalhöyük]"
+      },
+      "ark:/28722/k2000070r": {
+        "label": "Animal Bone 16896.F768",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Mound West, Trench 5, Turkey, Unit 16896, Çatalhöyük]"
+      }
+    }
   },
   "no-hit": {
     "term": "xyzzyqqqplugh",
     "substrate_top10": [],
     "baseline_top10": [],
     "hand_labeled_top10": [],
-    "notes": ""
+    "notes": "",
+    "display": {}
   },
   "all-common": {
     "term": "material sample",
     "substrate_top10": [],
     "baseline_top10": [],
     "hand_labeled_top10": [],
-    "notes": ""
+    "notes": "",
+    "display": {}
   },
   "composed-source": {
     "term": "pottery",
@@ -289,14 +1154,78 @@
       "ark:/28722/k21z4h390"
     ],
     "baseline_top10": [],
-    "hand_labeled_top10": [],
-    "notes": ""
+    "hand_labeled_top10": [
+      "ark:/28722/k21v5sq5s",
+      "ark:/28722/k25h7t46m",
+      "ark:/28722/k22r44723",
+      "ark:/28722/k26h4v17b",
+      "ark:/28722/k2000f98w",
+      "ark:/28722/k23r1543t",
+      "ark:/28722/k27h1vx56",
+      "ark:/28722/k20z7g69r",
+      "ark:/28722/k24q86121",
+      "ark:/28722/k21z4h390"
+    ],
+    "notes": "",
+    "display": {
+      "ark:/28722/k22r44723": {
+        "label": "Pottery KPX# 1010",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k2000f98w": {
+        "label": "Pottery KPX# 1017",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k23r1543t": {
+        "label": "Pottery KPX# 1018",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k21z4h390": {
+        "label": "Pottery KPX# 1342",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k24q86121": {
+        "label": "Pottery KPX# 1335",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k25h7t46m": {
+        "label": "Pottery KPX# 1003",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k26h4v17b": {
+        "label": "Pottery KPX# 1011",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k21v5sq5s": {
+        "label": "Pottery KPX# 1002",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k20z7g69r": {
+        "label": "Pottery KPX# 1334",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      },
+      "ark:/28722/k27h1vx56": {
+        "label": "Pottery KPX# 1019",
+        "source": "OPENCONTEXT",
+        "place": "[Asia, Cambodia, Choeung Ek]"
+      }
+    }
   },
   "composed-source-material": {
     "term": "pottery",
     "substrate_top10": [],
     "baseline_top10": [],
     "hand_labeled_top10": [],
-    "notes": ""
+    "notes": "",
+    "display": {}
   }
 }
