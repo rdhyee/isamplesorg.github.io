@@ -1,0 +1,302 @@
+{
+  "single-common": {
+    "term": "pottery",
+    "substrate_top10": [
+      "ark:/28722/k21v5sq5s",
+      "ark:/28722/k25h7t46m",
+      "ark:/28722/k22r44723",
+      "ark:/28722/k26h4v17b",
+      "ark:/28722/k2000f98w",
+      "ark:/28722/k23r1543t",
+      "ark:/28722/k27h1vx56",
+      "ark:/28722/k20z7g69r",
+      "ark:/28722/k24q86121",
+      "ark:/28722/k21z4h390"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k2000hz7r",
+      "ark:/28722/k2000hz68",
+      "ark:/28722/k2000hz5s",
+      "ark:/28722/k2000hz49",
+      "ark:/28722/k2000hz3t",
+      "ark:/28722/k2000hz1v",
+      "ark:/28722/k2000hz2b",
+      "ark:/28722/k2000hz0c",
+      "ark:/28722/k2000hx98",
+      "ark:/28722/k2000hx8s"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "single-rare": {
+    "term": "basalt",
+    "substrate_top10": [
+      "IGSN:MGD0009H1",
+      "IGSN:MGD0009GC",
+      "IGSN:MGD0009GE",
+      "IGSN:MGD0009H8",
+      "IGSN:MGD00091X",
+      "IGSN:MGD00092P",
+      "IGSN:MGD00092N",
+      "IGSN:MGD00091Y",
+      "IGSN:MGD00092O",
+      "IGSN:MGD000305"
+    ],
+    "baseline_top10": [
+      "IGSN:MGD000BRO",
+      "IGSN:MGD000BRP",
+      "IGSN:MGD000BSY",
+      "IGSN:MGD000BSZ",
+      "IGSN:MGD000BTI",
+      "IGSN:MGD000BTJ",
+      "IGSN:MGD000BTK",
+      "IGSN:MGD000BTL",
+      "IGSN:MGD000BTM",
+      "IGSN:MGD000BTN"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "multi-term": {
+    "term": "pottery Cyprus",
+    "substrate_top10": [
+      "ark:/28722/k2p27782m",
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316",
+      "ark:/28722/k20p1dv9d"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k2086mb12",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20p1dw3z",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "stopword-heavy": {
+    "term": "pottery from Cyprus",
+    "substrate_top10": [
+      "ark:/28722/k2p27782m",
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316",
+      "ark:/28722/k20p1dv9d"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k2086mb12",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20p1dw3z",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "duplicate-term": {
+    "term": "pottery pottery cyprus",
+    "substrate_top10": [
+      "ark:/28722/k2p27782m",
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316",
+      "ark:/28722/k20p1dv9d"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k20c59q3w",
+      "ark:/28722/k2086mb12",
+      "ark:/28722/k20k2qh14",
+      "ark:/28722/k20p1dw3z",
+      "ark:/28722/k20c59q2d",
+      "ark:/28722/k20296j1v",
+      "ark:/28722/k21267f13",
+      "ark:/28722/k2057wx39",
+      "ark:/28722/k20c59p9b",
+      "ark:/28722/k20g41316"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "concept-ceramic": {
+    "term": "ceramic",
+    "substrate_top10": [
+      "ark:/28722/r2p24/bf_t104_2025_6_c",
+      "ark:/28722/r2p24/bf_t111_2025_1_c",
+      "ark:/28722/r2p24/bf_t111_2025_2_c",
+      "ark:/28722/r2p24/bf_t111_2025_3_c",
+      "ark:/28722/r2p24/bf_t111_2025_4_c",
+      "ark:/28722/r2p24/bf_t111_2025_5_c",
+      "ark:/28722/r2p24/bf_t111_2025_6_c",
+      "ark:/28722/r2p24/bf_t111_2025_7_c",
+      "ark:/28722/r2p24/bf_t111_2025_8_c",
+      "ark:/28722/r2p24/bf_t112_2025_1_c"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k2086hh12",
+      "ark:/28722/k2057t384",
+      "ark:/28722/k20293q68",
+      "ark:/28722/k2086hg9g",
+      "ark:/28722/k2057t39m",
+      "ark:/28722/k2000db21",
+      "ark:/28722/k20c56w5v",
+      "ark:/28722/k2086hh0k",
+      "ark:/28722/k20293q7r",
+      "ark:/28722/k2000db3h"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "concept-bone": {
+    "term": "bone",
+    "substrate_top10": [
+      "ark:/28722/k22n51g5s",
+      "ark:/28722/k26d5r882",
+      "ark:/28722/k2xp6x43k",
+      "ark:/28722/k2xw49v0d",
+      "ark:/28722/k26d5r990",
+      "ark:/28722/k27p8wc0d",
+      "ark:/28722/k28g92p3k",
+      "ark:/28722/k2k93n86g",
+      "ark:/28722/k2794n065",
+      "ark:/28722/k2kp8ft7b"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k2xp6x43k",
+      "ark:/28722/k2xw49v0d",
+      "ark:/28722/k26d5r882",
+      "ark:/28722/k26d5r990",
+      "ark:/28722/k22n51g5s",
+      "ark:/28722/k27p8wc0d",
+      "IGSN:CDR0002ME",
+      "IGSN:CDR0002MF",
+      "IGSN:CDR0002MG",
+      "IGSN:CDR0002MH"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "concept-mammal": {
+    "term": "mammal",
+    "substrate_top10": [
+      "ark:/28722/k2086j53z",
+      "ark:/28722/k2057ts1q",
+      "ark:/28722/k2000f06w",
+      "ark:/28722/k20294d0r",
+      "ark:/28722/k2086j54f",
+      "ark:/28722/k2000f000",
+      "ark:/28722/k20294d17",
+      "ark:/28722/k2057ts45",
+      "ark:/28722/k2000f09b",
+      "ark:/28722/k20294d2q"
+    ],
+    "baseline_top10": [
+      "ark:/65665/3ba9335b1-6fec-489d-b4ae-bcece555d8f8",
+      "ark:/65665/30bc575f8-1bbc-4d27-8c28-a4d12ca077c5",
+      "ark:/65665/3841a0543-26ee-4cdd-ad7f-9bece0f45596",
+      "ark:/65665/30695c7d8-28ba-4720-a124-ac6a52115aa3",
+      "ark:/65665/35162ec57-ac46-4269-9e1e-c19118eafa35",
+      "ark:/65665/39d1ba6fe-df4e-49e0-a257-8021633148f5",
+      "ark:/65665/320a0e018-1da1-4628-b2ac-84a9e5fe31da",
+      "ark:/65665/3120cd628-c625-495d-bb64-dccdf71ea689",
+      "ark:/65665/338b9303e-1453-4e5e-a4af-63172015e6a0",
+      "ark:/65665/32361e75d-ff29-44de-90c2-4b2a10ec4467"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "diacritic": {
+    "term": "\u00c7atalh\u00f6y\u00fck",
+    "substrate_top10": [
+      "ark:/28722/r2p3k14c/oxa_14695",
+      "ark:/28722/r2p3k14c/oxa_14696",
+      "ark:/28722/r2p3k14c/oxa_14697",
+      "ark:/28722/r2p3k14c/oxa_14778",
+      "ark:/28722/r2p3k14c/oxa_14779",
+      "ark:/28722/r2p3k14c/oxa_14780",
+      "ark:/28722/r2p3k14c/oxa_14781",
+      "ark:/28722/r2p3k14c/aa_18104",
+      "ark:/28722/r2p3k14c/aa_18105",
+      "ark:/28722/r2p3k14c/aa_19344"
+    ],
+    "baseline_top10": [
+      "ark:/28722/k20000863",
+      "ark:/28722/k2000069n",
+      "ark:/28722/k2000087k",
+      "ark:/28722/k20000685",
+      "ark:/28722/k2000081p",
+      "ark:/28722/k20000717",
+      "ark:/28722/k2000070r",
+      "ark:/28722/k20000806",
+      "ark:/28722/k20000825",
+      "ark:/28722/k2000085m"
+    ],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "no-hit": {
+    "term": "xyzzyqqqplugh",
+    "substrate_top10": [],
+    "baseline_top10": [],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "all-common": {
+    "term": "material sample",
+    "substrate_top10": [],
+    "baseline_top10": [],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "composed-source": {
+    "term": "pottery",
+    "substrate_top10": [
+      "ark:/28722/k21v5sq5s",
+      "ark:/28722/k25h7t46m",
+      "ark:/28722/k22r44723",
+      "ark:/28722/k26h4v17b",
+      "ark:/28722/k2000f98w",
+      "ark:/28722/k23r1543t",
+      "ark:/28722/k27h1vx56",
+      "ark:/28722/k20z7g69r",
+      "ark:/28722/k24q86121",
+      "ark:/28722/k21z4h390"
+    ],
+    "baseline_top10": [],
+    "hand_labeled_top10": [],
+    "notes": ""
+  },
+  "composed-source-material": {
+    "term": "pottery",
+    "substrate_top10": [],
+    "baseline_top10": [],
+    "hand_labeled_top10": [],
+    "notes": ""
+  }
+}
