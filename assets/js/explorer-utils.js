@@ -17,23 +17,6 @@ export function searchTerms(value) {
     return String(value || '').trim().split(/\s+/).filter(Boolean);
 }
 
-// Format a place_name VARCHAR[] column value (from DuckDB-WASM) into a
-// display string, e.g. ['Country', 'Region', 'Site'] -> 'Country › Region ›
-// Site'. #311 (Codex-adjacent catch, discovered once place_name started
-// carrying real data): Observable's DuckDBClient returns Arrow LIST columns
-// as an Arrow `Vector` (iterable, has .length), NOT a plain JS Array —
-// `Array.isArray(vector)` is FALSE, so the four call sites in explorer.qmd
-// that used to check `Array.isArray(placeParts)` silently rendered every
-// non-null place as blank. This was invisible until now because place_name
-// was 100% NULL in production before the #311 pipeline fix landed. Array.from
-// works on both a plain Array and an Arrow Vector (both are iterable); the
-// null/undefined guard is required because Array.from(null) throws.
-export function formatPlaceName(placeParts) {
-    if (placeParts == null) return '';
-    const arr = Array.from(placeParts);
-    return arr.length > 0 ? arr.filter(Boolean).join(' › ') : '';
-}
-
 // Parse a numeric URL param with a default and optional clamping.
 export function parseNum(val, def, min, max) {
     if (val == null) return def;
@@ -60,35 +43,6 @@ export function csvParamValues(params, key) {
 export function sourceUrl(pid) {
     if (!pid) return null;
     return `https://n2t.net/${pid}`;
-}
-
-// #313 P0: decide what the facet-count UI should show when the multi-filter
-// index path (sample_facet_index) can't directly answer a global-view
-// request — i.e. updateCrossFilteredCounts() has no correct legacy fallback
-// and applyMaskIndexCounts() returned something other than 'ok'/'superseded'.
-//
-// Before this fix the boot/load code used a single boolean
-// (window.__facetIndexReady) to mean BOTH "still loading" and "failed to
-// load", so the UI always rendered the same "—" dash for both — on a slow
-// connection the dash could sit there for the entire ~20-80s cold-boot
-// window looking exactly like a permanent failure (issue #313).
-//
-// `status` is window.__facetIndexStatus: 'pending' (boot/load still in
-// flight) | 'ready' (loaded + validated) | 'failed' (load threw, or a
-// preflight check — schema version, generation match, coverage — failed;
-// permanent for this session until refresh).
-// `res` is the applyMaskIndexCounts() outcome reaching this branch:
-// 'fallthrough' (index not ready/usable) | 'unavailable' (index usable but
-// the count query itself failed, e.g. a selected node had no bit, or the
-// query threw).
-//
-// Returns 'pending' (render "Loading…"; a real count is still coming, and
-// __onFacetIndexReady will repaint once status flips to 'ready') or
-// 'unavailable' (render the "—" dash + the existing "can't trust this
-// count" tooltip — this session genuinely can't compute it).
-export function facetCountsDisplayState(status, res) {
-    if (res === 'fallthrough' && status === 'pending') return 'pending';
-    return 'unavailable';
 }
 
 // Decode the explorer globe state from a URL hash fragment.
