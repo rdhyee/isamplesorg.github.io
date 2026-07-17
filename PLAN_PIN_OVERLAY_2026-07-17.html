@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Internet of Samples: iSamples – iSamples</title>
+<title>plan_pin_overlay_2026-07-17 – iSamples</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -97,7 +97,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
@@ -212,153 +212,79 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pin-overlay-implementation-plan-option-c-164165-172-7-track" id="toc-pin-overlay-implementation-plan-option-c-164165-172-7-track" class="nav-link active" data-scroll-target="#pin-overlay-implementation-plan-option-c-164165-172-7-track"><span class="header-section-number">1</span> Pin-overlay implementation plan (option C, #164/#165 → #172 §7 track)</a>
+  <ul>
+  <li><a href="#context-deltas-since-the-contract-was-written-may" id="toc-context-deltas-since-the-contract-was-written-may" class="nav-link" data-scroll-target="#context-deltas-since-the-contract-was-written-may"><span class="header-section-number">1.1</span> Context deltas since the contract was written (May)</a></li>
+  <li><a href="#increments" id="toc-increments" class="nav-link" data-scroll-target="#increments"><span class="header-section-number">1.2</span> Increments</a>
+  <ul class="collapse">
+  <li><a href="#inc-1-additive-pin-overlay-no-behavior-removed-today" id="toc-inc-1-additive-pin-overlay-no-behavior-removed-today" class="nav-link" data-scroll-target="#inc-1-additive-pin-overlay-no-behavior-removed-today"><span class="header-section-number">1.2.1</span> Inc 1 — additive pin overlay (no behavior removed) ← TODAY</a></li>
+  <li><a href="#inc-2-searchuipin-mode-the-latency-win-behind-flag" id="toc-inc-2-searchuipin-mode-the-latency-win-behind-flag" class="nav-link" data-scroll-target="#inc-2-searchuipin-mode-the-latency-win-behind-flag"><span class="header-section-number">1.2.2</span> Inc 2 — <code>?searchui=pin</code> mode (the latency win) ← behind flag</a></li>
+  <li><a href="#inc-3-not-in-scope" id="toc-inc-3-not-in-scope" class="nav-link" data-scroll-target="#inc-3-not-in-scope"><span class="header-section-number">1.2.3</span> Inc 3 — NOT in scope</a></li>
+  </ul></li>
+  <li><a href="#verification" id="toc-verification" class="nav-link" data-scroll-target="#verification"><span class="header-section-number">1.3</span> Verification</a></li>
+  <li><a href="#files" id="toc-files" class="nav-link" data-scroll-target="#files"><span class="header-section-number">1.4</span> Files</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/PLAN_PIN_OVERLAY_2026-07-17.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
 <!-- main -->
-<main class="content page-columns page-full column-body" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Internet of Samples: iSamples</h1>
-<p class="subtitle lead">Toward an Interdisciplinary Cyberinfrastructure for Material Samples</p>
-</div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
 
-<div class="quarto-title-meta column-body">
 
-    
-  
-    
-  </div>
-  
-
-
-</header>
-
-
-<div class="page-columns page-full">
-<div class="quarto-figure quarto-figure-center page-columns page-full">
-<figure class="figure page-columns page-full">
-<p class="page-columns page-full"><a href="./explorer.html" title="Explore the interactive globe" class="page-columns page-full"><img src="assets/isamples_globe.webp" class="nolightbox img-fluid figure-img column-page" style="width:100.0%" alt="Animated rotating globe showing iSamples data points from 4 scientific repositories"></a></p>
-<figcaption>Explore 6.7 million samples on an interactive globe</figcaption>
-</figure>
-</div>
-</div>
-<div class="callout callout-style-simple callout-note no-icon">
-<div class="callout-body d-flex">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-body-container">
-<p><strong>6.7 million</strong> physical samples | <strong>4</strong> repositories (SESAR, OpenContext, GEOME, Smithsonian) | <strong>90+</strong> countries | <strong>Zero installation</strong> — runs in your browser</p>
-</div>
-</div>
-</div>
-<section id="showcase-real-samples-from-the-collection" class="level2 unnumbered">
-<h2 class="unnumbered" data-anchor-id="showcase-real-samples-from-the-collection">Showcase: Real Samples from the Collection</h2>
-<div class="quarto-layout-panel" data-layout-ncol="4">
-<div class="quarto-layout-row quarto-layout-valign-center">
-<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><a href="https://doi.org/10.58052/DIA0000YL" title="Diamond, collected 2019-06-11, Brazil"><img src="assets/IGSN_10.58052_DIA0000YL.png" class="img-fluid" data-group="showcase" alt="Diamond sample"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><a href="https://doi.org/10.58052/IEGIL000C" title="Fossil coral, from 10000 BCE, Cayman Islands"><img src="assets/IGSN_10.58052_IEGIL000C.png" class="img-fluid" data-group="showcase" alt="Fossil coral sample"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><a href="https://n2t.net/ark:65665/337856f1a655e4ad78b1ef10a16dfb6e3" title="Paracirrhites arcatus, collected 2006-03-10, French Polynesia"><img src="assets/ark_65665_337856f1a655e4ad78b1ef10a16dfb6e3.png" class="img-fluid" data-group="showcase" alt="Fish specimen"></a></p>
-</div>
-<div class="quarto-layout-cell" style="flex-basis: 25.0%;justify-content: center;">
-<p><a href="https://n2t.net/ark:28722/r2p24/vdm_19600211" title="Red-figure askoi, late-4th to early-3rd century BCE, Murlo, Italy"><img src="assets/ark_28722_r2p24_vdm_19600211.png" class="img-fluid" data-group="showcase" alt="Red-figure askoi"></a></p>
-</div>
-</div>
-</div>
-<p><em>Each image links to its record at the source repository. Two of these are also in the iSamples collection and open directly in our globe — the <a href="./explorer.html#pid=IGSN:IEGIL000C&amp;v=1">fossil coral</a> and the <a href="./explorer.html#pid=ark:/28722/r2p24/vdm_19600211&amp;v=1">askoi</a> — with the coral flying to the Cayman Islands and the askoi to Murlo, Italy. The diamond and the fish live at their home repositories for now; they’ll join the iSamples collection in a future data update.</em></p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>What is iSamples?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The Internet of Samples (iSamples) is a multi-disciplinary and multi-institutional project funded by the <strong>National Science Foundation</strong> to design, develop, and promote service infrastructure to uniquely, consistently, and conveniently identify material samples, record metadata about them, and persistently link them to other samples and derived digital content, including images, data, and publications.</p>
-<p>iSamples integrates data from four major scientific repositories:</p>
-<ul>
-<li><strong><a href="https://www.geosamples.org/">SESAR</a></strong> — Earth science samples (rocks, minerals, sediments, soils)</li>
-<li><strong><a href="https://opencontext.org/">OpenContext</a></strong> — Archaeological and cultural heritage materials</li>
-<li><strong><a href="https://geome-db.org/">GEOME</a></strong> — Genomic and biological specimens</li>
-<li><strong><a href="https://collections.nmnh.si.edu/">Smithsonian</a></strong> — Natural history museum collections</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>How can I access it?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The project uses <strong>geoparquet files + DuckDB-WASM</strong> for efficient, browser-based data access and analysis — no server required.</p>
-<ul>
-<li><strong>iSamples Full Dataset</strong>: ~280 MB wide format, 6.7M samples</li>
-<li><strong>Available via</strong>: Cloudflare R2 with HTTP range requests</li>
-<li><strong>Interactive tools</strong>: <a href="./explorer.html">Interactive Explorer</a> — search, filter, and explore 6.7M samples on a 3D globe or in a paginated table</li>
-</ul>
-<p>All analysis happens in your browser. Only the data you need is downloaded — typically less than 1 MB for initial exploration.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Why browser-based?
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ul>
-<li><strong>Universal access</strong> — No installation, works in any modern browser</li>
-<li><strong>Fast analysis</strong> — 5-10x faster than downloading full datasets</li>
-<li><strong>Memory efficient</strong> — Analyze 300MB datasets using less than 100MB browser memory</li>
-<li><strong>Minimal transfer</strong> — Only download the columns and rows you need</li>
-<li><strong>Reproducible</strong> — Share a URL and anyone can see exactly what you see</li>
-</ul>
-</div>
-</div>
-</div>
-<hr>
-<p><br></p>
+<section id="pin-overlay-implementation-plan-option-c-164165-172-7-track" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Pin-overlay implementation plan (option C, #164/#165 → #172 §7 track)</h1>
+<p><em>2026-07-17, RY green-light “start now”. Strategy: same playbook that shipped FTS this morning — additive increment first, behavior change behind a flag, staging verify, flip on confirmation.</em></p>
+<section id="context-deltas-since-the-contract-was-written-may" class="level2" data-number="1.1">
+<h2 data-number="1.1" data-anchor-id="context-deltas-since-the-contract-was-written-may"><span class="header-section-number">1.1</span> Context deltas since the contract was written (May)</h2>
+<ol type="1">
+<li><strong>Search is now a global filter</strong> (#234 A1): <code>search_pids</code> semi-joins constrain table, points, facet counts. The contract’s “facet counts exclude search” clause describes the <em>target</em> state, not today’s. Users have 6+ weeks of habit with filter-everything behavior.</li>
+<li><strong>Area/world scope already exists</strong> (#178 landed): <code>?search_scope</code>, two-button UI, viewport-scoped SQL. Contract’s “Light-path addendum” is DONE — do not rebuild.</li>
+<li><strong>FTS is the default backend</strong> (#335, today). Contract explicitly says (C) is backend-orthogonal — confirmed still true (both producers emit <code>search_pids</code>).</li>
+</ol>
 </section>
-<section id="isamples-in-action" class="level1 unnumbered page-columns page-full">
-<h1 class="unnumbered">iSamples in Action</h1>
-<div class="column-page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%;">
-<video autoplay="" muted="" playsinline="" controls="" style="max-width: 100%; display: block;" aria-label="iSamples data visualization from Moorea">
-<source src="assets/mdvunmuted.mp4" type="video/mp4">
-Your browser does not support the video tag.
-</video>
-<p style="font-size: 1.9rem; font-style: italic; text-align: center; margin-top: 1rem">
-Data visualization from the island of Moorea in French Polynesia.
-</p>
-</div>
+<section id="increments" class="level2" data-number="1.2">
+<h2 data-number="1.2" data-anchor-id="increments"><span class="header-section-number">1.2</span> Increments</h2>
+<section id="inc-1-additive-pin-overlay-no-behavior-removed-today" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" data-anchor-id="inc-1-additive-pin-overlay-no-behavior-removed-today"><span class="header-section-number">1.2.1</span> Inc 1 — additive pin overlay (no behavior removed) ← TODAY</h3>
+<p>After any search completes, render matching samples as a pin overlay per the contract’s non-negotiable rules: - <code>viewer.searchResultPoints</code> = new <code>PointPrimitiveCollection</code>, added to <code>scene.primitives</code> AFTER <code>h3Points</code>/<code>samplePoints</code> (z-order rule) - ≤ 50 pins (displayed result set), hollow-ring styling, <code>SOURCE_COLORS</code> palette, pixel size 8 - hover label + click → <code>updateSampleCard()</code> + pid hash write (dispatch on <code>meta.type === 'searchResult'</code>) - lifecycle: populate on results; clear per SNAPSHOT SEMANTICS below - camera (amended per Codex round-1 P1.5): Inc 1 ships only the cheap half — fly to the first <em>located</em> result @ 200000 (explicit null checks so 0° coords are valid), auto-fly suppressed in area scope (existing behavior). <strong>Fit-to- bounds (the 30°×30° extent rule) is DEFERRED to Inc 2</strong> — it is the only camera work not in Inc 1. - global refiltering UNCHANGED in Inc 1 — pins are purely additive - acceptance: the contract’s four shape cases (zero / one / local-many / global-many). Inc 1 asserts pin <em>identity/count/replacement/clear</em> for all four; the <strong>local-many fit-to-bounds ZOOM assertion is deferred to Inc 2</strong> with the fit-to-bounds implementation (Inc 1 flies to the first located result in every non-area case instead) - <strong>lifecycle (amended, Codex round-1 P1.2 — SNAPSHOT SEMANTICS):</strong> the pins are a snapshot of the <em>rendered results list</em> and reconcile with the LIST lifecycle, not with filter state. Cleared wherever the list is torn down (new/empty submit, described-by takeover, globe sample/cluster click). They deliberately PERSIST when the list persists stale (a source/facet toggle while a search is active updates #300 filtered surfaces but not the frozen list) — that staleness is pre-existing list behavior, documented, not a new pin bug. Known pre-existing incoherence left for a follow-up issue: a draft-input clear followed by a source/facet change makes <code>writeQueryState()</code> drop <code>search=</code> from the URL while the runtime filter (and thus list + pins) survive. - <strong>pin-count semantics (amended per review):</strong> one pin per <em>located</em> displayed result (world scope legitimately returns coordinate-less rows — never coerce to (0,0)); panel reports displayed vs pinned counts when they differ; camera rules use the first <em>located</em> result - <strong>click parity (amended, Codex round-1 P1.3):</strong> the sample-click ceremony (freshness token, card, selection/hash, detail hydration) is the shared <code>selectSearchResult()</code> helper with a preserve-results-list option; pin clicks use it — no shallow duplicate branch. Pin clicks get the FULL in-map card hydration (material / feature / specimen / thumbnail) by reusing <code>openInMapCardForSample()</code>, not a description-only fetch; the helper takes the caller’s freshness token to avoid a double-bump - <strong>styling (amended):</strong> carry <code>scaleByDistance</code> explicitly; use the bounded <code>POINT_DEPTH_TEST_DISTANCE</code> for <code>disableDepthTestDistance</code> (Codex round-1 P1.1 — <code>Infinity</code> bleeds pins through the far side of the globe)</p>
+</section>
+<section id="inc-2-searchuipin-mode-the-latency-win-behind-flag" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" data-anchor-id="inc-2-searchuipin-mode-the-latency-win-behind-flag"><span class="header-section-number">1.2.2</span> Inc 2 — <code>?searchui=pin</code> mode (the latency win) ← behind flag</h3>
+<p><strong>Seam corrected per Codex plan review (P0):</strong> skipping <code>applySearchFilterChange()</code> is NOT sufficient — <code>window.__searchFilter.active</code> is consulted independently by searchFilterSQL() (table/export/points/heatmap/facets), computeTargetMode(), table messaging, heatmap cache keys, and camera moveEnd refreshes. The seam is a single semantic predicate <strong><code>searchFiltersSurfaces()</code></strong> (false only for <code>kind === 'text' &amp;&amp; searchui === 'pin'</code>; concept/described-by filtering stays global), used consistently by every consumer. Skipping the direct call then becomes a latency optimization, not the correctness mechanism. - expected effect: search response ≈ filter-build time (~1-5s cold) instead of +10-20s of surface refiltering — this is what makes #172 §7 winnable - table/facets/clusters keep their pre-search state (facet counts stay search-independent, per original #158 contract) - clear messaging in panel: “N matches pinned on globe” replaces “N of N in view” - default stays current behavior until team confirms (Andrea/Eric habit risk); the eventual flip is a real change (tests/docs/rollback/telemetry), not 1 line — <code>searchui=pin|filter</code> recorded as a temporary rollout flag (deliberate, documented deviation from the “URL params unchanged” clause) - URL: <code>searchui=pin</code> round-trips like <code>fts</code> param (state contract: no new hash state)</p>
+</section>
+<section id="inc-3-not-in-scope" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" data-anchor-id="inc-3-not-in-scope"><span class="header-section-number">1.2.3</span> Inc 3 — NOT in scope</h3>
+<p>Scope buttons (done), mockup-v1 sidebar mirror (#200 — parked per closure triage).</p>
+</section>
+</section>
+<section id="verification" class="level2" data-number="1.3">
+<h2 data-number="1.3" data-anchor-id="verification"><span class="header-section-number">1.3</span> Verification</h2>
+<ul>
+<li>4 acceptance cases on staging (fork Pages dispatch from branch, as this morning)</li>
+<li>e2e spec additions: pins count == min(50, results); pins cleared on clear; <code>?searchui=pin</code> skips refilter (assert facet counts unchanged after search)</li>
+<li>Codex loop: plan review (round 1 DONE 7/17 — P0 seam corrected, this doc amended) → implement → per-increment review rounds → LGTM gate</li>
+<li>honest sizing (Codex): Inc 1 ≈ 1–2 days · Inc 2 ≈ 2–4 days · staging ≈ 1 day</li>
+</ul>
+</section>
+<section id="files" class="level2" data-number="1.4">
+<h2 data-number="1.4" data-anchor-id="files"><span class="header-section-number">1.4</span> Files</h2>
+<ul>
+<li><code>explorer.qmd</code>: viewer cell (~:773 area) for collection; <code>doSearch</code> result path for populate/clear; mouse/click handlers for pick dispatch; search-complete path for Inc 2 skip</li>
+<li><code>tests/playwright/pin-overlay.spec.js</code> (new) <!-- cc:2026.07.17 --></li>
+</ul>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -763,7 +689,7 @@ Data visualization from the island of Moorea in French Polynesia.
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/PLAN_PIN_OVERLAY_2026-07-17.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the <a href="https://nsf.gov/">NSF</a>.</p>
 </div>
