@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>data_provenance – iSamples</title>
+<title>plan_305_facet_counts – iSamples</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -255,17 +255,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#isamples-explorer-data-provenance" id="toc-isamples-explorer-data-provenance" class="nav-link active" data-scroll-target="#isamples-explorer-data-provenance"><span class="header-section-number">1</span> iSamples Explorer — Data Provenance</a>
+  <li><a href="#plan-305-facet-count-correctness-coherence-counts-beyond-the-single-filter-cube" id="toc-plan-305-facet-count-correctness-coherence-counts-beyond-the-single-filter-cube" class="nav-link active" data-scroll-target="#plan-305-facet-count-correctness-coherence-counts-beyond-the-single-filter-cube"><span class="header-section-number">1</span> Plan — #305 Facet-count correctness &amp; coherence (counts beyond the single-filter cube)</a>
   <ul>
-  <li><a href="#pipeline-dag" id="toc-pipeline-dag" class="nav-link" data-scroll-target="#pipeline-dag"><span class="header-section-number">1.1</span> Pipeline DAG</a></li>
-  <li><a href="#stages-script-command-per-step" id="toc-stages-script-command-per-step" class="nav-link" data-scroll-target="#stages-script-command-per-step"><span class="header-section-number">1.2</span> Stages (script / command per step)</a></li>
-  <li><a href="#the-sidecarenrichment-pattern-how-new-data-gets-in" id="toc-the-sidecarenrichment-pattern-how-new-data-gets-in" class="nav-link" data-scroll-target="#the-sidecarenrichment-pattern-how-new-data-gets-in"><span class="header-section-number">1.3</span> The sidecar/enrichment pattern (how new data gets in)</a></li>
-  <li><a href="#stage-4-builder-contract-scriptsbuild_frontend_derived.py" id="toc-stage-4-builder-contract-scriptsbuild_frontend_derived.py" class="nav-link" data-scroll-target="#stage-4-builder-contract-scriptsbuild_frontend_derived.py"><span class="header-section-number">1.4</span> Stage 4 builder contract (<code>scripts/build_frontend_derived.py</code>)</a></li>
-  <li><a href="#documentation-automation-gaps-remaining" id="toc-documentation-automation-gaps-remaining" class="nav-link" data-scroll-target="#documentation-automation-gaps-remaining"><span class="header-section-number">1.5</span> Documentation / automation gaps (remaining)</a></li>
-  <li><a href="#key-files" id="toc-key-files" class="nav-link" data-scroll-target="#key-files"><span class="header-section-number">1.6</span> Key files</a></li>
+  <li><a href="#problem" id="toc-problem" class="nav-link" data-scroll-target="#problem"><span class="header-section-number">1.1</span> Problem</a></li>
+  <li><a href="#core-idea-count-per-node-from-the-bitmasks-no-membership-scan" id="toc-core-idea-count-per-node-from-the-bitmasks-no-membership-scan" class="nav-link" data-scroll-target="#core-idea-count-per-node-from-the-bitmasks-no-membership-scan"><span class="header-section-number">1.2</span> Core idea — count per node FROM the bitmasks (no membership scan)</a></li>
+  <li><a href="#feasibility-codex-native-duckdb-benchmarks-real-6m-pid-data" id="toc-feasibility-codex-native-duckdb-benchmarks-real-6m-pid-data" class="nav-link" data-scroll-target="#feasibility-codex-native-duckdb-benchmarks-real-6m-pid-data"><span class="header-section-number">1.3</span> Feasibility (Codex native DuckDB benchmarks, real 6M-pid data)</a></li>
+  <li><a href="#source-handling" id="toc-source-handling" class="nav-link" data-scroll-target="#source-handling"><span class="header-section-number">1.4</span> Source handling</a></li>
+  <li><a href="#data-correctness-prerequisite-306" id="toc-data-correctness-prerequisite-306" class="nav-link" data-scroll-target="#data-correctness-prerequisite-306"><span class="header-section-number">1.5</span> Data-correctness prerequisite (#306)</a></li>
+  <li><a href="#honesty-rule-non-negotiable" id="toc-honesty-rule-non-negotiable" class="nav-link" data-scroll-target="#honesty-rule-non-negotiable"><span class="header-section-number">1.6</span> Honesty rule (non-negotiable)</a></li>
+  <li><a href="#phased-plan" id="toc-phased-plan" class="nav-link" data-scroll-target="#phased-plan"><span class="header-section-number">1.7</span> Phased plan</a>
+  <ul class="collapse">
+  <li><a href="#phase-1-artifact-semantic-foundation" id="toc-phase-1-artifact-semantic-foundation" class="nav-link" data-scroll-target="#phase-1-artifact-semantic-foundation"><span class="header-section-number">1.7.1</span> Phase 1 — Artifact + semantic foundation</a></li>
+  <li><a href="#phase-2-fix-304-at-global-view" id="toc-phase-2-fix-304-at-global-view" class="nav-link" data-scroll-target="#phase-2-fix-304-at-global-view"><span class="header-section-number">1.7.2</span> Phase 2 — Fix #304 at global view</a></li>
+  <li><a href="#phase-3-extend-not-premature-unification" id="toc-phase-3-extend-not-premature-unification" class="nav-link" data-scroll-target="#phase-3-extend-not-premature-unification"><span class="header-section-number">1.7.3</span> Phase 3 — Extend (not premature unification)</a></li>
+  <li><a href="#phase-4-verification-cleanup" id="toc-phase-4-verification-cleanup" class="nav-link" data-scroll-target="#phase-4-verification-cleanup"><span class="header-section-number">1.7.4</span> Phase 4 — Verification + cleanup</a></li>
+  </ul></li>
+  <li><a href="#constraints-landmines" id="toc-constraints-landmines" class="nav-link" data-scroll-target="#constraints-landmines"><span class="header-section-number">1.8</span> Constraints / landmines</a></li>
+  <li><a href="#top-3-risks" id="toc-top-3-risks" class="nav-link" data-scroll-target="#top-3-risks"><span class="header-section-number">1.9</span> Top 3 risks</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/DATA_PROVENANCE.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/PLAN_305_facet_counts.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -273,140 +282,134 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="isamples-explorer-data-provenance" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> iSamples Explorer — Data Provenance</h1>
-<p>How every parquet file the explorer uses is generated, from root to publish. <em>Reviewed 2026-06-02 (CC, via codebase audit). Complements <code>SERIALIZATIONS.md</code> (format/schema reference); this file is the end-to-end build chain + the automation gaps.</em></p>
-<blockquote class="blockquote">
-<p><strong>Load-bearing constraint:</strong> the <strong>root export cannot be regenerated.</strong> It was produced from the iSamples Central Solr API (<code>central.isample.xyz</code>), <strong>offline since Aug 2025</strong>. The Zenodo-archived export is a <strong>frozen root</strong>. Any <em>new</em> data (e.g.&nbsp;concept URIs, thumbnails) therefore must come from a <strong>per-source supplementary file merged into the base by <code>pid</code></strong> — the “sidecar” pattern (see Stage 3) — not from re-exporting.</p>
-</blockquote>
-<section id="pipeline-dag" class="level2" data-number="1.1">
-<h2 data-number="1.1" data-anchor-id="pipeline-dag"><span class="header-section-number">1.1</span> Pipeline DAG</h2>
-<pre><code>Source collections (SESAR · OpenContext · GEOME · Smithsonian)
-   │  iSamples Central Solr API  ── OFFLINE since Aug 2025 (cannot re-run) ──┐
-   ▼                                                                         │
-STAGE 0/1  export_client → JSONL → GeoParquet                               │ frozen
-   → isamples_export_*_geo.parquet   (Export format; ~300MB, 6.7M; Zenodo doi:10.5281/zenodo.15278211)
-   ▼
-STAGE 2  pqg/pqg/sql_converter.py  (export → base PQG; 7-stage DuckDB SQL)
-   →  narrow (…_narrow.parquet, ~844MB, 106M rows)   and   wide (…_wide.parquet, ~282MB, 20M rows)
-   ▼
-STAGE 3  sidecar/enrichment merges (LEFT JOIN by pid)       ← Eric's independently-maintained OC PQG (GCS)
-   3a scripts/enrich_wide_with_oc_thumbnails.py  →  isamples_202604_wide.parquet (+47K thumbnails)
-   3b scripts/enrich_wide_with_oc_concepts.py    →  isamples_202606_wide.parquet (#272: OC material/
-      object-type concepts REPLACE the frozen export's for OC pids — OC wins unconditionally;
-      gate: scripts/validate_oc_concept_enrichment.py)
-   ▼
-STAGE 4  wide → frontend derived files  (NOW SCRIPTED: scripts/build_frontend_derived.py)
-   → wide_h3 · h3_summary_res4/6/8 · samples_map_lite · sample_facets_v2 · facet_summaries · facet_cross_filter
-   → vocab_labels  (scripts/build_vocab_labels.py — built separately from SKOS TTLs)
-   → {tag}_manifest.json  (build identity: input+output sha256, argv, git SHA, DuckDB/extension versions)
-   ▼
-STAGE 5  publish to R2 (bucket isamples-ry) + Cloudflare Worker (data.isamples.org, /current/ aliases)
-   ▼
-DuckDB-WASM in the browser (explorer.qmd; parquet URLs ~L767-781)</code></pre>
+<section id="plan-305-facet-count-correctness-coherence-counts-beyond-the-single-filter-cube" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Plan — #305 Facet-count correctness &amp; coherence (counts beyond the single-filter cube)</h1>
+<p><strong>Status:</strong> plan of record · <strong>Authors:</strong> Claude + Codex (joint, 2026-06-19) · <strong>Tracks:</strong> #305 (meta), #304 (live bug), #306 (data bug), #276 (semantics), #230, #286</p>
+<section id="problem" class="level2" data-number="1.1">
+<h2 data-number="1.1" data-anchor-id="problem"><span class="header-section-number">1.1</span> Problem</h2>
+<p>At the global/zoomed-out view, facet <strong>counts</strong> only cross-filter for a <strong>single</strong> active filter (served by the precomputed <code>facet_tree_cross_filter</code> cube via <code>effectiveSingleFilter()</code>, <code>explorer.qmd:3374</code>). With <strong>2+ active selections</strong> the cube is skipped and tree-dim counts revert to the <strong>unfiltered baseline</strong> (<code>explorer.qmd:3557-3562</code>) — deliberately, to avoid a ~39M-row <code>sample_facet_membership</code> GROUP BY that stalls DuckDB-WASM. So the <strong>map is correctly filtered</strong> (#299 bitmask) but the <strong>count numbers are wrong</strong> for multi-filter at world view. Zoomed-in is already correct (live membership path, <code>explorer.qmd:3564-3598</code>). Reported by Eric in #304 (e.g.&nbsp;<em>Material: Anthropogenic</em> + <em>Specimen Type: Artifact</em>).</p>
 </section>
-<section id="stages-script-command-per-step" class="level2" data-number="1.2">
-<h2 data-number="1.2" data-anchor-id="stages-script-command-per-step"><span class="header-section-number">1.2</span> Stages (script / command per step)</h2>
+<section id="core-idea-count-per-node-from-the-bitmasks-no-membership-scan" class="level2" data-number="1.2">
+<h2 data-number="1.2" data-anchor-id="core-idea-count-per-node-from-the-bitmasks-no-membership-scan"><span class="header-section-number">1.2</span> Core idea — count per node FROM the bitmasks (no membership scan)</h2>
+<p>For a count dimension D over a qualifying pid set Q:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> nb.concept_uri <span class="kw">AS</span> <span class="fu">value</span>, <span class="fu">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> <span class="fu">count</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> <span class="op">&lt;</span>complete_facet_index<span class="op">&gt;</span> s</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> read_parquet(<span class="st">'${node_bits_url}'</span>) nb <span class="kw">ON</span> nb.facet_type <span class="op">=</span> <span class="st">'&lt;D&gt;'</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> (s.<span class="op">&lt;</span>D<span class="op">&gt;</span>_mask &amp; (<span class="dv">1</span>:<span class="ch">:BIGINT</span> <span class="op">&lt;&lt;</span> nb.bit_index)) <span class="op">&lt;&gt;</span> <span class="dv">0</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="op">&lt;</span><span class="kw">AND</span> <span class="kw">of</span> <span class="kw">the</span> OTHER active dims<span class="st">' mask predicates&gt; &lt;source&gt; &lt;viewport&gt; &lt;search&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">GROUP BY nb.concept_uri</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>Masks are <strong>one row per pid</strong> → <code>COUNT(*)</code> == <code>COUNT(DISTINCT pid)</code> (do <strong>not</strong> add <code>COUNT(DISTINCT)</code> — wasted work).</li>
+<li>Membership encodes <strong>ancestor closure</strong> → child bit ⇒ parent bit, so <strong>parent ≥ child</strong> holds for free.</li>
+<li>The bitwise join is against <code>facet_node_bits</code> (≤63 rows/dim), not the 39M-row membership table.</li>
+</ul>
+<p><strong>Cross-filter semantics (confirmed correct):</strong> OR among selected nodes <em>within</em> a dimension; AND <em>across</em> dimensions; <strong>omit the target dimension’s own predicate</strong> (exclude-self), matching the UI contract (<code>explorer.qmd:3305</code>) and the existing cube (<code>build_frontend_derived.py:460</code>). Special case: <strong>zero selected sources</strong> ⇒ impossible filter for tree targets, but the source dimension’s own histogram must still exclude source and stay constrained by the three trees.</p>
+</section>
+<section id="feasibility-codex-native-duckdb-benchmarks-real-6m-pid-data" class="level2" data-number="1.3">
+<h2 data-number="1.3" data-anchor-id="feasibility-codex-native-duckdb-benchmarks-real-6m-pid-data"><span class="header-section-number">1.3</span> Feasibility (Codex native DuckDB benchmarks, real 6M-pid data)</h2>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
 <thead>
 <tr class="header">
-<th>Stage</th>
-<th>Input → Output</th>
-<th>How (file:line)</th>
-<th>Automated?</th>
+<th>Query</th>
+<th>Time</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>0/1 Export</strong></td>
-<td>Solr API → <code>isamples_export_*_geo.parquet</code></td>
-<td><code>export_client</code> <code>ExportClient.perform_full_download()</code> (<code>export_client.py:423-469</code>) → <code>write_geoparquet_from_json_lines()</code>; schema <code>SOURCE_COLUMNS</code> (<code>duckdb_utilities.py:9-42</code>, incl.&nbsp;<code>keywords: STRUCT(keyword VARCHAR)[]</code> — <strong>text only, no URI</strong>, L17)</td>
-<td>❌ API offline; <strong>frozen</strong></td>
+<td>One unfiltered 22-node histogram</td>
+<td>~0.17s</td>
 </tr>
 <tr class="even">
-<td><strong>2 Base PQG</strong></td>
-<td>export → <code>*_narrow.parquet</code> / <code>*_wide.parquet</code></td>
-<td><code>pqg/pqg/sql_converter.py</code> <code>convert_isamples_sql(input, output, wide=…)</code> (CLI <code>python pqg/sql_converter.py in.parquet out.parquet [--wide]</code>); 7 stages, decomposes nested structs → nodes+edges; site dedupe by rounded lat/lon+label</td>
-<td>✅ scripted (exact prod invocation not recorded — gap)</td>
+<td>All three tree dims via one 56-node join</td>
+<td>~0.69s</td>
 </tr>
 <tr class="odd">
-<td><strong>3a Sidecar: thumbnails</strong></td>
-<td>base wide + Eric’s OC PQG → <code>isamples_202604_wide.parquet</code></td>
-<td><code>scripts/enrich_wide_with_oc_thumbnails.py</code> — <code>LEFT JOIN</code> OC <code>(pid, thumbnail_url)</code> into wide (<code>COALESCE</code>). Drift check: <code>scripts/check_oc_pqg_drift.py</code> (detects only; no mirror)</td>
-<td>⚠️ merge scripted; OC mirror + R2 upload manual</td>
+<td>Eric’s Material+Specimen-Type → context histogram</td>
+<td>~0.02s</td>
 </tr>
 <tr class="even">
-<td><strong>3b Sidecar: OC concepts (#272)</strong></td>
-<td>3a wide + Eric’s OC <strong>wide</strong> → <code>isamples_202606_wide.parquet</code></td>
-<td><code>scripts/enrich_wide_with_oc_concepts.py</code> — REPLACES <code>p__has_material_category</code> / <code>p__has_sample_object_type</code> for OC pids with OC’s ordered concept lists (<strong>OC wins unconditionally</strong> — RY decision 2026-06-10, #272); mints <code>IdentifiedConcept</code> rows for URIs the frozen export never had (e.g.&nbsp;<code>otheranthropogenicmaterial</code>, the #260 fix); deterministic; emits <code>.manifest.json</code>. Independent gate: <code>scripts/validate_oc_concept_enrichment.py</code> (re-derives from inputs; non-overlay rows must be byte-identical). Scope: overlay only — ~75K OC records absent from the frozen export are NOT ingested (follow-up); <code>p__has_context_category</code> untouched (follow-up).</td>
-<td>✅ merge + gate scripted (<code>make all-272</code>); R2 upload manual</td>
+<td>Embedded source predicate/group</td>
+<td>~0.014s</td>
 </tr>
 <tr class="odd">
-<td><strong>4 Frontend derived</strong></td>
-<td>wide → 7 explorer files</td>
-<td>The 6 map/facet files (<code>wide_h3</code>, <code>h3_summary_res4/6/8</code>, <code>samples_map_lite</code>, <code>sample_facets_v2</code>, <code>facet_summaries</code>, <code>facet_cross_filter</code>) ← <strong><code>scripts/build_frontend_derived.py</code></strong> (deterministic; geometry-agnostic; emits a manifest). <code>vocab_labels.parquet</code> ← <code>scripts/build_vocab_labels.py</code> (SKOS TTLs). Gated by <code>scripts/validate_frontend_derived.py</code> (algebraic + <code>--wide</code> semantic re-derivation) + <code>tests/test_frontend_derived.py</code> (fixtures, CI).</td>
-<td>✅ scripted; facet/map files semantic-tested; wide_h3 column-smoke-tested</td>
-</tr>
-<tr class="even">
-<td><strong>5 Publish</strong></td>
-<td>files → R2 + Worker</td>
-<td>Worker <code>workers/data-isamples-org/src/index.js</code> (<code>wrangler deploy</code>); immutable cache for <code>isamples_\d{6}_*.parquet</code>; <code>/current/&lt;flavor&gt;.parquet</code> → 302 via <code>current/manifest.json</code>. Bucket <code>isamples-ry</code></td>
-<td>⚠️ Worker scripted; <strong>file upload + manifest update are manual</strong></td>
+<td><code>facets_v3</code> semi-join (rejected approach)</td>
+<td>~0.145s</td>
 </tr>
 </tbody>
 </table>
+<p>Strongly supports feasibility. <strong>Worst case ≈ 6M × 56 = ~336M cheap bit-tests</strong>, not merely a 6M-row scan → <strong>WASM cold+warm benchmarking remains a hard release gate</strong> (the app has documented DuckDB-WASM concurrency/deadlock sensitivity).</p>
 </section>
-<section id="the-sidecarenrichment-pattern-how-new-data-gets-in" class="level2" data-number="1.3">
-<h2 data-number="1.3" data-anchor-id="the-sidecarenrichment-pattern-how-new-data-gets-in"><span class="header-section-number">1.3</span> The sidecar/enrichment pattern (how new data gets in)</h2>
-<p>Because the export is frozen, new per-source data is added by <strong>merging a supplementary parquet keyed by <code>pid</code> into the base wide</strong> — exactly what the thumbnail enrichment does:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- scripts/enrich_wide_with_oc_thumbnails.py (core)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> TEMP <span class="kw">TABLE</span> oc_thumbs <span class="kw">AS</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> pid, thumbnail_url <span class="kw">FROM</span> read_parquet(<span class="st">'&lt;eric_oc_pqg&gt;'</span>) <span class="kw">WHERE</span> thumbnail_url <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (<span class="kw">SELECT</span> p.<span class="op">*</span> <span class="kw">REPLACE</span> (<span class="fu">COALESCE</span>(oc.thumbnail_url, p.thumbnail_url) <span class="kw">AS</span> thumbnail_url)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> read_parquet(<span class="st">'&lt;base_wide&gt;'</span>) p <span class="kw">LEFT</span> <span class="kw">JOIN</span> oc_thumbs oc <span class="kw">ON</span> p.pid <span class="op">=</span> oc.pid)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">TO</span> <span class="st">'&lt;out&gt;'</span> (FORMAT PARQUET, COMPRESSION ZSTD);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Eric Kansa maintains OpenContext PQG <strong>independently</strong> on GCS (<code>storage.googleapis.com/opencontext-parquet/oc_isamples_pqg.parquet</code>), so it can carry data the frozen iSamples export lacks. This is the channel for <strong>#263</strong> (external concept URIs): Eric’s OC PQG carries them → merged into wide by pid → flows to the derived files. <em>(Sidecar design endorsed 2026-04-17; the spec <code>project_isamples_sidecar_pattern.md</code> lives in the Obsidian vault, not a repo — gap.)</em></p>
+<section id="source-handling" class="level2" data-number="1.4">
+<h2 data-number="1.4" data-anchor-id="source-handling"><span class="header-section-number">1.4</span> Source handling</h2>
+<p>Add <code>source</code> as a plain <strong>VARCHAR</strong> column to a <strong>new complete per-pid index</strong> (source is exclusive, not multi-valued → a mask is wrong; a <code>facets_v3</code> semi-join adds a second 6M-row read + hash join). New schema:</p>
+<pre><code>pid · source · material_mask · context_mask · object_type_mask · build_id · schema_version</code></pre>
 </section>
-<section id="stage-4-builder-contract-scriptsbuild_frontend_derived.py" class="level2" data-number="1.4">
-<h2 data-number="1.4" data-anchor-id="stage-4-builder-contract-scriptsbuild_frontend_derived.py"><span class="header-section-number">1.4</span> Stage 4 builder contract (<code>scripts/build_frontend_derived.py</code>)</h2>
+<section id="data-correctness-prerequisite-306" class="level2" data-number="1.5">
+<h2 data-number="1.5" data-anchor-id="data-correctness-prerequisite-306"><span class="header-section-number">1.5</span> Data-correctness prerequisite (#306)</h2>
+<p>The current <code>sample_facet_masks</code> is built from <code>membership</code>, so it <strong>omits ~29,917 located samples</strong> with coordinates but no tree membership (<code>facets_v3</code> = 6,026,242 vs masks = 5,996,325). The new index must start from <strong><code>samp_geo</code></strong>, LEFT JOIN masks, and emit <strong>zero masks</strong> for no-membership pids. Tracked as <strong>#306</strong> (must land in Phase 1).</p>
+</section>
+<section id="honesty-rule-non-negotiable" class="level2" data-number="1.6">
+<h2 data-number="1.6" data-anchor-id="honesty-rule-non-negotiable"><span class="header-section-number">1.6</span> Honesty rule (non-negotiable)</h2>
+<p><strong>Never fall back to the unfiltered baseline when filters are active</strong> — that is exactly the #304 bug. <code>applyFacetCounts(..., null)</code> means baseline (<code>explorer.qmd:1381</code>). On any miss/error under active filters, show <strong>“—” / “unavailable” / stale styling / hidden counts</strong> — never authoritative-looking baseline numbers. Apply all dimension maps <strong>atomically after one stale-guard check</strong> (<code>facetCountsReqId</code>); never partially repaint dimensions.</p>
+</section>
+<section id="phased-plan" class="level2" data-number="1.7">
+<h2 data-number="1.7" data-anchor-id="phased-plan"><span class="header-section-number">1.7</span> Phased plan</h2>
+<section id="phase-1-artifact-semantic-foundation" class="level3" data-number="1.7.1">
+<h3 data-number="1.7.1" data-anchor-id="phase-1-artifact-semantic-foundation"><span class="header-section-number">1.7.1</span> Phase 1 — Artifact + semantic foundation</h3>
 <ul>
-<li><strong>Geometry-agnostic input.</strong> The <code>geometry</code> column may be <strong>WKB BLOB</strong> (e.g.&nbsp;<code>isamples_202604_wide</code>) or DuckDB <strong>GEOMETRY</strong> (e.g.&nbsp;<code>isamples_202601_wide</code>, the Zenodo wide). The builder detects the type at runtime — earlier ad-hoc SQL assumed BLOB and threw <code>BinderException</code> on GEOMETRY wides.</li>
-<li><strong>Material selection (#265/#271).</strong> <code>material</code> = the <strong>first NON-ROOT</strong> concept in <code>p__has_material_category</code> (the root <code>.../material/1.0/material</code> “Material” can sit at any array position). Samples tagged only at the root get <code>NULL</code> material (excluded from the facet). This is <strong>NOT leaf/most-specific</strong> selection — the arrays are not clean SKOS paths. <code>context</code>/<code>object_type</code> use <code>[1]</code>; their root-dropping is deferred.</li>
-<li><strong>Determinism.</strong> Every COPY has <code>ORDER BY</code>; <code>dominant_source</code> ties break on source name (ASC); center lat/lng rounded to 6 dp.</li>
-<li><strong>Reproducibility &amp; build identity.</strong> Each run writes <code>{tag}_manifest.json</code> (input + per-output sha256, argv, git SHA, DuckDB + extension versions). DuckDB pinned in <code>scripts/requirements.txt</code>.</li>
-<li><strong>Tested.</strong> <code>tests/test_frontend_derived.py</code> (fixtures, CI via <code>.github/workflows/pipeline-tests.yml</code>) + <code>scripts/validate_frontend_derived.py</code> (algebraic: <code>facet_summaries == GROUP BY sample_facets_v2</code>, <code>facet_cross_filter == conditional GROUP BY</code>, <code>facets.pid == map_lite.pid</code>, pid uniqueness, H3 sums). <code>make test</code> / <code>make all</code>.</li>
-<li><strong><code>sample_facet_index_meta</code> (#313 P1) is paired with <code>sample_facet_index</code> and MUST be deployed together.</strong> It’s a tiny per-source-histogram manifest built DIRECTLY from <code>samp_geo</code> (never by reading back <code>sample_facet_index.parquet</code> — that would make the “staleness check” self-referential) so the explorer’s boot-time <code>facetIndexReady</code> preflight can validate the index without a live 6M-row <code>GROUP BY</code> scan. <code>--only sample_facet_index_meta</code> alone builds just the meta file (no forced <code>sample_facet_index</code> rebuild) for re-pairing a meta file with an already-published index of the same <code>build_id</code>; a normal build or <code>--only sample_facet_index,sample_facet_index_meta</code> builds both together. <strong>R2 upload must always publish the two files together with matching <code>build_id</code></strong> — see <code>SERIALIZATIONS.md</code> §4.13. Independently validated by <code>validate_frontend_derived.py --index ... --index-meta ...</code>, which recomputes the histogram/build_id/schema_version/row-count from the actual on-disk index file (not from the meta file’s own claims).</li>
+<li>Build the complete per-pid index above. Start from <code>samp_geo</code>; include zero-mask pids (#306).</li>
+<li>Add <code>source</code> VARCHAR; extend the build <strong>fingerprint</strong> to cover the pid/source universe (today it fingerprints membership only → would go stale silently once source/coverage change).</li>
+<li>AI-free validator: pid completeness vs <code>facets_v3</code>; source equality; node-bit coverage; mask ≡ membership for pids that have membership; build_id consistency.</li>
+<li><strong>Publish under a new immutable filename/tag — do NOT overwrite the cached <code>202608</code> artifact.</strong></li>
+<li>Ratify the count contract (#276) as <strong>membership / “anywhere in tree”</strong> — already the shipped semantics, so this is confirmation, not a redesign.</li>
 </ul>
 </section>
-<section id="documentation-automation-gaps-remaining" class="level2" data-number="1.5">
-<h2 data-number="1.5" data-anchor-id="documentation-automation-gaps-remaining"><span class="header-section-number">1.5</span> Documentation / automation gaps (remaining)</h2>
+<section id="phase-2-fix-304-at-global-view" class="level3" data-number="1.7.2">
+<h3 data-number="1.7.2" data-anchor-id="phase-2-fix-304-at-global-view"><span class="header-section-number">1.7.2</span> Phase 2 — Fix #304 at global view</h3>
 <ul>
-<li>⚠️ <strong>The deployed <code>202601</code> derived files are NOT reproducible</strong> from any available wide. A rebuild yields <strong>528,983</strong> root-material rows (pre-#271); the deployed <code>sample_facets_v2</code> has <strong>346,768</strong> — so the live files came from a different/unrecorded Stage-4 process, <em>and</em> the data has since rolled (wide is now <code>202604</code>). Treat a fresh <code>build_frontend_derived.py</code> run as the new source of truth, not as a bit-for-bit reproduction of the deployed files.</li>
-<li><strong>Version skew:</strong> the deployed derived files are <code>202601</code> while the wide they should derive from is <code>202604</code> (the popup reads <code>202604</code>). Rebuilding from <code>202604</code> resolves it (tracked in the pipeline epic).</li>
-<li><strong>No R2 upload automation</strong> — file upload to bucket <code>isamples-ry</code> + <code>current/manifest.json</code> update are manual <code>wrangler</code>/dashboard steps.</li>
-<li><strong>No OC mirror script</strong> — <code>check_oc_pqg_drift.py</code> detects GCS↔︎R2 drift but doesn’t perform the mirror.</li>
-<li><strong>Stage-2 prod invocation</strong> that produced <code>zenodo_narrow_2025-12-12</code> / <code>zenodo_wide_2026-01-09</code> from the Zenodo export is still unrecorded (dedupe options unknown).</li>
-<li><strong><code>SERIALIZATIONS.md:80</code></strong> claims every file “can be rebuilt by a script” — now true for the Stage-4 files; still aspirational for Stage-2.</li>
-<li><strong>Sidecar spec</strong> is in Obsidian only, not version-controlled with the code.</li>
+<li>Generalized <strong>direct-control filter snapshot</strong> (today’s <code>describeCrossFilters()</code> zeroes tree selections at global view — the root cause). Generalize <code>effectiveSingleFilter()</code> to all selections.</li>
+<li>Route <strong>multi-filter / full-tree-mode / global / no-search</strong> counts through one mask-index histogram query (the <code>tree_counts ∪ source_counts</code> shape).</li>
+<li>Keep the single-filter cube as a <strong>pure optimization</strong>, not a required semantic path.</li>
+<li>Apply dimension maps atomically after the stale check. On failure → unavailable, <strong>not</strong> baseline.</li>
+<li><strong>Benchmark cold + warm DuckDB-WASM</strong> across empty / narrow / broad / all-pid qualifying sets; set a concrete interaction budget before release.</li>
 </ul>
 </section>
-<section id="key-files" class="level2" data-number="1.6">
-<h2 data-number="1.6" data-anchor-id="key-files"><span class="header-section-number">1.6</span> Key files</h2>
+<section id="phase-3-extend-not-premature-unification" class="level3" data-number="1.7.3">
+<h3 data-number="1.7.3" data-anchor-id="phase-3-extend-not-premature-unification"><span class="header-section-number">1.7.3</span> Phase 3 — Extend (not premature unification)</h3>
 <ul>
-<li><code>export_client/isamples_export_client/duckdb_utilities.py</code> — export schema (keywords narrowing @ L17)</li>
-<li><code>pqg/pqg/sql_converter.py</code> — export→PQG engine; <code>pqg/docs/PQG_SPECIFICATION.md</code> — format spec</li>
-<li><code>isamplesorg.github.io/scripts/enrich_wide_with_oc_thumbnails.py</code> — the sidecar-merge precedent</li>
-<li><code>isamplesorg.github.io/scripts/build_vocab_labels.py</code> — the one scripted derived file</li>
-<li><code>isamplesorg.github.io/scripts/check_oc_pqg_drift.py</code> — OC drift check</li>
-<li><code>isamplesorg.github.io/workers/data-isamples-org/{src/index.js,wrangler.toml}</code> — Worker + R2 config</li>
-<li><code>isamplesorg.github.io/SERIALIZATIONS.md</code> — format/schema reference (DAG companion to this file)</li>
+<li>Add <strong>viewport</strong> support (identical padded bbox, <code>VIEWPORT_PAD_FACTOR = 0.3</code>).</li>
+<li>Add <strong>search</strong> via <code>search_pids</code>.</li>
+<li>Characterization-test the new path against the existing membership path; <strong>then</strong> retire the membership count implementation. (Immediate unification would balloon the first fix into viewport + search + flat-mode + stale-update refactoring — defer.)</li>
 </ul>
+</section>
+<section id="phase-4-verification-cleanup" class="level3" data-number="1.7.4">
+<h3 data-number="1.7.4" data-anchor-id="phase-4-verification-cleanup"><span class="header-section-number">1.7.4</span> Phase 4 — Verification + cleanup</h3>
+<ul>
+<li>Unit-test predicate generation (exclude-self, zero-source states).</li>
+<li>Data validator gates from Phase 1, run in CI.</li>
+<li>Playwright: Eric’s exact URL, multi-value-in-one-dim, source+tree, impossible combos, global↔︎viewport transitions, superseded requests.</li>
+<li>Remove the misleading active-filter baseline fallback everywhere.</li>
+<li>Codex adversarial review; staging verify on real R2 data; deploy smoke gate.</li>
+</ul>
+</section>
+</section>
+<section id="constraints-landmines" class="level2" data-number="1.8">
+<h2 data-number="1.8" data-anchor-id="constraints-landmines"><span class="header-section-number">1.8</span> Constraints / landmines</h2>
+<ul>
+<li><strong>63-bit ceiling:</strong> current dims are 19 / 22 / 15 nodes — ample headroom. Keep the build hard-fail; design a future multiword schema but <strong>do not implement now</strong>.</li>
+<li><strong>Flat / mixed render mode:</strong> keep the mask path gated OFF (subtree-membership semantics are wrong for a flat dim) — defer to existing paths, as the cube already does.</li>
+<li><strong>Immutable data:</strong> new tag/filename; never overwrite a cached artifact.</li>
+</ul>
+</section>
+<section id="top-3-risks" class="level2" data-number="1.9">
+<h2 data-number="1.9" data-anchor-id="top-3-risks"><span class="header-section-number">1.9</span> Top 3 risks</h2>
+<ol type="1">
+<li><strong>WASM latency / connection starvation</strong> — credible SQL, unmeasured in-browser; ~336M bit-tests worst case.</li>
+<li><strong>Stale / incomplete index generations</strong> — #306 missing pids + membership-only build_id; mixed cached generations → convincing-but-false counts.</li>
+<li><strong>Honesty &amp; state-transition failures</strong> — baseline-as-truth fallback + async camera transitions unless results applied atomically.</li>
+</ol>
+<hr>
+<p><em>Joint plan: Claude (code trace, drafting) + Codex (native benchmarks, source design, #306 discovery, honesty rule, phasing). 2026-06-19.</em></p>
 
 
 </section>
@@ -814,7 +817,7 @@ DuckDB-WASM in the browser (explorer.qmd; parquet URLs ~L767-781)</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/DATA_PROVENANCE.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/PLAN_305_facet_counts.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the <a href="https://nsf.gov/">NSF</a>.</p>
 </div>
