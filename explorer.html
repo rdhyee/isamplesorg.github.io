@@ -929,7 +929,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><strong>Instant</strong> (&lt;1s): Pre-aggregated H3 res4 summary (580 KB) → 38K colored circles</li>
+<li><strong>Instant</strong> (&lt;1s): Pre-aggregated H3 res4 summary (494 KB) → 38K colored circles</li>
 <li><strong>Zoom in</strong>: Automatically switches to res6 (112K) then res8 (176K) clusters</li>
 <li><strong>Zoom deeper</strong> (&lt;120 km): Individual sample points from 60 MB lite parquet</li>
 <li><strong>Click</strong>: Cluster info or individual sample card with full metadata</li>
@@ -8556,36 +8556,75 @@ Loading H3 global overview...
 <tr class="odd">
 <td><strong>Instant</strong></td>
 <td>H3 res4</td>
-<td>580 KB</td>
+<td>0.5 MB</td>
 <td>38K clusters (continental)</td>
 </tr>
 <tr class="even">
 <td><strong>Zoom in</strong></td>
 <td>H3 res6</td>
-<td>1.6 MB</td>
+<td>1.3 MB</td>
 <td>112K clusters (city)</td>
 </tr>
 <tr class="odd">
 <td><strong>Zoom more</strong></td>
 <td>H3 res8</td>
-<td>2.5 MB</td>
+<td>2.0 MB</td>
 <td>176K clusters (neighborhood)</td>
 </tr>
 <tr class="even">
 <td><strong>Zoom deep</strong></td>
 <td>Map lite</td>
-<td>60 MB (range req.)</td>
+<td>63 MB (range req.)</td>
 <td>Up to 5K individual samples</td>
 </tr>
 <tr class="odd">
 <td><strong>Click sample</strong></td>
 <td>Full dataset</td>
-<td>~280 MB (range req.)</td>
+<td>300 MB (range req.)</td>
 <td>Full metadata for 1 sample</td>
 </tr>
 </tbody>
 </table>
-<p><strong>4 parquet files, zero backend.</strong> All queries run in your browser via DuckDB-WASM with HTTP range requests — only the bytes you need are transferred.</p>
+<p><em>Sizes are decimal MB (10⁶ bytes), matching the manifest’s byte counts.</em></p>
+<p><strong>Static files, zero backend.</strong> All queries run in your browser via DuckDB-WASM with HTTP range requests — only the bytes you need are transferred. The published release is 21 objects (18 parquet + 3 small JSON search-index files); any one view touches only a few of them. The authoritative inventory is <a href="https://data.isamples.org/isamples_202608_release_manifest.json"><code>isamples_202608_release_manifest.json</code></a> (human twin: <code>CANONICAL.md</code>), which the Explorer cross-checks at boot.</p>
+<!-- Coherence-audit follow-up (2026-08-05). Sizes are from the release manifest:
+     res4 505,651 B; res6 1,322,875 B; res8 2,009,510 B; map_lite_v3 62,924,115 B;
+     wide 300,303,095 B. Cluster counts verified against parquet row counts:
+     38,462 / 112,019 / 176,669 (the manifest does not carry row counts).
+
+     The previous figures (580 KB / 1.6 MB / 2.5 MB) were not invented — they are
+     correct for the **202601** snapshot, which SERIALIZATIONS.md, how-to-use.qmd,
+     data.qmd and tutorials/why_h3.qmd still legitimately document. This page
+     describes the LIVE app, which serves **202608**, so it had silently drifted a
+     generation behind. Beware: a "wrong number" here may be a right number for a
+     different snapshot — always check which release a doc is describing before
+     correcting it.
+
+     Units: decimal MB (10^6 B). The old row mixed conventions (580 KB was KiB
+     while 1.6/2.5 MB were decimal), which is how it read as self-consistent.
+     If you edit these, re-derive from the manifest — do not round from memory. -->
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Check these numbers against the source
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Every figure above comes from the published release manifest, which the Explorer also cross-checks at boot. To re-derive them without taking this page’s word for it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> https://data.isamples.org/isamples_202608_release_manifest.json <span class="dt">\</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">|</span> <span class="ex">jq</span> <span class="st">'.files | to_entries[] | select(.key|test("h3_summary|_wide\\.|map_lite"))</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">        | {file: .key, bytes: .value.size_bytes}'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Cluster counts come from the parquet row counts, not the manifest:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="fu">count</span>(<span class="op">*</span>) <span class="kw">FROM</span> read_parquet(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">'https://data.isamples.org/isamples_202608_h3_summary_res4.parquet'</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
 </section>
 <section id="see-also" class="level2" data-number="2">
 <h2 data-number="2" data-anchor-id="see-also"><span class="header-section-number">2</span> See Also</h2>
