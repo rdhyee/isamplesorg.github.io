@@ -403,7 +403,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> read_parquet(<span class="st">'wide.parquet'</span>) mat <span class="kw">ON</span> mat.row_id <span class="op">=</span> s.p__has_material_category[<span class="dv">1</span>]</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> read_parquet(<span class="st">'vocab_labels.parquet'</span>) mat_lbl <span class="kw">ON</span> mat_lbl.uri <span class="op">=</span> mat.pid</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> s.pid <span class="op">=</span> <span class="st">'&lt;clicked pid&gt;'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This is the one query that reads from <code>wide.parquet</code> on click (everything above deliberately avoids touching the 280 MB wide file until you actually need full detail on one sample).</p>
+<p>This is the one query that reads from <code>wide.parquet</code> on click (everything above deliberately avoids touching the 300 MB wide file until you actually need full detail on one sample).</p>
 </section>
 </section>
 <section id="try-it-yourself" class="level2" data-number="1.4">
