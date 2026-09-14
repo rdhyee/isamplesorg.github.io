@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>data_provenance – iSamples</title>
+<title>perf_bandwidth_findings_2026-08-06 – iSamples</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -258,17 +258,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#isamples-explorer-data-provenance" id="toc-isamples-explorer-data-provenance" class="nav-link active" data-scroll-target="#isamples-explorer-data-provenance"><span class="header-section-number">1</span> iSamples Explorer — Data Provenance</a>
+  <li><a href="#the-explorer-downloads-74-mb-to-show-you-a-globe-and-why" id="toc-the-explorer-downloads-74-mb-to-show-you-a-globe-and-why" class="nav-link active" data-scroll-target="#the-explorer-downloads-74-mb-to-show-you-a-globe-and-why"><span class="header-section-number">1</span> The Explorer downloads 74 MB to show you a globe — and why</a>
   <ul>
-  <li><a href="#pipeline-dag" id="toc-pipeline-dag" class="nav-link" data-scroll-target="#pipeline-dag"><span class="header-section-number">1.1</span> Pipeline DAG</a></li>
-  <li><a href="#stages-script-command-per-step" id="toc-stages-script-command-per-step" class="nav-link" data-scroll-target="#stages-script-command-per-step"><span class="header-section-number">1.2</span> Stages (script / command per step)</a></li>
-  <li><a href="#the-sidecarenrichment-pattern-how-new-data-gets-in" id="toc-the-sidecarenrichment-pattern-how-new-data-gets-in" class="nav-link" data-scroll-target="#the-sidecarenrichment-pattern-how-new-data-gets-in"><span class="header-section-number">1.3</span> The sidecar/enrichment pattern (how new data gets in)</a></li>
-  <li><a href="#stage-4-builder-contract-scriptsbuild_frontend_derived.py" id="toc-stage-4-builder-contract-scriptsbuild_frontend_derived.py" class="nav-link" data-scroll-target="#stage-4-builder-contract-scriptsbuild_frontend_derived.py"><span class="header-section-number">1.4</span> Stage 4 builder contract (<code>scripts/build_frontend_derived.py</code>)</a></li>
-  <li><a href="#documentation-automation-gaps-remaining" id="toc-documentation-automation-gaps-remaining" class="nav-link" data-scroll-target="#documentation-automation-gaps-remaining"><span class="header-section-number">1.5</span> Documentation / automation gaps (remaining)</a></li>
-  <li><a href="#key-files" id="toc-key-files" class="nav-link" data-scroll-target="#key-files"><span class="header-section-number">1.6</span> Key files</a></li>
+  <li><a href="#plain-english" id="toc-plain-english" class="nav-link" data-scroll-target="#plain-english"><span class="header-section-number">1.1</span> Plain English</a></li>
+  <li><a href="#the-measurements" id="toc-the-measurements" class="nav-link" data-scroll-target="#the-measurements"><span class="header-section-number">1.2</span> The measurements</a>
+  <ul class="collapse">
+  <li><a href="#time-to-a-usable-explorer-by-connection-production-cold-cache-desktop" id="toc-time-to-a-usable-explorer-by-connection-production-cold-cache-desktop" class="nav-link" data-scroll-target="#time-to-a-usable-explorer-by-connection-production-cold-cache-desktop"><span class="header-section-number">1.2.1</span> Time to a usable Explorer, by connection (production, cold cache, desktop)</a></li>
+  <li><a href="#cross-browser-and-viewport-unthrottled" id="toc-cross-browser-and-viewport-unthrottled" class="nav-link" data-scroll-target="#cross-browser-and-viewport-unthrottled"><span class="header-section-number">1.2.2</span> Cross-browser and viewport (unthrottled)</a></li>
+  </ul></li>
+  <li><a href="#root-cause-and-the-experiment-that-proved-it" id="toc-root-cause-and-the-experiment-that-proved-it" class="nav-link" data-scroll-target="#root-cause-and-the-experiment-that-proved-it"><span class="header-section-number">1.3</span> Root cause, and the experiment that proved it</a>
+  <ul class="collapse">
+  <li><a href="#controlled-ab" id="toc-controlled-ab" class="nav-link" data-scroll-target="#controlled-ab"><span class="header-section-number">1.3.1</span> Controlled A/B</a></li>
+  </ul></li>
+  <li><a href="#recommended-fix" id="toc-recommended-fix" class="nav-link" data-scroll-target="#recommended-fix"><span class="header-section-number">1.4</span> Recommended fix</a>
+  <ul class="collapse">
+  <li><a href="#also-worth-correcting-once-fixed" id="toc-also-worth-correcting-once-fixed" class="nav-link" data-scroll-target="#also-worth-correcting-once-fixed"><span class="header-section-number">1.4.1</span> Also worth correcting once fixed</a></li>
+  </ul></li>
+  <li><a href="#method-notes-read-before-trusting-or-extending-the-harness" id="toc-method-notes-read-before-trusting-or-extending-the-harness" class="nav-link" data-scroll-target="#method-notes-read-before-trusting-or-extending-the-harness"><span class="header-section-number">1.5</span> Method notes (read before trusting or extending the harness)</a></li>
+  <li><a href="#reproduce" id="toc-reproduce" class="nav-link" data-scroll-target="#reproduce"><span class="header-section-number">1.6</span> Reproduce</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/DATA_PROVENANCE.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/PERF_BANDWIDTH_FINDINGS_2026-08-06.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -276,153 +286,286 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<section id="isamples-explorer-data-provenance" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> iSamples Explorer — Data Provenance</h1>
-<p>How the explorer’s derived parquet files are generated, from root to publish. <strong>Not exhaustive as of 2026-08-05 — see the coverage caveat below.</strong> <em>Reviewed 2026-06-02 (CC, via codebase audit). Complements <code>SERIALIZATIONS.md</code> (format/schema reference); this file is the end-to-end build chain + the automation gaps.</em></p>
-<blockquote class="blockquote">
-<p>⚠️ <strong>Coverage caveat (2026-08-05; live generation updated 2026-09).</strong> The DAG below documents the <strong>seven-file derived substrate as of the 2026-06-02 review</strong>. It does <em>not</em> cover the whole live <code>202609</code> family. Known omissions:</p>
-<ul>
-<li><code>sample_facet_masks</code>, <code>facet_node_bits</code>, <code>sample_facet_index</code>, <code>sample_facet_index_meta</code> (the bitmask count path, #299/#304/#305/#313)</li>
-<li><code>sample_facet_membership</code></li>
-<li><code>facet_tree_summaries</code>, <code>facet_tree_cross_filter</code> (the tree facet path, #290)</li>
-<li>the sharded search index <code>isamples_202609_search_index_v1/</code> (#171)</li>
-</ul>
-<p>The <em>build chain and the automation gaps</em> it describes were accurate, as of that review, for the files it covers. They have not been re-audited for the 202609 re-run, so treat this file as incomplete and dated rather than wrong. Authoritative current inventory: <code>isamples_202609_release_manifest.json</code> / <code>CANONICAL.md</code>.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p><strong>Load-bearing constraint:</strong> the <strong>root export cannot be regenerated.</strong> It was produced from the iSamples Central Solr API (<code>central.isample.xyz</code>), <strong>offline since Aug 2025</strong>. The Zenodo-archived export is a <strong>frozen root</strong>. Any <em>new</em> data (e.g.&nbsp;concept URIs, thumbnails) therefore must come from a <strong>per-source supplementary file merged into the base by <code>pid</code></strong> — the “sidecar” pattern (see Stage 3) — not from re-exporting.</p>
-</blockquote>
-<section id="pipeline-dag" class="level2" data-number="1.1">
-<h2 data-number="1.1" data-anchor-id="pipeline-dag"><span class="header-section-number">1.1</span> Pipeline DAG</h2>
-<pre><code>Source collections (SESAR · OpenContext · GEOME · Smithsonian)
-   │  iSamples Central Solr API  ── OFFLINE since Aug 2025 (cannot re-run) ──┐
-   ▼                                                                         │
-STAGE 0/1  export_client → JSONL → GeoParquet                               │ frozen
-   → isamples_export_*_geo.parquet   (Export format; ~300MB, 6.7M; Zenodo doi:10.5281/zenodo.15278211)
-   ▼
-STAGE 2  pqg/pqg/sql_converter.py  (export → base PQG; 7-stage DuckDB SQL)
-   →  narrow (…_narrow.parquet, ~860MB, 101,387,180 rows)   and   wide (…_wide.parquet, ~292MB, 20.7M rows)
-   ▼
-STAGE 3  sidecar/enrichment merges (LEFT JOIN by pid)       ← Eric's independently-maintained OC PQG (GCS)
-   3a scripts/enrich_wide_with_oc_thumbnails.py  →  isamples_202604_wide.parquet (+47K thumbnails)
-   3b scripts/enrich_wide_with_oc_concepts.py    →  isamples_202606_wide.parquet (#272: OC material/
-      object-type concepts REPLACE the frozen export's for OC pids — OC wins unconditionally;
-      gate: scripts/validate_oc_concept_enrichment.py)
-   ▼
-STAGE 4  wide → frontend derived files  (NOW SCRIPTED: scripts/build_frontend_derived.py)
-   → wide_h3 · h3_summary_res4/6/8 · samples_map_lite · sample_facets_v2 · facet_summaries · facet_cross_filter
-   → vocab_labels  (scripts/build_vocab_labels.py — built separately from SKOS TTLs)
-   → {tag}_manifest.json  (build identity: input+output sha256, argv, git SHA, DuckDB/extension versions)
-   ▼
-STAGE 5  publish to R2 (bucket isamples-ry) + Cloudflare Worker (data.isamples.org, /current/ aliases)
-   ▼
-DuckDB-WASM in the browser (explorer.qmd; parquet URLs ~L767-781)</code></pre>
+<section id="the-explorer-downloads-74-mb-to-show-you-a-globe-and-why" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> The Explorer downloads 74 MB to show you a globe — and why</h1>
+<p><strong>Date:</strong> 2026-08-06 · <strong>Status:</strong> root-caused and proven by controlled experiment; fix not yet applied <strong>Harness:</strong> <code>tests/playwright/bandwidth_matrix.py</code> (reproducible, committed alongside this doc)</p>
+<hr>
+<section id="plain-english" class="level2" data-number="1.1">
+<h2 data-number="1.1" data-anchor-id="plain-english"><span class="header-section-number">1.1</span> Plain English</h2>
+<p>Opening the Interactive Explorer with an empty cache transfers <strong>about 74 MB</strong> before the facet panel appears. The site’s own documentation says <em>“only the data you need is downloaded — typically less than 1 MB for initial exploration.”</em> That claim is wrong by roughly two orders of magnitude.</p>
+<p>The cause is <strong>one HTTP status code</strong>. DuckDB-WASM checks whether a server supports partial downloads by sending a <code>HEAD</code> request with a <code>Range</code> header. Our data host answers <code>200</code> instead of <code>206</code>, so DuckDB concludes “this server can’t do partial reads” and downloads <strong>every file whole</strong> — including a 63 MB one it only needs about 1.5 MB of.</p>
+<p>Changing that single response to <code>206</code> cuts the cold load from <strong>74 MB to 3.3 MB</strong> and makes the facet panel appear <strong>4.7× sooner on a 3G connection</strong>. The fix is server-side, in the Cloudflare Worker in front of the bucket. No application code changes.</p>
+<hr>
 </section>
-<section id="stages-script-command-per-step" class="level2" data-number="1.2">
-<h2 data-number="1.2" data-anchor-id="stages-script-command-per-step"><span class="header-section-number">1.2</span> Stages (script / command per step)</h2>
+<section id="the-measurements" class="level2" data-number="1.2">
+<h2 data-number="1.2" data-anchor-id="the-measurements"><span class="header-section-number">1.2</span> The measurements</h2>
+<section id="time-to-a-usable-explorer-by-connection-production-cold-cache-desktop" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" data-anchor-id="time-to-a-usable-explorer-by-connection-production-cold-cache-desktop"><span class="header-section-number">1.2.1</span> Time to a usable Explorer, by connection (production, cold cache, desktop)</h3>
 <table class="caption-top table">
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 20%">
+<col style="width: 26%">
+<col style="width: 26%">
+<col style="width: 26%">
 </colgroup>
 <thead>
 <tr class="header">
-<th>Stage</th>
-<th>Input → Output</th>
-<th>How (file:line)</th>
-<th>Automated?</th>
+<th>Connection</th>
+<th style="text-align: right;">Globe drawn</th>
+<th style="text-align: right;"><strong>Facet panel</strong></th>
+<th style="text-align: right;">Table rows</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>0/1 Export</strong></td>
-<td>Solr API → <code>isamples_export_*_geo.parquet</code></td>
-<td><code>export_client</code> <code>ExportClient.perform_full_download()</code> (<code>export_client.py:423-469</code>) → <code>write_geoparquet_from_json_lines()</code>; schema <code>SOURCE_COLUMNS</code> (<code>duckdb_utilities.py:9-42</code>, incl.&nbsp;<code>keywords: STRUCT(keyword VARCHAR)[]</code> — <strong>text only, no URI</strong>, L17)</td>
-<td>❌ API offline; <strong>frozen</strong></td>
+<td>Unthrottled</td>
+<td style="text-align: right;">2.2 s</td>
+<td style="text-align: right;">10.8 s</td>
+<td style="text-align: right;">1.2 s</td>
 </tr>
 <tr class="even">
-<td><strong>2 Base PQG</strong></td>
-<td>export → <code>*_narrow.parquet</code> / <code>*_wide.parquet</code></td>
-<td><code>pqg/pqg/sql_converter.py</code> <code>convert_isamples_sql(input, output, wide=…)</code> (CLI <code>python pqg/sql_converter.py in.parquet out.parquet [--wide]</code>); 7 stages, decomposes nested structs → nodes+edges; site dedupe by rounded lat/lon+label</td>
-<td>✅ scripted (exact prod invocation not recorded — gap)</td>
+<td>4G (4 Mbps)</td>
+<td style="text-align: right;">15.4 s</td>
+<td style="text-align: right;"><strong>168.7 s</strong></td>
+<td style="text-align: right;">7.3 s</td>
 </tr>
 <tr class="odd">
-<td><strong>3a Sidecar: thumbnails</strong></td>
-<td>base wide + Eric’s OC PQG → <code>isamples_202604_wide.parquet</code></td>
-<td><code>scripts/enrich_wide_with_oc_thumbnails.py</code> — <code>LEFT JOIN</code> OC <code>(pid, thumbnail_url)</code> into wide (<code>COALESCE</code>). Drift check: <code>scripts/check_oc_pqg_drift.py</code> (detects only; no mirror)</td>
-<td>⚠️ merge scripted; OC mirror + R2 upload manual</td>
+<td>3G fast (1.6 Mbps)</td>
+<td style="text-align: right;">38.7 s</td>
+<td style="text-align: right;"><strong>423.1 s</strong></td>
+<td style="text-align: right;">17.6 s</td>
 </tr>
 <tr class="even">
-<td><strong>3b Sidecar: OC concepts (#272)</strong></td>
-<td>3a wide + Eric’s OC <strong>wide</strong> → <code>isamples_202606_wide.parquet</code></td>
-<td><code>scripts/enrich_wide_with_oc_concepts.py</code> — REPLACES <code>p__has_material_category</code> / <code>p__has_sample_object_type</code> for OC pids with OC’s ordered concept lists (<strong>OC wins unconditionally</strong> — RY decision 2026-06-10, #272); mints <code>IdentifiedConcept</code> rows for URIs the frozen export never had (e.g.&nbsp;<code>otheranthropogenicmaterial</code>, the #260 fix); deterministic; emits <code>.manifest.json</code>. Independent gate: <code>scripts/validate_oc_concept_enrichment.py</code> (re-derives from inputs; non-overlay rows must be byte-identical). Scope: overlay only — ~75K OC records absent from the frozen export are NOT ingested (follow-up); <code>p__has_context_category</code> untouched (follow-up).</td>
-<td>✅ merge + gate scripted (<code>make all-272</code>); R2 upload manual</td>
-</tr>
-<tr class="odd">
-<td><strong>4 Frontend derived</strong></td>
-<td>wide → 7 explorer files</td>
-<td>The 6 map/facet files (<code>wide_h3</code>, <code>h3_summary_res4/6/8</code>, <code>samples_map_lite</code>, <code>sample_facets_v2</code>, <code>facet_summaries</code>, <code>facet_cross_filter</code>) ← <strong><code>scripts/build_frontend_derived.py</code></strong> (deterministic; geometry-agnostic; emits a manifest). <code>vocab_labels.parquet</code> ← <code>scripts/build_vocab_labels.py</code> (SKOS TTLs). Gated by <code>scripts/validate_frontend_derived.py</code> (algebraic + <code>--wide</code> semantic re-derivation) + <code>tests/test_frontend_derived.py</code> (fixtures, CI).</td>
-<td>✅ scripted; facet/map files semantic-tested; wide_h3 column-smoke-tested</td>
-</tr>
-<tr class="even">
-<td><strong>5 Publish</strong></td>
-<td>files → R2 + Worker</td>
-<td>Worker <code>workers/data-isamples-org/src/index.js</code> (<code>wrangler deploy</code>); immutable cache for <code>isamples_\d{6}_*.parquet</code>; <code>/current/&lt;flavor&gt;.parquet</code> → 302 via <code>current/manifest.json</code>. Bucket <code>isamples-ry</code></td>
-<td>⚠️ Worker scripted; <strong>file upload + manifest update are manual</strong></td>
+<td>3G slow (400 kbps)</td>
+<td style="text-align: right;">156.6 s</td>
+<td style="text-align: right;"><strong>never — not reached in 600 s</strong></td>
+<td style="text-align: right;">67.7 s</td>
 </tr>
 </tbody>
 </table>
+<p>On a slow connection the facet panel — the Explorer’s main filtering affordance — <strong>never appears at all</strong> within ten minutes.</p>
 </section>
-<section id="the-sidecarenrichment-pattern-how-new-data-gets-in" class="level2" data-number="1.3">
-<h2 data-number="1.3" data-anchor-id="the-sidecarenrichment-pattern-how-new-data-gets-in"><span class="header-section-number">1.3</span> The sidecar/enrichment pattern (how new data gets in)</h2>
-<p>Because the export is frozen, new per-source data is added by <strong>merging a supplementary parquet keyed by <code>pid</code> into the base wide</strong> — exactly what the thumbnail enrichment does:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- scripts/enrich_wide_with_oc_thumbnails.py (core)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> TEMP <span class="kw">TABLE</span> oc_thumbs <span class="kw">AS</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> pid, thumbnail_url <span class="kw">FROM</span> read_parquet(<span class="st">'&lt;eric_oc_pqg&gt;'</span>) <span class="kw">WHERE</span> thumbnail_url <span class="kw">IS</span> <span class="kw">NOT</span> <span class="kw">NULL</span>;</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">COPY</span> (<span class="kw">SELECT</span> p.<span class="op">*</span> <span class="kw">REPLACE</span> (<span class="fu">COALESCE</span>(oc.thumbnail_url, p.thumbnail_url) <span class="kw">AS</span> thumbnail_url)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>      <span class="kw">FROM</span> read_parquet(<span class="st">'&lt;base_wide&gt;'</span>) p <span class="kw">LEFT</span> <span class="kw">JOIN</span> oc_thumbs oc <span class="kw">ON</span> p.pid <span class="op">=</span> oc.pid)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">TO</span> <span class="st">'&lt;out&gt;'</span> (FORMAT PARQUET, COMPRESSION ZSTD);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Eric Kansa maintains OpenContext PQG <strong>independently</strong> on GCS (<code>storage.googleapis.com/opencontext-parquet/oc_isamples_pqg.parquet</code>), so it can carry data the frozen iSamples export lacks. This is the channel for <strong>#263</strong> (external concept URIs): Eric’s OC PQG carries them → merged into wide by pid → flows to the derived files. <em>(Sidecar design endorsed 2026-04-17; the spec <code>project_isamples_sidecar_pattern.md</code> lives in the Obsidian vault, not a repo — gap.)</em></p>
+<section id="cross-browser-and-viewport-unthrottled" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" data-anchor-id="cross-browser-and-viewport-unthrottled"><span class="header-section-number">1.2.2</span> Cross-browser and viewport (unthrottled)</h3>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Browser</th>
+<th>Viewport</th>
+<th style="text-align: right;">Globe</th>
+<th style="text-align: right;">Facets</th>
+<th style="text-align: right;">Bytes</th>
+<th style="text-align: right;">Page errors</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Chromium</td>
+<td>desktop</td>
+<td style="text-align: right;">2.4 s</td>
+<td style="text-align: right;">7.6 s</td>
+<td style="text-align: right;">73.7 MB</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>Chromium</td>
+<td>mobile</td>
+<td style="text-align: right;">2.3 s</td>
+<td style="text-align: right;">7.5 s</td>
+<td style="text-align: right;">73.7 MB</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>Firefox</td>
+<td>desktop</td>
+<td style="text-align: right;">2.2 s</td>
+<td style="text-align: right;">6.3 s</td>
+<td style="text-align: right;">73.6 MB</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>Firefox</td>
+<td>mobile</td>
+<td style="text-align: right;">2.2 s</td>
+<td style="text-align: right;">5.3 s</td>
+<td style="text-align: right;">73.6 MB</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>WebKit (Safari)</td>
+<td>desktop</td>
+<td style="text-align: right;">2.4 s</td>
+<td style="text-align: right;">7.5 s</td>
+<td style="text-align: right;">73.7 MB</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>WebKit (Safari)</td>
+<td>mobile</td>
+<td style="text-align: right;">2.3 s</td>
+<td style="text-align: right;">7.4 s</td>
+<td style="text-align: right;">73.6 MB</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Good news for <a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/313">#313</a>:</strong> the Explorer works in all three engines, desktop and mobile, with no uncaught errors and comparable timings. That had been an open unknown since 2026-06-26.</p>
+<p><strong>Bad news:</strong> the 74 MB is identical in all three, so this is not a browser quirk.</p>
+<hr>
 </section>
-<section id="stage-4-builder-contract-scriptsbuild_frontend_derived.py" class="level2" data-number="1.4">
-<h2 data-number="1.4" data-anchor-id="stage-4-builder-contract-scriptsbuild_frontend_derived.py"><span class="header-section-number">1.4</span> Stage 4 builder contract (<code>scripts/build_frontend_derived.py</code>)</h2>
+</section>
+<section id="root-cause-and-the-experiment-that-proved-it" class="level2" data-number="1.3">
+<h2 data-number="1.3" data-anchor-id="root-cause-and-the-experiment-that-proved-it"><span class="header-section-number">1.3</span> Root cause, and the experiment that proved it</h2>
+<p>DuckDB-WASM’s per-file handshake, observed on production:</p>
+<pre><code>HEAD  range=None            -&gt; 200
+HEAD  range=bytes=0-        -&gt; 200      &lt;-- a range-capable server answers 206
+GET   range=None            -&gt; 200      &lt;-- full 62,924,115 bytes</code></pre>
+<p>followed by <code>falling back to full HTTP read for: …</code> in the console, for eight files.</p>
+<p><strong>A caution about how this was diagnosed.</strong> The server was cleared <em>three times</em> on the basis of <code>curl</code> tests before the real problem was found, because those tests used <code>GET</code>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Probe</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>GET</code> + <code>Range</code></td>
+<td><strong>206</strong> + <code>Content-Range</code> ✅</td>
+</tr>
+<tr class="even">
+<td><code>HEAD</code> + <code>Range</code></td>
+<td><strong>200</strong>, no <code>Content-Range</code> ❌ ← what DuckDB actually sends</td>
+</tr>
+<tr class="odd">
+<td><code>OPTIONS</code> preflight</td>
+<td>204, <code>Access-Control-Allow-Headers: Range</code> ✅</td>
+</tr>
+<tr class="even">
+<td><code>HEAD</code> CORS exposure</td>
+<td><code>Accept-Ranges</code> correctly exposed ✅</td>
+</tr>
+</tbody>
+</table>
+<p>Everything was right except the one verb that mattered.</p>
+<section id="controlled-ab" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" data-anchor-id="controlled-ab"><span class="header-section-number">1.3.1</span> Controlled A/B</h3>
+<p>A transparent reverse proxy forwarded every request to <code>data.isamples.org</code> unchanged, altering <strong>exactly one thing</strong>: a <code>HEAD</code> carrying <code>Range</code> returned <code>206</code> + <code>Content-Range</code>. The Explorer was served locally and pointed at each proxy via <code>?data_base=</code>. Same build, same cold cache, same everything else.</p>
+<p><strong>Unthrottled</strong></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 27%">
+<col style="width: 36%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Control (<code>HEAD</code>+Range → 200)</th>
+<th style="text-align: right;">Treatment (→ 206)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bytes from data host</td>
+<td style="text-align: right;"><strong>74,202,598</strong></td>
+<td style="text-align: right;"><strong>3,341,812</strong></td>
+</tr>
+<tr class="even">
+<td><code>full HTTP read</code> fallbacks</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;"><strong>0</strong></td>
+</tr>
+<tr class="odd">
+<td><code>samples_map_lite_v3.parquet</code></td>
+<td style="text-align: right;">62,924,115 B (whole file)</td>
+<td style="text-align: right;">1,467,731 B (8 ranged reads)</td>
+</tr>
+<tr class="even">
+<td><code>sample_facet_masks.parquet</code></td>
+<td style="text-align: right;">10,138,648 B (whole file)</td>
+<td style="text-align: right;">767,000 B (48 ranged reads)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3G fast — the user-visible result</strong></p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: right;">Control</th>
+<th style="text-align: right;">Treatment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Globe drawn</td>
+<td style="text-align: right;">54.0 s</td>
+<td style="text-align: right;">54.1 s</td>
+</tr>
+<tr class="even">
+<td><strong>Facet panel</strong></td>
+<td style="text-align: right;"><strong>440.6 s</strong></td>
+<td style="text-align: right;"><strong>94.2 s</strong></td>
+</tr>
+<tr class="odd">
+<td>Table rows</td>
+<td style="text-align: right;">30.8 s</td>
+<td style="text-align: right;">30.7 s</td>
+</tr>
+<tr class="even">
+<td>Bytes</td>
+<td style="text-align: right;">74.2 MB</td>
+<td style="text-align: right;">3.0 MB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>4.7× faster to a usable filter panel, 24× less data</strong>, from one status code.</p>
+<p>Globe and table are unchanged because they read the small H3 summary, not the big files.</p>
+<hr>
+</section>
+</section>
+<section id="recommended-fix" class="level2" data-number="1.4">
+<h2 data-number="1.4" data-anchor-id="recommended-fix"><span class="header-section-number">1.4</span> Recommended fix</h2>
+<p>In the Cloudflare Worker fronting <code>data.isamples.org</code>: when a <code>HEAD</code> request carries a <code>Range</code> header and the object supports ranges, respond <strong><code>206</code></strong> with <code>Content-Range</code> (and no body, as <code>HEAD</code> requires) instead of <code>200</code>.</p>
+<p>Notes for whoever implements it:</p>
 <ul>
-<li><strong>Geometry-agnostic input.</strong> The <code>geometry</code> column may be <strong>WKB BLOB</strong> (e.g.&nbsp;<code>isamples_202604_wide</code>) or DuckDB <strong>GEOMETRY</strong> (e.g.&nbsp;<code>isamples_202601_wide</code>, the Zenodo wide). The builder detects the type at runtime — earlier ad-hoc SQL assumed BLOB and threw <code>BinderException</code> on GEOMETRY wides.</li>
-<li><strong>Material selection (#265/#271).</strong> <code>material</code> = the <strong>first NON-ROOT</strong> concept in <code>p__has_material_category</code> (the root <code>.../material/1.0/material</code> “Material” can sit at any array position). Samples tagged only at the root get <code>NULL</code> material (excluded from the facet). This is <strong>NOT leaf/most-specific</strong> selection — the arrays are not clean SKOS paths. <code>context</code>/<code>object_type</code> use <code>[1]</code>; their root-dropping is deferred.</li>
-<li><strong>Determinism.</strong> Every COPY has <code>ORDER BY</code>; <code>dominant_source</code> ties break on source name (ASC); center lat/lng rounded to 6 dp.</li>
-<li><strong>Reproducibility &amp; build identity.</strong> Each run writes <code>{tag}_manifest.json</code> (input + per-output sha256, argv, git SHA, DuckDB + extension versions). DuckDB, pandas, pyarrow, and rdflib — the four packages the scripts’ output bytes are actually sensitive to — are exact-pinned in <code>scripts/requirements.txt</code>; <code>bash scripts/setup_pipeline_venv.sh</code> installs them into an isolated, project-local env (<code>scripts/.venv</code>), which <code>make</code> then uses by default (see its <code>PY</code> var) — rather than a shared/ambient interpreter such as pyenv’s <code>myenv</code> (which other projects also use, and which can silently move a pin nobody re-installed against — this happened for real 2026-08-28→31, see <code>provenance/isamples_202609/step9_clean_rerun_2026-08-31.md</code> and <code>step0_toolchain_pin_2026-09-02.md</code> in the isamples-suite provenance repo, both private/not in this repo). This is <strong>narrower than a full lockfile</strong>: transitive dependencies, the Python interpreter version, and <code>uv</code> itself are still resolver-chosen, so a clean checkout can still drift there (unlike <code>pqg</code>’s step 1, which is fully <code>uv.lock</code>-hermetic). This bullet is about that <em>toolchain-pin</em> gap specifically — a different, now-closed issue from the <em>data-lineage</em> “reproducibility gap” the snapshot note directly below still describes as open.</li>
-<li><strong>Tested.</strong> <code>tests/test_frontend_derived.py</code> (fixtures, CI via <code>.github/workflows/pipeline-tests.yml</code>) + <code>scripts/validate_frontend_derived.py</code> (algebraic: <code>facet_summaries == GROUP BY sample_facets_v2</code>, <code>facet_cross_filter == conditional GROUP BY</code>, <code>facets.pid == map_lite.pid</code>, pid uniqueness, H3 sums). <code>make test</code> / <code>make all</code>.</li>
-<li><strong><code>sample_facet_index_meta</code> (#313 P1) is paired with <code>sample_facet_index</code> and MUST be deployed together.</strong> It’s a tiny per-source-histogram manifest built DIRECTLY from <code>samp_geo</code> (never by reading back <code>sample_facet_index.parquet</code> — that would make the “staleness check” self-referential) so the explorer’s boot-time <code>facetIndexReady</code> preflight can validate the index without a live 6M-row <code>GROUP BY</code> scan. <code>--only sample_facet_index_meta</code> alone builds just the meta file (no forced <code>sample_facet_index</code> rebuild) for re-pairing a meta file with an already-published index of the same <code>build_id</code>; a normal build or <code>--only sample_facet_index,sample_facet_index_meta</code> builds both together. <strong>R2 upload must always publish the two files together with matching <code>build_id</code></strong> — see <code>SERIALIZATIONS.md</code> §4.13. Independently validated by <code>validate_frontend_derived.py --index ... --index-meta ...</code>, which recomputes the histogram/build_id/schema_version/row-count from the actual on-disk index file (not from the meta file’s own claims).</li>
+<li>Returning <code>200</code> to <code>HEAD</code>+<code>Range</code> is <strong>not</strong> an RFC violation — <code>raw.githubusercontent.com</code> does the same. This is about interoperating with DuckDB-WASM’s capability probe, which is the single most important client this bucket has.</li>
+<li><code>Content-Range</code> must stay in <code>Access-Control-Expose-Headers</code> (it already is) or the browser cannot read it cross-origin.</li>
+<li><strong>Verify with <code>HEAD</code>, not <code>GET</code>.</strong> That mistake cost three false “server is fine” conclusions.</li>
+<li>The A/B proxy (<code>range_fix_proxy.py</code>, referenced in the issue) reproduces both arms in minutes.</li>
 </ul>
+<section id="also-worth-correcting-once-fixed" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" data-anchor-id="also-worth-correcting-once-fixed"><span class="header-section-number">1.4.1</span> Also worth correcting once fixed</h3>
+<p><code>index.qmd</code> claims <em>“typically less than 1 MB for initial exploration”</em> and <code>explorer.qmd</code> claims <em>“only the bytes you need are transferred.”</em> Both are currently false. After the fix the measured figure is ~3.3 MB cold — still a good story, and an honest one.</p>
+<hr>
 </section>
-<section id="documentation-automation-gaps-remaining" class="level2" data-number="1.5">
-<h2 data-number="1.5" data-anchor-id="documentation-automation-gaps-remaining"><span class="header-section-number">1.5</span> Documentation / automation gaps (remaining)</h2>
-<blockquote class="blockquote">
-<p>⚠️ <strong>Snapshot note (2026-08-05).</strong> The version-skew bullets below were written when the deployed derived files were <code>202601</code> and the wide was <code>202604</code>. That is no longer the live state: the Explorer now serves the <strong><code>202609</code></strong> family (<code>sample_facets_v4</code>, <code>samples_map_lite_v3</code>, <code>wide</code> at 236,995,193 B). The reproducibility and version-skew bullets below describe <strong>those historical builds</strong> (the <code>202601</code> derived files and the <code>202604</code> wide) and are kept as a record. The 202609 generation came from a full re-run of the chain with per-file hashes recorded (<code>tools/verify_release.py</code>; toolchain pin in #358). These bullets have not been re-audited against that re-run, so don’t read them as statements about 202609. Authoritative current inventory: <a href="https://isamples.org/isamples_202609_release_manifest.json"><code>isamples_202609_release_manifest.json</code></a>, human twin <code>CANONICAL.md</code>.</p>
-</blockquote>
-<ul>
-<li>⚠️ <strong>The deployed <code>202601</code> derived files are NOT reproducible</strong> from any available wide. A rebuild yields <strong>528,983</strong> root-material rows (pre-#271); the deployed <code>sample_facets_v2</code> has <strong>346,768</strong> — so the live files came from a different/unrecorded Stage-4 process, <em>and</em> the data has since rolled (wide is now <code>202604</code>). Treat a fresh <code>build_frontend_derived.py</code> run as the new source of truth, not as a bit-for-bit reproduction of the deployed files.</li>
-<li><strong>Version skew:</strong> the deployed derived files are <code>202601</code> while the wide they should derive from is <code>202604</code> (the popup reads <code>202604</code>). Rebuilding from <code>202604</code> resolves it (tracked in the pipeline epic).</li>
-<li><strong>No R2 upload automation</strong> — file upload to bucket <code>isamples-ry</code> + <code>current/manifest.json</code> update are manual <code>wrangler</code>/dashboard steps.</li>
-<li><strong>No OC mirror script</strong> — <code>check_oc_pqg_drift.py</code> detects GCS↔︎R2 drift but doesn’t perform the mirror.</li>
-<li><strong>Stage-2 prod invocation</strong> that produced <code>zenodo_narrow_2025-12-12</code> / <code>zenodo_wide_2026-01-09</code> from the Zenodo export is still unrecorded (dedupe options unknown).</li>
-<li><strong><code>SERIALIZATIONS.md:80</code></strong> claims every file “can be rebuilt by a script” — now true for the Stage-4 files; still aspirational for Stage-2.</li>
-<li><strong>Sidecar spec</strong> is in Obsidian only, not version-controlled with the code.</li>
-</ul>
 </section>
-<section id="key-files" class="level2" data-number="1.6">
-<h2 data-number="1.6" data-anchor-id="key-files"><span class="header-section-number">1.6</span> Key files</h2>
-<ul>
-<li><code>export_client/isamples_export_client/duckdb_utilities.py</code> — export schema (keywords narrowing @ L17)</li>
-<li><code>pqg/pqg/sql_converter.py</code> — export→PQG engine; <code>pqg/docs/PQG_SPECIFICATION.md</code> — format spec</li>
-<li><code>isamplesorg.github.io/scripts/enrich_wide_with_oc_thumbnails.py</code> — the sidecar-merge precedent</li>
-<li><code>isamplesorg.github.io/scripts/build_vocab_labels.py</code> — the one scripted derived file</li>
-<li><code>isamplesorg.github.io/scripts/check_oc_pqg_drift.py</code> — OC drift check</li>
-<li><code>isamplesorg.github.io/workers/data-isamples-org/{src/index.js,wrangler.toml}</code> — Worker + R2 config</li>
-<li><code>isamplesorg.github.io/SERIALIZATIONS.md</code> — format/schema reference (DAG companion to this file)</li>
-</ul>
+<section id="method-notes-read-before-trusting-or-extending-the-harness" class="level2" data-number="1.5">
+<h2 data-number="1.5" data-anchor-id="method-notes-read-before-trusting-or-extending-the-harness"><span class="header-section-number">1.5</span> Method notes (read before trusting or extending the harness)</h2>
+<p>Two instrumentation traps were hit and corrected; both would have produced confidently wrong conclusions:</p>
+<ol type="1">
+<li><strong>Page-level CDP does not see Web Worker traffic.</strong> DuckDB-WASM runs in a worker. Measuring only the page session reported <strong>568 KB and 3 requests</strong> — which looks exactly like a healthy “only the bytes you need” result and is off by a factor of 130. Real accounting uses context-level <code>requestfinished</code> events, which do observe worker requests.</li>
+<li><strong>The instrument changed the measurement, twice.</strong> <code>Target.setAutoAttach</code> with <code>waitForDebuggerOnStart: true</code> paused workers that were never resumed, so the globe never rendered and the run looked broken. And <code>ctx.route(...) + continue_()</code> interception inflated time-to-globe from 2.5 s to 7.3 s. The final harness is passive.</li>
+</ol>
+<p>Also: <code>sizes()</code> returns <code>-1</code> for indeterminate bodies; the harness counts those separately rather than letting negatives offset real totals (an early version reported a file as −885 bytes).</p>
+<p><strong>Limits.</strong> Timings are single runs on one machine and one uplink, not medians over repeats — treat them as order-of-magnitude, not benchmarks. Throttling is Chrome DevTools emulation, not a real cellular link. Firefox/WebKit runs are unthrottled (CDP is Chromium-only). Only cold-cache first visits were measured; a returning visitor with a warm cache is a different, much better story that was not characterised here.</p>
+<hr>
+</section>
+<section id="reproduce" class="level2" data-number="1.6">
+<h2 data-number="1.6" data-anchor-id="reproduce"><span class="header-section-number">1.6</span> Reproduce</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the matrix (production, desktop, four connection profiles)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> tests/playwright/bandwidth_matrix.py https://isamples.org <span class="dt">\</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--profiles</span> unthrottled,4g,3g-fast,3g-slow <span class="at">--budget</span> 600 <span class="at">--out</span> /tmp/matrix.json</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># cross-browser</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> tests/playwright/bandwidth_matrix.py https://isamples.org <span class="dt">\</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">--browsers</span> chromium,firefox,webkit <span class="at">--viewports</span> desktop,mobile <span class="at">--profiles</span> unthrottled</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 
 
 </section>
@@ -830,7 +973,7 @@ DuckDB-WASM in the browser (explorer.qmd; parquet URLs ~L767-781)</code></pre>
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/DATA_PROVENANCE.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/edit/main/PERF_BANDWIDTH_FINDINGS_2026-08-06.md" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/isamplesorg/isamplesorg.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>Opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the <a href="https://nsf.gov/">NSF</a>.</p>
 </div>
