@@ -473,6 +473,10 @@ format:
         top: -150px !important;
         transform-origin: 0 150px !important;
         z-index: 1100;
+        /* Cesium fixes the panel at 250px. On a phone-width globe that
+           plus the 40px offset would run off the right edge, so let it
+           shrink to what the viewport can hold. */
+        max-width: calc(100vw - 96px);
     }
     .search-bar { display: flex; gap: 6px; }
     .search-bar input {
